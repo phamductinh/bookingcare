@@ -1,3 +1,18 @@
+// Sticky header
+window.onscroll = function () {
+	myFunction();
+};
+var header = document.getElementById("header");
+var sticky = header.offsetTop;
+function myFunction() {
+	if (window.pageYOffset > sticky) {
+		header.classList.add("sticky");
+	} else {
+		header.classList.remove("sticky");
+	}
+}
+
+// autoplay slider
 document.getElementById("next").onclick = function () {
 	let lists = document.querySelectorAll(".slide-item");
 	document.getElementById("slide").appendChild(lists[0]);
@@ -47,3 +62,14 @@ function showSlides(n) {
 
 	slides[slideIndex - 1].style.display = "block";
 }
+
+
+//telemedicine slider
+document.getElementById("telem-next").onclick = function () {
+	let lists = document.querySelectorAll(".telem-slide-item");
+	document.getElementById("telem-slide").appendChild(lists[0]);
+};
+document.getElementById("telem-prev").onclick = function () {
+	let lists = document.querySelectorAll(".telem-slide-item");
+	document.getElementById("telem-slide").prepend(lists[lists.length - 1]);
+};
