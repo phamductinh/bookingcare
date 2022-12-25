@@ -71,3 +71,34 @@ document.getElementById("spec-prev").onclick = function () {
 	let lists = document.querySelectorAll(".spec-slide-item");
 	document.getElementById("spec-slide").prepend(lists[lists.length - 1]);
 };
+
+//facility slider
+document.getElementById("faci-next").onclick = function () {
+	let lists = document.querySelectorAll(".faci-slide-item");
+	document.getElementById("faci-slide").appendChild(lists[0]);
+};
+document.getElementById("faci-prev").onclick = function () {
+	let lists = document.querySelectorAll(".faci-slide-item");
+	document.getElementById("faci-slide").prepend(lists[lists.length - 1]);
+};
+
+//doctor slider
+document.getElementById("doctor-next").onclick = function () {
+	let lists = document.querySelectorAll(".doctor-slide-item");
+	document.getElementById("doctor-slide").appendChild(lists[0]);
+};
+document.getElementById("doctor-prev").onclick = function () {
+	let lists = document.querySelectorAll(".doctor-slide-item");
+	document.getElementById("doctor-slide").prepend(lists[lists.length - 1]);
+};
+
+//handbook slider
+document.getElementById("handbook-next").onclick = function () {
+	let lists = document.querySelectorAll(".handbook-slide-item");
+	document.getElementById("handbook-slide").appendChild(lists[0]);
+};
+document.getElementById("handbook-prev").onclick = function () {
+	let lists = document.querySelectorAll(".handbook-slide-item");
+	document.getElementById("handbook-slide").prepend(lists[lists.length - 1]);
+};
+
