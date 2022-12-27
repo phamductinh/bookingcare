@@ -102,3 +102,13 @@ document.getElementById("handbook-prev").onclick = function () {
 	document.getElementById("handbook-slide").prepend(lists[lists.length - 1]);
 };
 
+//posts slider
+document.getElementById("posts-next").onclick = function () {
+	let lists = document.querySelectorAll(".posts-slide-item");
+	document.getElementById("posts-slide").appendChild(lists[0]);
+};
+document.getElementById("posts-prev").onclick = function () {
+	let lists = document.querySelectorAll(".posts-slide-item");
+	document.getElementById("posts-slide").prepend(lists[lists.length - 1]);
+};
+
