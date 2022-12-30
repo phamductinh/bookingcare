@@ -1,0 +1,649 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap");
+* {
+	margin: 0px;
+	padding: 0px;
+	position: relative;
+	box-sizing: border-box;
+	font: 14px/1.5 "Montserrat", sans-serif;
+}
+.faci-header {
+	height: 60px;
+	width: 100%;
+	position: relative;
+	display: flex;
+	background: #45c3d2;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.faci-header-left {
+	padding: 17px 20px;
+	display: inline-flex;
+}
+.faci-header-left i {
+	font-size: 20px;
+	padding: 2px 20px;
+	cursor: pointer;
+	color: white;
+}
+.faci-header-left h2 {
+	font-size: 17px;
+	color: #ffffff;
+}
+.faci-header-right {
+	position: absolute;
+	display: inline-flex;
+	padding: 20px 20px;
+	right: 0;
+}
+.faci-header-right .fas {
+	font-size: 22px;
+	color: #ffffff;
+	padding: 0 20px;
+	cursor: pointer;
+}
+.faci-header-support {
+	color: #ffffff;
+	cursor: pointer;
+}
+.faci-header-right i {
+	color: #ffffff;
+	cursor: pointer;
+}
+@media screen and (max-width: 600px) {
+	.faci-header-left {
+		padding-left: 5px;
+	}
+	.faci-header-left i {
+		padding-left: 10px;
+		font-size: 17px;
+	}
+	.faci-header-left h2 {
+		padding-top: 2px;
+		font-size: 15px;
+	}
+	.faci-header-right {
+		padding-right: 5px;
+	}
+	.faci-header-right .fas {
+		padding-right: 5px;
+	}
+}
+@media screen and (max-width: 425px) {
+	.faci-header-left {
+		padding-left: 5px;
+	}
+	.faci-header-left i {
+		padding-left: 10px;
+		font-size: 17px;
+	}
+	.faci-header-left h2 {
+		padding-top: 2px;
+		font-size: 15px;
+	}
+	.faci-header-right {
+		padding-right: 5px;
+	}
+	.faci-header-right .fas {
+		padding-right: 5px;
+	}
+}
+.faci-img {
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 230px;
+	max-width: 1170px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.faci-nav-bar-container {
+	max-width: 1170px;
+	height: auto;
+	margin: 0 auto;
+	/* border: 1px solid red; */
+}
+.faci-infor {
+	height: auto;
+	padding: 10px 0;
+	display: flex;
+	border-bottom: 1px solid #f5f5f5;
+}
+.faci-infor-left {
+	display: flex;
+}
+.faci-logo {
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 120px;
+	height: 60px;
+	border: 1px solid #f5f5f5;
+}
+.faci-name {
+	margin-left: 10px;
+}
+.faci-name h1 {
+	font-size: 20px;
+	font-weight: 500;
+	color: #000000;
+}
+.faci-name p {
+	margin-top: 6px;
+	color: #333;
+}
+.faci-name p i {
+	padding: 0 5px;
+}
+.faci-booking-btn {
+	margin: 10px 15px;
+	position: absolute;
+	right: 0;
+}
+.faci-booking-btn a {
+	text-decoration: none;
+	background-color: #ffc419;
+	color: #fff;
+}
+.booking-btn {
+	border-radius: 4px;
+	text-align: center;
+	display: inline-block;
+	padding: 10px 20px;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 14px;
+}
+
+@media screen and (max-width: 600px) {
+	.faci-infor {
+		display: block;
+	}
+	.faci-infor-left {
+		margin: 10px;
+	}
+	.faci-name h1 {
+		font-size: 18px;
+	}
+	.faci-name p {
+		font-size: 12px;
+	}
+	.faci-booking-btn {
+		display: block;
+		margin: 10px auto;
+		height: auto;
+		width: 358px;
+		position: unset;
+	}
+	.booking-btn {
+		padding: 10px 120px;
+	}
+}
+@media screen and (max-width: 425px) {
+	.faci-infor {
+		display: block;
+	}
+	.faci-infor-left {
+		margin: 10px;
+	}
+	.faci-name h1 {
+		font-size: 18px;
+	}
+	.faci-name p {
+		font-size: 12px;
+	}
+	.faci-booking-btn {
+		display: block;
+		margin: 10px auto;
+		height: auto;
+		width: 358px;
+		position: unset;
+	}
+	.booking-btn {
+		padding: 10px 120px;
+	}
+}
+
+.faci-nav-menu {
+	height: 40px;
+	width: 100%;
+    display: flex;
+    justify-content: center;
+	box-shadow: 1px 2px 3px #bbb;
+}
+.faci-nav-menu ul {
+    overflow-x: auto;
+    display: flex;
+    list-style: none;
+    display: block;
+    white-space: nowrap;
+}
+.faci-nav-menu ul li {
+    display: inline-block;
+}
+.faci-nav-menu a {
+    display: inline-block;
+    text-decoration: none;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    padding: 9px 12px;
+}
+.about-bookingcare{
+    display: flex;
+    width: 90%;
+    height: auto;
+    border-radius: 5px;
+    background-color: #dff0d8;
+    padding: 20px;
+    margin: 20px auto;
+    border-color: #d6e9c6;
+    color: #3c763d;
+}
+.about-bookingcare i {
+    padding-top: 10px;
+    padding-right: 20px;
+    font-size: 20px;
+    color: rgb(255, 153, 0);
+}
+.bookingcare-benefits{
+    width: 90%;
+    height: auto;
+    border-radius: 5px;
+    background-color: #ffc;
+    padding: 20px;
+    margin: 20px auto;
+}
+.bookingcare-benefits ul{
+    padding-top: 10px;
+    padding-left: 20px;
+}
+.faci-introduction-container{
+    width: 90%;
+    height: auto;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px auto;
+}
+.faci-introduction h1{
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #337ab7;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+.faci-introduction p b {
+    font-weight: bold;
+}
+.faci-introduction p {
+    margin: 5px 0;
+}
+.gist {
+    margin: 10px 0;
+}
+.faci-intro-2{
+    padding-top: 40px;
+}
+
+.choose-specialty-btn{
+    background: #fff;
+    padding: 15px 15px;
+    display: block;
+    color: #006e6f;
+    position: fixed;
+    z-index: 2;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    box-shadow: 2px -2px 5px #ccc;
+    font-weight: bold;
+}
+.choose-specialty-btn a{
+    background: #ffc419;
+    color: #fff;
+    padding: 8px 400px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px;
+    max-width: 1150px;
+    margin-left: auto;
+    margin-right: auto;
+}
+@media screen and (max-width: 1000px) {
+    .choose-specialty-btn a{
+        padding: 8px 200px;
+    }
+}
+@media screen and (max-width: 800px) {
+    .choose-specialty-btn a{
+        padding: 8px 150px;
+    }
+}
+@media screen and (max-width: 600px) {
+    .choose-specialty-btn a{
+        padding: 8px 100px;
+    }
+}
+@media screen and (max-width: 425px) {
+    .choose-specialty-btn a{
+        padding: 8px 100px;
+    }
+}
+
+/* footer */
+.footer1 {
+	position: relative;
+	width: 100%;
+	height: 300px;
+	display: flex;
+	background: #efefef;
+	border-bottom: 3px solid #efeef5;
+}
+.company-infor {
+	width: 50%;
+	height: 350px;
+}
+.company-logo {
+	background: url(https://bookingcare.vn/assets/icon/bookingcare-2020.svg);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: left;
+	margin: 30px 0 10px 70px;
+	height: 60px;
+	width: 100%;
+}
+.company-address {
+	margin-left: 70px;
+}
+.company-address h2 {
+	padding-bottom: 5px;
+	font-size: 16px;
+	font-weight: bold;
+}
+.company-address p {
+	padding: 3px 0;
+}
+.company-address p i {
+	font-size: 15px;
+	margin-right: 7px;
+}
+.registered {
+	display: flex;
+	margin-left: 70px;
+	margin-top: 10px;
+}
+.registered-1 {
+	background: url(https://bookingcare.vn/assets/icon/bo-cong-thuong.svg);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: left;
+	margin-right: 20px;
+	height: 40px;
+	width: 90px;
+	cursor: pointer;
+}
+.registered-2 {
+	background: url(https://bookingcare.vn/assets/icon/bo-cong-thuong.svg);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: left;
+	height: 40px;
+	width: 90px;
+	cursor: pointer;
+}
+.list-features {
+	width: 25%;
+	height: 350px;
+}
+.list-features ul {
+	margin: 20px 20px;
+}
+.list-features ul li {
+	list-style: none;
+	padding: 6px;
+}
+.list-features ul li a {
+	text-decoration: none;
+	color: #1cbfd1;
+}
+.more-infor {
+	width: 25%;
+	height: 350px;
+	padding: 20px 20px;
+}
+.more-infor h2 {
+	font-size: 15px;
+	font-weight: 600;
+}
+.headquarter {
+	margin-bottom: 20px;
+}
+.office {
+	margin-bottom: 20px;
+}
+@media screen and (max-width: 1200px) {
+	.footer1 {
+		width: 100%;
+		height: 590px;
+		display: block;
+	}
+	.company-infor {
+		width: 100%;
+		height: 200px;
+		padding: 10px 10px;
+	}
+	.company-logo {
+		margin: 10px 10px;
+		height: 40px;
+		width: 80%;
+	}
+	.company-address {
+		margin: 10px 10px;
+	}
+	.company-address h2 {
+		font-size: 14px;
+	}
+	.company-address p {
+		font-size: 12px;
+	}
+	.list-features {
+		width: 100%;
+		height: 220px;
+	}
+	.list-features ul {
+		margin: 7px 10px;
+	}
+	.more-infor {
+		width: 100%;
+		height: 170px;
+		padding: 10px 10px;
+	}
+	.more-infor h2 {
+		font-size: 13px;
+	}
+	.more-infor p {
+		font-size: 12px;
+	}
+	.headquarter {
+		margin-bottom: 10px;
+	}
+	.office {
+		margin-bottom: 10px;
+	}
+}
+@media screen and (max-width: 600px) {
+	.footer1 {
+		width: 100%;
+		height: 590px;
+		display: block;
+	}
+	.company-infor {
+		width: 100%;
+		height: 200px;
+		padding: 10px 10px;
+	}
+	.company-logo {
+		margin: 10px 10px;
+		height: 40px;
+		width: 80%;
+	}
+	.company-address {
+		margin: 10px 10px;
+	}
+	.company-address h2 {
+		font-size: 14px;
+	}
+	.company-address p {
+		font-size: 12px;
+	}
+	.list-features {
+		width: 100%;
+		height: 220px;
+	}
+	.list-features ul {
+		margin: 7px 10px;
+	}
+	.more-infor {
+		width: 100%;
+		height: 170px;
+		padding: 10px 10px;
+	}
+	.more-infor h2 {
+		font-size: 13px;
+	}
+	.more-infor p {
+		font-size: 12px;
+	}
+	.headquarter {
+		margin-bottom: 10px;
+	}
+	.office {
+		margin-bottom: 10px;
+	}
+}
+@media screen and (max-width: 425px) {
+	.footer1 {
+		width: 100%;
+		height: 590px;
+		display: block;
+	}
+	.company-infor {
+		width: 100%;
+		height: 200px;
+		padding: 10px 10px;
+	}
+	.company-logo {
+		margin: 10px 10px;
+		height: 40px;
+		width: 80%;
+	}
+	.company-address {
+		margin: 10px 10px;
+	}
+	.company-address h2 {
+		font-size: 14px;
+	}
+	.company-address p {
+		font-size: 12px;
+	}
+	.list-features {
+		width: 100%;
+		height: 220px;
+	}
+	.list-features ul {
+		margin: 7px 10px;
+	}
+	.more-infor {
+		width: 100%;
+		height: 170px;
+		padding: 10px 10px;
+	}
+	.more-infor h2 {
+		font-size: 13px;
+	}
+	.more-infor p {
+		font-size: 12px;
+	}
+	.headquarter {
+		margin-bottom: 10px;
+	}
+	.office {
+		margin-bottom: 10px;
+	}
+}
+
+.footer2 {
+	width: 100%;
+	height: 60px;
+	display: flex;
+    margin-bottom: 50px;
+	background: #1cbfd1;
+}
+.footer-left {
+	text-align: center;
+	width: 50%;
+}
+.footer-left p {
+	padding: 19px;
+}
+.footer-right {
+	width: 50%;
+	text-align: center;
+}
+.footer-right i {
+	font-size: 20px;
+	padding: 20px;
+	cursor: pointer;
+}
+@media screen and (max-width: 1200px) {
+	.footer2 {
+		display: block;
+		height: 80px;
+	}
+	.footer-left {
+		width: 100%;
+	}
+	.footer-left p {
+		padding: 5px 0;
+	}
+	.footer-right {
+		width: 100%;
+	}
+	.footer-right i {
+		padding: 6px 20px;
+	}
+}
+@media screen and (max-width: 600px) {
+	.footer2 {
+		display: block;
+		height: 80px;
+	}
+	.footer-left {
+		width: 100%;
+	}
+	.footer-left p {
+		padding: 5px 0;
+	}
+	.footer-right {
+		width: 100%;
+	}
+	.footer-right i {
+		padding: 6px 20px;
+	}
+}
+@media screen and (max-width: 425px) {
+	.footer2 {
+		display: block;
+		height: 80px;
+	}
+	.footer-left {
+		width: 100%;
+	}
+	.footer-left p {
+		padding: 5px 0;
+	}
+	.footer-right {
+		width: 100%;
+	}
+	.footer-right i {
+		padding: 8px 20px;
+	}
+}
