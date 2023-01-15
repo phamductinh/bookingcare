@@ -15,21 +15,22 @@
 		/>
 		<title>Login</title>
 	</head>
-	<body>
+	<body onload="checkSucceed()">
 		<div class="login-box">
 			<h2>Login</h2>
 			<form>
 				<div class="user-box">
-					<input type="text" name="" required="" />
+					<input type="text" name="" required="" id="email" />
 					<label>Email</label>
 				</div>
 				<div class="user-box">
-					<input type="password" name="" required="" />
+					<input type="password" name="" required="" id="password" />
 					<label>Password</label>
 				</div>
-				<a href="#">Login</a>
+				<a onclick="Login()" href="#">Login</a>
 				<a href="#">Cancel</a>
 			</form>
 		</div>
+		<script src="/login/js/login.js"></script>
 	</body>
 </html>
