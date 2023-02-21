@@ -17,7 +17,7 @@ let getUser = (req, res) => {
 	if (!userId) {
 		return res
 			.status(400)
-			.send({ error: true, message: "Please provide id" });
+			.send({ code: "400", msg: "Please provide id" });
 	}
 	db.query(
 		"SELECT * FROM user WHERE id = ?",
@@ -25,15 +25,14 @@ let getUser = (req, res) => {
 		(error, results, fields) => {
 			if (error) throw error;
 			return res.send({
-				error: false,
-				message: "Succeed !",
+				code: "200",
 				data: results[0],
 			});
 		}
 	);
 };
 
-let createUser = (req, res, checkEmail) => {
+let createUser = (req, res) => {
 	if (
 		!req.body.email ||
 		!req.body.password ||
@@ -42,8 +41,8 @@ let createUser = (req, res, checkEmail) => {
 		!req.body.gender
 	) {
 		return res.status(408).send({
-			msg: "Missing parameters !",
 			code: "400",
+			msg: "Missing parameters !",
 		});
 	} else {
 		db.query(
@@ -53,6 +52,7 @@ let createUser = (req, res, checkEmail) => {
 			(err, result) => {
 				if (result.length) {
 					return res.status(409).send({
+                        code: "409",
 						msg: "This user is already in used !",
 					});
 				} else {
@@ -82,8 +82,8 @@ let createUser = (req, res, checkEmail) => {
 										throw err;
 									}
 									return res.status(201).send({
-										msg: "Create a user succeed !",
 										code: "200",
+										msg: "Create a user successfully !",
 									});
 								}
 							);
@@ -104,9 +104,10 @@ let updateUser = (req, res) => {
 	if (!userId) {
 		return res
 			.status(400)
-			.send({ error: true, message: "Please provide userId" });
+			.send({ code: "400", msg: "Please provide userId" });
 	} else if (req.body.email || req.body.password) {
 		return res.status(401).send({
+            code: "401",
 			msg: "Email and password can't be changed !",
 		});
 	} else {
@@ -116,8 +117,8 @@ let updateUser = (req, res) => {
 			(error, results, fields) => {
 				if (error) throw error;
 				return res.send({
-					error: false,
-					message: "User has been updated successfully.",
+					code: "200",
+					msg: "User has been updated successfully.",
 				});
 			}
 		);
@@ -129,7 +130,7 @@ let deleteUser = (req, res) => {
 	if (!userId) {
 		return res
 			.status(400)
-			.send({ error: true, message: "Please provide userId" });
+			.send({ code: "400", msg: "Please provide userId" });
 	} else {
 		db.query(
 			"DELETE FROM user WHERE id = ?",
@@ -137,8 +138,8 @@ let deleteUser = (req, res) => {
 			(error, results, fields) => {
 				if (error) throw error;
 				return res.send({
-					error: false,
-					message: "User has been deleted successfully.",
+					code: "200",
+					msg: "User has been deleted successfully.",
 				});
 			}
 		);
