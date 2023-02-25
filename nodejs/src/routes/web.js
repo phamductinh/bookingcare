@@ -8,14 +8,14 @@ let router = express.Router();
 
 let initWebRoutes = (app) => {
 	router.get("/", homeController.getHomePage);
-	router.post("/login", authController.login);
-	router.post("/register", authController.register);
+	router.post("/api/login", authController.login);
+	router.post("/api/register", authController.register);
 
-	router.get("/users", verifyJWT, userController.getAllUsers);
-	router.get("/get-user", verifyJWT, userController.getUser);
-	router.post("/create-user", verifyJWT, userController.createUser);
-	router.put("/edit-user", verifyJWT, userController.updateUser);
-	router.delete("/delete-user", verifyJWT, userController.deleteUser);
+	router.get("/api/users", verifyJWT, userController.getAllUsers);
+	router.get("/api/get-user", verifyJWT, userController.getUser);
+	router.post("/api/create-user", verifyJWT, userController.createUser);
+	router.put("/api/edit-user", verifyJWT, userController.updateUser);
+	router.delete("/api/delete-user", verifyJWT, userController.deleteUser);
 
 	return app.use("/", router);
 };
