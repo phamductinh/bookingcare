@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Exercise 1</title>
+		<script type="text/javascript">
+            var enter = "<br />";
+            var str = "      Javascript is        easy     ";
+
+            document.write("Input: " + str + "length: " + str.length + enter);
+
+            function trim(string) {
+                string = string.replace(/^\s+/igm, "");
+                string = string.replace(/\s+$/igm, "");
+                string = string.replace(/\s+/igm, " ");
+                return string;
+            }
+
+            str = trim(str);
+            document.write("Output trim: " + str + " - length: " + str.length + enter);
+
+            
+
+        </script>
+	</head>
+	<body></body>
+</html>

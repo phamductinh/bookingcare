@@ -1,35 +1,30 @@
 import db from "../configs/connectDB";
 import bcrypt from "bcryptjs";
 import emailValidator from "email-validator";
+import userModel from "../models/userModel";
 
-let getAllUsers = (req, res) => {
-	db.query("SELECT * FROM user", (error, results, fields) => {
-		if (error) throw error;
-		return res.send({
-			code: "200",
-			data: results,
-		});
-	});
+const getAllUsers = (req, res) => {
+    userModel.getAllUsers((error, results) => {
+        if (error) throw error;
+        return res.send({
+            code: "200",
+            data: results,
+        });
+    });
 };
 
 let getUser = (req, res) => {
 	let userId = req.query.id;
 	if (!userId) {
-		return res
-			.status(400)
-			.send({ code: "400", msg: "Please provide id" });
+		return res.status(400).send({ code: "400", msg: "Please provide id" });
 	}
-	db.query(
-		"SELECT * FROM user WHERE id = ?",
-		userId,
-		(error, results, fields) => {
-			if (error) throw error;
-			return res.send({
-				code: "200",
-				data: results[0],
-			});
-		}
-	);
+	userModel.getUserById(userId, (error, results) => {
+		if (error) throw error;
+		return res.send({
+			code: "200",
+			data: results[0],
+		});
+	});
 };
 
 let createUser = (req, res) => {
@@ -52,7 +47,7 @@ let createUser = (req, res) => {
 			(err, result) => {
 				if (result.length) {
 					return res.status(409).send({
-                        code: "409",
+						code: "409",
 						msg: "This user is already in used !",
 					});
 				} else {
@@ -107,7 +102,7 @@ let updateUser = (req, res) => {
 			.send({ code: "400", msg: "Please provide userId" });
 	} else if (req.body.email || req.body.password) {
 		return res.status(401).send({
-            code: "401",
+			code: "401",
 			msg: "Email and password can't be changed !",
 		});
 	} else {
