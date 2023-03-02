@@ -6,24 +6,23 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Exercise 1</title>
 		<script type="text/javascript">
-            var enter = "<br />";
-            var str = "      Javascript is        easy     ";
+			var enter = "<br />";
+			var str = "      Javascript is        easy     ";
 
-            document.write("Input: " + str + "length: " + str.length + enter);
+			document.write("Input: " + str + "length: " + str.length + enter);
 
-            function trim(string) {
-                string = string.replace(/^\s+/igm, "");
-                string = string.replace(/\s+$/igm, "");
-                string = string.replace(/\s+/igm, " ");
-                return string;
-            }
+			function trim(string) {
+				string = string.replace(/^\s+/gim, "");
+				string = string.replace(/\s+$/gim, "");
+				string = string.replace(/\s+/gim, " ");
+				return string;
+			}
 
-            str = trim(str);
-            document.write("Output trim: " + str + " - length: " + str.length + enter);
-
-            
-
-        </script>
+			str = trim(str);
+			document.write(
+				"Output trim: " + str + " - length: " + str.length + enter
+			);
+		</script>
 	</head>
 	<body></body>
 </html>
