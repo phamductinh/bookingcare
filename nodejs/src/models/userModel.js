@@ -6,9 +6,16 @@ import {
 	validateAddress,
 } from "../middlewares/validateUser";
 import bcrypt from "bcryptjs";
+import {
+	findAllUsers,
+	findUserById,
+	findByEmail,
+	createAUser,
+	updateUserQuery,
+} from "../database/queries";
 
 let getAllUsers = (callback) => {
-	db.query("SELECT * FROM user", (error, results, fields) => {
+	db.query(findAllUsers, (error, results, fields) => {
 		if (error) {
 			callback(error, null);
 		} else {
@@ -18,16 +25,12 @@ let getAllUsers = (callback) => {
 };
 
 let getUserById = (userId, callback) => {
-	db.query(
-		"SELECT * FROM user WHERE id = ?",
-		userId,
-		(error, results, fields) => {
-			if (error) {
-				return callback(error);
-			}
-			return callback(null, results[0]);
+	db.query(findUserById, userId, (error, results, fields) => {
+		if (error) {
+			return callback(error);
 		}
-	);
+		return callback(null, results[0]);
+	});
 };
 
 let createUser = (userData, callback) => {
@@ -37,74 +40,89 @@ let createUser = (userData, callback) => {
 		error.statusCode = 400;
 		return callback(error);
 	}
-	db.query(
-		`SELECT * FROM user WHERE LOWER(email) = LOWER(${db.escape(email)});`,
-		(err, result) => {
+
+	db.query(findByEmail, email, (err, result) => {
+		if (err) {
+			return callback(err);
+		}
+
+		if (result.length) {
+			let error = new Error("This user is already in used!");
+			error.statusCode = 409;
+			return callback(error);
+		}
+
+		if (!validatePassword(password)) {
+			let error = new Error(
+				"The password must include a special character, capitalize the first letter and have at least 8 characters!"
+			);
+			error.statusCode = 400;
+			return callback(error);
+		}
+		bcrypt.hash(password, 10, (err, hash) => {
 			if (err) {
 				return callback(err);
 			}
 
-			if (result.length) {
-				let error = new Error("This user is already in used!");
-				error.statusCode = 409;
+			if (!validateEmail(email)) {
+				let error = new Error("Please provide a valid email!");
+				error.statusCode = 400;
 				return callback(error);
 			}
 
-			if (!validatePassword(password)) {
+			if (!validateFullName(fullName)) {
 				let error = new Error(
-					"The password must include a special character and capitalize the first letter!"
+					"Fullname can't contain special characters and number!"
 				);
 				error.statusCode = 400;
 				return callback(error);
 			}
-			bcrypt.hash(password, 10, (err, hash) => {
-				if (err) {
-					return callback(err);
-				}
 
-				if (!validateEmail(email)) {
-					let error = new Error("Invalid email!");
-					error.statusCode = 400;
-					return callback(error);
-				}
-
-				if (!validateFullName(fullName)) {
-					let error = new Error(
-						"Fullname can't contain special characters and number!"
-					);
-					error.statusCode = 400;
-					return callback(error);
-				}
-
-				if (!validateAddress(address)) {
-					let error = new Error(
-						"Address can't contain special characters!"
-					);
-					error.statusCode = 400;
-					return callback(error);
-				}
-
-				db.query(
-					`INSERT INTO user (email, password, fullName, address, gender, phoneNumber) VALUES (${db.escape(
-						email
-					)}, ${db.escape(hash)}, ${db.escape(fullName)}, ${db.escape(
-						address
-					)}, ${db.escape(gender)}, ${db.escape(phoneNumber)})`,
-					(err, results) => {
-						if (err) {
-							return callback(err);
-						}
-
-						callback(null, results);
-					}
+			if (!validateAddress(address)) {
+				let error = new Error(
+					"Address can't contain special characters!"
 				);
-			});
-		}
-	);
+				error.statusCode = 400;
+				return callback(error);
+			}
+
+			db.query(
+				createAUser,
+				[email, hash, fullName, address, gender, phoneNumber],
+				(err, results) => {
+					if (err) {
+						return callback(err);
+					}
+					callback(null, results);
+				}
+			);
+		});
+	});
+};
+
+let updateAUser = (id, userData, callback) => {
+	let values = [
+		userData.fullName,
+		userData.address,
+		userData.gender,
+		userData.phoneNumber,
+	];
+	if (!id) {
+		let error = new Error("Please provide id!");
+		error.statusCode = 400;
+		return callback(error);
+	}
+	if (userData.email || userData.password) {
+		let error = new Error("Email and password can't be changed!");
+		error.statusCode = 400;
+		return callback(error);
+	}
+	db.query(updateUserQuery, values, id, callback);
 };
 
 module.exports = {
 	getUserById,
 	getAllUsers,
 	createUser,
+	updateAUser,
 };

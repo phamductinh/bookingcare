@@ -20,33 +20,30 @@ const getAllUsers = (req, res) => {
 
 let getUser = (req, res) => {
 	let userId = req.query.id;
-    if (!userId) {
-        return res
-            .status(400)
-            .send({ code: "400", msg: "Please provide id" });
-    }
+	if (!userId) {
+		return res.status(400).send({ code: "400", msg: "Please provide id" });
+	}
 
-    userModel.getUserById(userId, (error, user) => {
-        if (error) {
-            throw error;
-        }
-        return res.send({
-            code: "200",
-            data: user,
-        });
-    });
+	userModel.getUserById(userId, (error, user) => {
+		if (error) {
+			throw error;
+		}
+		return res.send({
+			code: "200",
+			data: user,
+		});
+	});
 };
 
 let createUser = (req, res) => {
-	const userData = req.body;
+	let userData = req.body;
 	userModel.createUser(userData, (err, results) => {
 		if (err) {
-			return res.status(err.statusCode || 500).send({
-				code: err.statusCode || 500,
+			return res.status(err.statusCode).send({
+				code: err.statusCode,
 				msg: err.message,
 			});
 		}
-
 		return res.status(201).send({
 			code: 200,
 			msg: "Create a user successfully!",
@@ -55,33 +52,18 @@ let createUser = (req, res) => {
 };
 
 let updateUser = (req, res) => {
-	let userId = req.body.id;
-	let fullName = req.body.fullName;
-	let address = req.body.address;
-	let gender = req.body.gender;
-	let phoneNumber = req.body.phoneNumber;
-	if (!userId) {
-		return res
-			.status(400)
-			.send({ code: "400", msg: "Please provide userId" });
-	} else if (req.body.email || req.body.password) {
-		return res.status(401).send({
-			code: "401",
-			msg: "Email and password can't be changed !",
-		});
-	} else {
-		db.query(
-			"UPDATE user SET fullName = ?, address = ?, gender = ?, phoneNumber = ? WHERE id = ?",
-			[fullName, address, gender, phoneNumber, userId],
-			(error, results, fields) => {
-				if (error) throw error;
-				return res.send({
-					code: "200",
-					msg: "User has been updated successfully.",
-				});
-			}
-		);
-	}
+	let id = req.params.id;
+	let userData = req.body;
+	userModel.updateAUser,
+		userData,
+		id,
+		(error, results, fields) => {
+			if (error) throw error;
+			return res.send({
+				code: "200",
+				msg: "User has been updated successfully.",
+			});
+		};
 };
 
 let deleteUser = (req, res) => {
