@@ -8,10 +8,12 @@ let createAUser = `INSERT INTO user (email, password, fullName, address, gender,
 
 let updateUserQuery = `UPDATE user SET fullName = ?, address = ?, gender = ?, phoneNumber = ? WHERE id = ?`;
 
+let deleteUserById = `DELETE FROM user WHERE id = ?`
+
 module.exports = {
 	findAllUsers,
 	findUserById,
 	findByEmail,
 	createAUser,
-	updateUserQuery,
+	updateUserQuery,deleteUserById
 };

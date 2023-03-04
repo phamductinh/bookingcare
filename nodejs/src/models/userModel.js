@@ -12,10 +12,11 @@ import {
 	findByEmail,
 	createAUser,
 	updateUserQuery,
+	deleteUserById,
 } from "../database/queries";
 
 let getAllUsers = (callback) => {
-	db.query(findAllUsers, (error, results, fields) => {
+	db.query(findAllUsers, (error, results) => {
 		if (error) {
 			callback(error, null);
 		} else {
@@ -25,7 +26,7 @@ let getAllUsers = (callback) => {
 };
 
 let getUserById = (userId, callback) => {
-	db.query(findUserById, userId, (error, results, fields) => {
+	db.query(findUserById, userId, (error, results) => {
 		if (error) {
 			return callback(error);
 		}
@@ -100,14 +101,35 @@ let createUser = (userData, callback) => {
 	});
 };
 
-let updateAUser = (id, userData, callback) => {
+// let updateAUser = (id, userData, callback) => {
+// 	let values = [
+// 		userData.fullName,
+// 		userData.address,
+// 		userData.gender,
+// 		userData.phoneNumber,
+// 	];
+// 	if (!id) {
+// 		let error = new Error("Please provide id!");
+// 		error.statusCode = 400;
+// 		return callback(error);
+// 	}
+// 	if (userData.email || userData.password) {
+// 		let error = new Error("Email and password can't be changed!");
+// 		error.statusCode = 400;
+// 		return callback(error);
+// 	}
+// 	db.query(updateUserQuery, values, id, callback);
+// };
+
+let updateAUser = (userData, callback) => {
 	let values = [
 		userData.fullName,
 		userData.address,
 		userData.gender,
 		userData.phoneNumber,
+		userData.id,
 	];
-	if (!id) {
+	if (!userData.id) {
 		let error = new Error("Please provide id!");
 		error.statusCode = 400;
 		return callback(error);
@@ -117,7 +139,11 @@ let updateAUser = (id, userData, callback) => {
 		error.statusCode = 400;
 		return callback(error);
 	}
-	db.query(updateUserQuery, values, id, callback);
+	db.query(updateUserQuery, values, callback);
+};
+
+let deleteAUser = (userId, callback) => {
+	return db.query(deleteUserById, [userId], callback);
 };
 
 module.exports = {
@@ -125,4 +151,5 @@ module.exports = {
 	getAllUsers,
 	createUser,
 	updateAUser,
+	deleteAUser,
 };

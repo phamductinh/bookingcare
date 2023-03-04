@@ -51,40 +51,53 @@ let createUser = (req, res) => {
 	});
 };
 
+// let updateUser = (req, res) => {
+// 	let id = req.params.id;
+// 	let userData = req.body;
+// 	userModel.updateAUser,
+// 		userData,
+// 		id,
+// 		(error, results, fields) => {
+// 			if (error) throw error;
+// 			return res.send({
+// 				code: "200",
+// 				msg: "User has been updated successfully.",
+// 			});
+// 		};
+// };
+
 let updateUser = (req, res) => {
-	let id = req.params.id;
-	let userData = req.body;
-	userModel.updateAUser,
-		userData,
-		id,
-		(error, results, fields) => {
-			if (error) throw error;
-			return res.send({
-				code: "200",
-				msg: "User has been updated successfully.",
-			});
-		};
-};
+    let userData = req.body;
+    userModel.updateAUser(userData, (error, results, fields) => {
+      if (error) throw error;
+      return res.send({
+        code: "200",
+        msg: "User has been updated successfully.",
+      });
+    });
+  };
 
 let deleteUser = (req, res) => {
 	let userId = req.body.id;
 	if (!userId) {
 		return res
 			.status(400)
-			.send({ code: "400", msg: "Please provide userId" });
-	} else {
-		db.query(
-			"DELETE FROM user WHERE id = ?",
-			[userId],
-			(error, results, fields) => {
-				if (error) throw error;
-				return res.send({
-					code: "200",
-					msg: "User has been deleted successfully.",
-				});
-			}
-		);
+			.send({ code: "400", msg: "Please provide userId!" });
 	}
+	userModel.getUserById(userId, (error, user) => {
+		if (!user) {
+			return res
+				.status(400)
+				.send({ code: "400", msg: "User does not exist!" });
+		}
+		userModel.deleteAUser(userId, (error, results, fields) => {
+			if (error) throw error;
+			return res.send({
+				code: "200",
+				msg: "User has been deleted successfully.",
+			});
+		});
+	});
 };
 
 module.exports = {
