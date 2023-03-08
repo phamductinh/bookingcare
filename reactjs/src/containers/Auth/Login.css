@@ -62,11 +62,13 @@ body {
 	font-size: 13px;
 } */
 
-.login-box form a {
+.btn-login {
 	position: relative;
-	display: inline-block;
 	padding: 10px 20px;
 	color: #03e9f4;
+	outline: none;
+	border: none;
+	background: none;
 	font-size: 16px;
 	text-decoration: none;
 	text-transform: uppercase;
@@ -77,7 +79,29 @@ body {
 	letter-spacing: 4px;
 }
 
-.login-box a:hover {
+.btn-signup {
+	position: relative;
+	padding: 10px 20px;
+	color: #03e9f4;
+	outline: none;
+	border: none;
+	background: none;
+	font-size: 16px;
+	text-decoration: none;
+	text-transform: uppercase;
+	overflow: hidden;
+	transition: 0.5s;
+	margin-top: 40px;
+	margin-left: 25px;
+	letter-spacing: 4px;
+}
+
+.btn-login:hover {
+	background: #03e9f4;
+	color: #fff;
+	border-radius: 5px;
+}
+.btn-signup:hover {
 	background: #03e9f4;
 	color: #fff;
 	border-radius: 5px;

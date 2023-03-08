@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
+import { handleLoginAPI } from "../../services/userService";
 import "./Login.css";
 
 class Login extends Component {
@@ -12,20 +13,20 @@ class Login extends Component {
 		};
 	}
 
-	handleOnchangeEmail = (event) => {
+	handleOnchangeInputs = (event) => {
 		this.setState({
-			email: event.target.value,
-		});
-	};
-	handleOnchangePassword = (event) => {
-		this.setState({
-			password: event.target.value,
+			[event.target.name]: event.target.value,
 		});
 	};
 
-	handleLogin = () => {
+	handleLogin = async () => {
 		console.log("email:", this.state.email);
 		console.log("password:", this.state.password);
+		try {
+			await handleLoginAPI(this.state.email, this.state.password);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	render() {
@@ -37,10 +38,10 @@ class Login extends Component {
 						<div className="user-box">
 							<input
 								type="email"
-								id="email"
+								name="email"
 								value={this.state.email}
 								onChange={(event) =>
-									this.handleOnchangeEmail(event)
+									this.handleOnchangeInputs(event)
 								}
 							/>
 							<label>Email</label>
@@ -49,17 +50,19 @@ class Login extends Component {
 							<input
 								type="password"
 								onChange={(event) =>
-									this.handleOnchangePassword(event)
+									this.handleOnchangeInputs(event)
 								}
-								required=""
-								id="password"
+								name="password"
 							/>
 							<label>Password</label>
 						</div>
-						<a onClick={() => this.handleLogin()} href="#">
+						<button
+							className="btn-login"
+							onClick={() => this.handleLogin()}
+						>
 							Login
-						</a>
-						<a href="#">Sign up</a>
+						</button>
+						<button className="btn-signup">Sign up</button>
 					</form>
 				</div>
 			</body>
