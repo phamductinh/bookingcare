@@ -14,6 +14,7 @@ import {
 	updateUserQuery,
 	deleteUserById,
 } from "../database/queries";
+import { errMsg } from "../utils/resMsg";
 
 let getAllUsers = (callback) => {
 	db.query(findAllUsers, (error, results) => {
@@ -35,9 +36,10 @@ let getUserById = (userId, callback) => {
 };
 
 let createUser = (userData, callback) => {
-	let { email, password, fullName, address, gender, phoneNumber } = userData;
-	if (!email || !password || !fullName || !address || !gender) {
-		let error = new Error("Missing input parameters!");
+	let { email, password, fullName, address, gender, role, phoneNumber } =
+		userData;
+	if (!email || !password || !fullName || !address || !gender || !role) {
+		let error = new Error(errMsg.missing_input);
 		error.statusCode = 400;
 		return callback(error);
 	}
@@ -48,15 +50,13 @@ let createUser = (userData, callback) => {
 		}
 
 		if (result.length) {
-			let error = new Error("This user is already in used!");
+			let error = new Error(errMsg.inUsed);
 			error.statusCode = 409;
 			return callback(error);
 		}
 
 		if (!validatePassword(password)) {
-			let error = new Error(
-				"The password must include a special character, capitalize the first letter and have at least 8 characters!"
-			);
+			let error = new Error(errMsg.wr_password);
 			error.statusCode = 400;
 			return callback(error);
 		}
@@ -66,30 +66,26 @@ let createUser = (userData, callback) => {
 			}
 
 			if (!validateEmail(email)) {
-				let error = new Error("Please provide a valid email!");
+				let error = new Error(errMsg.wr_email);
 				error.statusCode = 400;
 				return callback(error);
 			}
 
 			if (!validateFullName(fullName)) {
-				let error = new Error(
-					"Fullname can't contain special characters and number!"
-				);
+				let error = new Error(errMsg.wr_fullname);
 				error.statusCode = 400;
 				return callback(error);
 			}
 
 			if (!validateAddress(address)) {
-				let error = new Error(
-					"Address can't contain special characters!"
-				);
+				let error = new Error(errMsg.wr_address);
 				error.statusCode = 400;
 				return callback(error);
 			}
 
 			db.query(
 				createAUser,
-				[email, hash, fullName, address, gender, phoneNumber],
+				[email, hash, fullName, address, gender, role, phoneNumber],
 				(err, results) => {
 					if (err) {
 						return callback(err);
@@ -130,12 +126,12 @@ let updateAUser = (userData, callback) => {
 		userData.id,
 	];
 	if (!userData.id) {
-		let error = new Error("Please provide id!");
+		let error = new Error(errMsg.missing_input);
 		error.statusCode = 400;
 		return callback(error);
 	}
 	if (userData.email || userData.password) {
-		let error = new Error("Email and password can't be changed!");
+		let error = new Error(errMsg.cant_change);
 		error.statusCode = 400;
 		return callback(error);
 	}

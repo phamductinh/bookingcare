@@ -1,13 +1,14 @@
 import db from "../configs/connectDB";
 import bcrypt from "bcryptjs";
 import userModel from "../models/userModel";
+import { errMsg, successMsg } from "../utils/resMsg";
 
 const getAllUsers = (req, res) => {
 	userModel.getAllUsers((error, results) => {
 		if (error) {
 			return res.status(500).send({
 				code: "500",
-				msg: "Failed to fetch users",
+				msg: errMsg.failed,
 			});
 		} else {
 			return res.status(200).send({
@@ -21,7 +22,7 @@ const getAllUsers = (req, res) => {
 let getUser = (req, res) => {
 	let userId = req.query.id;
 	if (!userId) {
-		return res.status(400).send({ code: "400", msg: "Please provide id" });
+		return res.status(400).send({ code: "400", msg: errMsg.missing_input });
 	}
 
 	userModel.getUserById(userId, (error, user) => {
@@ -46,7 +47,7 @@ let createUser = (req, res) => {
 		}
 		return res.status(201).send({
 			code: 200,
-			msg: "Create a user successfully!",
+			msg: successMsg.create_user_succeed,
 		});
 	});
 };
@@ -72,7 +73,7 @@ let updateUser = (req, res) => {
       if (error) throw error;
       return res.send({
         code: "200",
-        msg: "User has been updated successfully.",
+        msg: successMsg.update_user_succeed,
       });
     });
   };
@@ -82,19 +83,19 @@ let deleteUser = (req, res) => {
 	if (!userId) {
 		return res
 			.status(400)
-			.send({ code: "400", msg: "Please provide userId!" });
+			.send({ code: "400", msg: errMsg.missing_input });
 	}
 	userModel.getUserById(userId, (error, user) => {
 		if (!user) {
 			return res
 				.status(400)
-				.send({ code: "400", msg: "User does not exist!" });
+				.send({ code: "400", msg: errMsg.not_exist });
 		}
 		userModel.deleteAUser(userId, (error, results, fields) => {
 			if (error) throw error;
 			return res.send({
 				code: "200",
-				msg: "User has been deleted successfully.",
+				msg: successMsg.dalete_user_succeed,
 			});
 		});
 	});

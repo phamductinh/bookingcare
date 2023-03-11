@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import { handleLoginAPI } from "../../services/userService";
+import * as actions from "../../store/actions/";
+import { Helmet } from "react-helmet";
 import "./Login.css";
 
 class Login extends Component {
@@ -10,38 +12,77 @@ class Login extends Component {
 		this.state = {
 			email: "",
 			password: "",
+			errMsg: "",
 		};
 	}
 
-	handleOnchangeInputs = (event) => {
+	handleOnchangeEmail = (event) => {
 		this.setState({
-			[event.target.name]: event.target.value,
+			email: event.target.value,
+		});
+	};
+	handleOnchangePassword = (event) => {
+		this.setState({
+			password: event.target.value,
 		});
 	};
 
 	handleLogin = async () => {
-		console.log("email:", this.state.email);
-		console.log("password:", this.state.password);
+		this.setState({
+			errMsg: "",
+		});
 		try {
-			await handleLoginAPI(this.state.email, this.state.password);
+			let data = await handleLoginAPI(
+				this.state.email,
+				this.state.password
+			);
+			if (data && data.code !== 200) {
+				this.setState({
+					errMsg: data.msg,
+				});
+			}
+			if (data && data.code === 200) {
+				localStorage.setItem("token", data.token);
+				this.props.userLoginSuccess(data.user);
+				console.log("login succeed", data);
+			}
 		} catch (error) {
-			console.log(error);
+			if (error.response) {
+				if (error.response.data) {
+					this.setState({
+						errMsg: error.response.data.msg,
+					});
+				}
+			}
 		}
 	};
 
 	render() {
 		return (
-			<body>
+			<>
+				<Helmet>
+					<style>{`
+                        body {
+                            margin: 0;
+                            padding: 0;
+                            font-family: sans-serif;
+                            background-image: url("/src/assets/images/banner1.jpg");
+                            background-size: cover;
+                            background-repeat: no-repeat;
+                            background-position: center;
+                        }
+                    `}</style>
+				</Helmet>
 				<div className="login-box">
 					<h2>Login</h2>
 					<form>
 						<div className="user-box">
 							<input
 								type="email"
-								name="email"
+								autoComplete="off"
 								value={this.state.email}
 								onChange={(event) =>
-									this.handleOnchangeInputs(event)
+									this.handleOnchangeEmail(event)
 								}
 							/>
 							<label>Email</label>
@@ -49,14 +90,19 @@ class Login extends Component {
 						<div className="user-box">
 							<input
 								type="password"
+								autoComplete="off"
+								value={this.state.password}
 								onChange={(event) =>
-									this.handleOnchangeInputs(event)
+									this.handleOnchangePassword(event)
 								}
-								name="password"
 							/>
 							<label>Password</label>
 						</div>
+						<div className="errMsg" style={{ color: "red" }}>
+							{this.state.errMsg}
+						</div>
 						<button
+							type="button"
 							className="btn-login"
 							onClick={() => this.handleLogin()}
 						>
@@ -65,7 +111,7 @@ class Login extends Component {
 						<button className="btn-signup">Sign up</button>
 					</form>
 				</div>
-			</body>
+			</>
 		);
 	}
 }
@@ -79,6 +125,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		navigate: (path) => dispatch(push(path)),
+		userLoginSuccess: (userInfor) =>
+			dispatch(actions.userLoginSuccess(userInfor)),
 	};
 };
 
