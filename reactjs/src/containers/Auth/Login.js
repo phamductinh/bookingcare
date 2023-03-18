@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
-import { handleLoginAPI } from "../../services/userService";
+import { handleLoginAPI, handleCreateUser } from "../../services/userService";
 import * as actions from "../../store/actions/";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
 
 class Login extends Component {
@@ -11,7 +13,16 @@ class Login extends Component {
 		this.state = {
 			email: "",
 			password: "",
+			newEmail: "",
+			newPassword: "",
+			confirmPass: "",
+			fullName: "",
+			address: "",
+			gender: "",
+			role: "",
+			phoneNumber: "",
 			errMsg: "",
+			errMsgSignUp: "",
 			setModalIsOpen: false,
 			setLoginOpen: true,
 		};
@@ -45,7 +56,6 @@ class Login extends Component {
 			if (data && data.code === 200) {
 				localStorage.setItem("token", data.token);
 				this.props.userLoginSuccess(data.user);
-				console.log("login succeed", data);
 			}
 		} catch (error) {
 			if (error.response) {
@@ -64,13 +74,101 @@ class Login extends Component {
 			setLoginOpen: false,
 		});
 	}
-    
+
 	handleCloseModal() {
-        this.setState({
-            setModalIsOpen: false,
-            setLoginOpen: true,
+		this.setState({
+			setModalIsOpen: false,
+			setLoginOpen: true,
+			newEmail: "",
+			newPassword: "",
+			confirmPass: "",
+			fullName: "",
+			address: "",
+			gender: "",
+			role: "",
+			phoneNumber: "",
+            errMsgSignUp: "",
 		});
 	}
+
+	handleOnchangeModalInput = (event, id) => {
+		let copyState = { ...this.state };
+		copyState[id] = event.target.value;
+		this.setState({
+			...copyState,
+		});
+	};
+
+	validateModalInput = () => {
+		let isValid = true;
+		let arrInput = [
+			"newEmail",
+			"newPassword",
+			"confirmPass",
+			"fullName",
+			"address",
+			"gender",
+			"role",
+			"phoneNumber",
+		];
+		for (let i = 0; i < arrInput.length; i++) {
+			if (!this.state[arrInput[i]]) {
+				isValid = false;
+				this.setState({
+					errMsgSignUp: "Missing input parameters !",
+				});
+				// alert("Missing " + arrInput[i]);
+				break;
+			}
+		}
+		return isValid;
+	};
+
+	handleAddNewUser = async (data) => {
+		this.setState({
+			errMsgSignUp: "",
+		});
+		let newUserData = {
+			email: this.state.newEmail,
+			password: this.state.newPassword,
+			fullName: this.state.fullName,
+			address: this.state.address,
+			gender: this.state.gender,
+			role: this.state.role,
+			phoneNumber: this.state.phoneNumber,
+		};
+		let isValid = this.validateModalInput();
+		if (newUserData.password !== this.state.confirmPass) {
+			this.setState({
+				errMsgSignUp: "Passwords are not the same !",
+			});
+		} else if (isValid === true) {
+			try {
+				let response = await handleCreateUser(newUserData);
+				console.log("check response", response);
+				this.setState({
+					newEmail: "",
+					newPassword: "",
+					confirmPass: "",
+					fullName: "",
+					address: "",
+					gender: "",
+					role: "",
+					phoneNumber: "",
+					setModalIsOpen: false,
+					setLoginOpen: true,
+				});
+			} catch (error) {
+				if (error.response) {
+					if (error.response.data) {
+						this.setState({
+							errMsgSignUp: error.response.data.msg,
+						});
+					}
+				}
+			}
+		}
+	};
 
 	render() {
 		let { setModalIsOpen, setLoginOpen } = this.state;
@@ -135,44 +233,104 @@ class Login extends Component {
 							<input
 								className="email"
 								type="email"
-                                name="email"
 								placeholder="Email"
+								value={this.state.newEmail}
+								onChange={(event) =>
+									this.handleOnchangeModalInput(
+										event,
+										"newEmail"
+									)
+								}
 							/>
 							<div className="pass-field">
 								<input
 									className="password"
-                                    name="password"
 									type="password"
+									autoComplete="off"
 									placeholder="Password"
+									value={this.state.newPassword}
+									onChange={(event) =>
+										this.handleOnchangeModalInput(
+											event,
+											"newPassword"
+										)
+									}
 								/>
 								<input
 									className="confirm-password"
-                                    name="cf-password"
 									type="password"
+									autoComplete="off"
 									placeholder="Confirm Password"
+									value={this.state.confirmPass}
+									onChange={(event) =>
+										this.handleOnchangeModalInput(
+											event,
+											"confirmPass"
+										)
+									}
 								/>
 							</div>
 							<input
 								className="fullname"
-                                name="fullname"
+								name="fullName"
 								type="text"
-								placeholder="Full name"
+								placeholder="Fullname"
+								value={this.state.fullName}
+								onChange={(event) =>
+									this.handleOnchangeModalInput(
+										event,
+										"fullName"
+									)
+								}
 							/>
 							<input
 								className="address"
-                                name="address"
+								name="address"
 								type="text"
 								placeholder="Address"
+								value={this.state.address}
+								onChange={(event) =>
+									this.handleOnchangeModalInput(
+										event,
+										"address"
+									)
+								}
 							/>
 
 							<div className="modal-select">
-								<select name="gender" id="gender-select">
+								<select
+									name="gender"
+									id="gender-select"
+									value={this.state.gender}
+									onChange={(event) =>
+										this.handleOnchangeModalInput(
+											event,
+											"gender"
+										)
+									}
+								>
+									<option value="" disabled>
+										Gender
+									</option>
 									<option value="male">Male</option>
 									<option value="female">Female</option>
 									<option value="other">Other</option>
 								</select>
 
-								<select name="role" id="role-select">
+								<select
+									name="role"
+									id="role-select"
+									value={this.state.role}
+									onChange={(event) =>
+										this.handleOnchangeModalInput(
+											event,
+											"role"
+										)
+									}
+								>
+									<option value="" disabled>
+										Role
+									</option>
 									<option value="admin">Admin</option>
 									<option value="doctor">Doctor</option>
 									<option value="user">User</option>
@@ -180,14 +338,32 @@ class Login extends Component {
 
 								<input
 									className="phoneNumber"
-                                    name="phonenumber"
 									type="tel"
 									placeholder="Phone"
+									value={this.state.phoneNumber}
+									onChange={(event) =>
+										this.handleOnchangeModalInput(
+											event,
+											"phoneNumber"
+										)
+									}
 								/>
+							</div>
+							<div
+								className="errMsgSignUp"
+								style={{ color: "red" }}
+							>
+								{this.state.errMsgSignUp}
 							</div>
 
 							<div className="modal-btn">
-								<button className="btn-add-new">Add</button>
+								<button
+									className="btn-add-new"
+									type="button"
+									onClick={() => this.handleAddNewUser()}
+								>
+									Add
+								</button>
 								<button
 									className="btn-cancel"
 									type="button"

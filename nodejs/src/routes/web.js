@@ -13,7 +13,7 @@ let initWebRoutes = (app) => {
 
 	router.get("/api/users", verifyJWT, userController.getAllUsers);
 	router.get("/api/get-user", verifyJWT, userController.getUser);
-	router.post("/api/create-user", verifyJWT, userController.createUser);
+	router.post("/api/create-user", userController.createUser);
 	router.put("/api/edit-user", verifyJWT, userController.updateUser);
 	router.delete("/api/delete-user", verifyJWT, userController.deleteUser);
 

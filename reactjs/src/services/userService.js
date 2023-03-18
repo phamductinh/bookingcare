@@ -7,4 +7,8 @@ const handleLoginAPI = (userEmail, userPassword) => {
 	});
 };
 
-export { handleLoginAPI };
+const handleCreateUser = (data) => {
+    return axios.post("/api/create-user", data);
+}
+
+export { handleLoginAPI , handleCreateUser};
