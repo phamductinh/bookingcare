@@ -25,6 +25,7 @@ class Login extends Component {
 			errMsgSignUp: "",
 			setModalIsOpen: false,
 			setLoginOpen: true,
+			isShowRole: false,
 		};
 	}
 
@@ -87,7 +88,7 @@ class Login extends Component {
 			gender: "",
 			role: "",
 			phoneNumber: "",
-            errMsgSignUp: "",
+			errMsgSignUp: "",
 		});
 	}
 
@@ -171,7 +172,7 @@ class Login extends Component {
 	};
 
 	render() {
-		let { setModalIsOpen, setLoginOpen } = this.state;
+		let { setModalIsOpen, setLoginOpen, isShowRole } = this.state;
 		return (
 			<>
 				<div className="login-container">
@@ -298,6 +299,18 @@ class Login extends Component {
 							/>
 
 							<div className="modal-select">
+								<input
+									className="phoneNumber"
+									type="tel"
+									placeholder="Phone"
+									value={this.state.phoneNumber}
+									onChange={(event) =>
+										this.handleOnchangeModalInput(
+											event,
+											"phoneNumber"
+										)
+									}
+								/>
 								<select
 									name="gender"
 									id="gender-select"
@@ -317,37 +330,26 @@ class Login extends Component {
 									<option value="other">Other</option>
 								</select>
 
-								<select
-									name="role"
-									id="role-select"
-									value={this.state.role}
-									onChange={(event) =>
-										this.handleOnchangeModalInput(
-											event,
-											"role"
-										)
-									}
-								>
-									<option value="" disabled>
-										Role
-									</option>
-									<option value="admin">Admin</option>
-									<option value="doctor">Doctor</option>
-									<option value="user">User</option>
-								</select>
-
-								<input
-									className="phoneNumber"
-									type="tel"
-									placeholder="Phone"
-									value={this.state.phoneNumber}
-									onChange={(event) =>
-										this.handleOnchangeModalInput(
-											event,
-											"phoneNumber"
-										)
-									}
-								/>
+								{isShowRole ? (
+									<select
+										name="role"
+										id="role-select"
+										value={this.state.role}
+										onChange={(event) =>
+											this.handleOnchangeModalInput(
+												event,
+												"role"
+											)
+										}
+									>
+										<option value="" disabled>
+											Role
+										</option>
+										<option value="admin">Admin</option>
+										<option value="doctor">Doctor</option>
+										<option value="user">User</option>
+									</select>
+								) : null}
 							</div>
 							<div
 								className="errMsgSignUp"

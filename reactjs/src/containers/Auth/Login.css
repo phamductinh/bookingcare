@@ -6,8 +6,8 @@ body {
 }
 
 .login-container {
-    width: 1400px;
-    height: 800px;
+	width: 1400px;
+	height: 800px;
 	background-image: url("/src/assets/images/banner1.jpg");
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -131,7 +131,7 @@ body {
 .modal-content {
 	margin: auto;
 	padding: 20px;
-    background: rgba(8, 7, 7, 0.651);
+	background: rgba(8, 7, 7, 0.651);
 	border: 1px solid #888;
 	width: 60%;
 }
@@ -146,8 +146,8 @@ body {
 	height: 35px;
 	margin: 10px 0;
 	padding: 10px;
-    color: #c7c6c6;
-    background: rgba(8, 7, 7, 0.651);
+	color: #c7c6c6;
+	background: rgba(8, 7, 7, 0.651);
 	border: 1px solid rgb(141, 141, 141);
 	outline: none;
 }
@@ -174,11 +174,11 @@ body {
 #gender-select {
 	height: 35px;
 	width: 30%;
-	margin: 10px 0;
-    padding-left: 8px;
+	margin: 10px 2%;
+	padding-left: 8px;
 	outline: none;
-    color: #c7c6c6;
-    background: rgba(8, 7, 7, 0.651);
+	color: #c7c6c6;
+	background: rgba(8, 7, 7, 0.651);
 	border: 1px solid rgb(141, 141, 141);
 	border-radius: 4px;
 }
@@ -186,11 +186,10 @@ body {
 #role-select {
 	height: 35px;
 	width: 30%;
-	margin: 10px 2%;
-    padding-left: 8px;
+	padding-left: 8px;
 	outline: none;
-    color: #c7c6c6;
-    background: rgba(8, 7, 7, 0.651);
+	color: #c7c6c6;
+	background: rgba(8, 7, 7, 0.651);
 	border: 1px solid rgb(141, 141, 141);
 	border-radius: 4px;
 }
@@ -201,8 +200,8 @@ body {
 
 .modal-btn {
 	display: flex;
-    margin: 5px auto;
-    width: auto;
+	margin: 5px auto;
+	width: auto;
 }
 .btn-add-new {
 	width: 80px;

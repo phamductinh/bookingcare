@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import "./HomePage.css";
 
@@ -7,7 +6,7 @@ class HomePage extends Component {
 	render() {
 		return (
 			<div className="container">
-				<div id="header" className="header-container sticky">
+				<div id="header" className="header-container">
 					<div className="home-header">
 						<div className="left-content">
 							<i className="fas fa-bars"></i>

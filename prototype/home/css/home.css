@@ -108,7 +108,7 @@
 
 /* banner */
 .home-banner {
-	background-image: url("/home/image/banner/banner1.jpg");
+	background-image: url("../image/banner/banner1.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
@@ -181,7 +181,7 @@
 	justify-content: center;
 }
 .android {
-	background-image: url("/home/image/download/android.svg");
+	background-image: url("../image/download/android.svg");
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;
@@ -192,7 +192,7 @@
 	transition: all 0.3s linear;
 }
 .ios {
-	background-image: url("/home/image/download/ios.svg");
+	background-image: url("../image/download/ios.svg");
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;
@@ -425,7 +425,7 @@
 	background-size: cover;
 	display: inline-block;
 	color: #333;
-	box-shadow: 0 7px 50px #b9b9b9;
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 	/* transition: 1s; */
 	transition: all 0.3s linear;
 	position: absolute;
@@ -433,6 +433,7 @@
 	z-index: 1;
 }
 .slide-img:hover {
+    border-radius: 1px;
 	transform: scale(1.02);
 }
 .slide-item:nth-child(1) {
@@ -1785,7 +1786,7 @@
 	display: flex;
 }
 .app-android {
-	background-image: url("/home/image/download/android.svg");
+	background-image: url("../image/download/android.svg");
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;
@@ -1797,7 +1798,7 @@
 	transition: all 0.3s linear;
 }
 .app-ios {
-	background-image: url("/home/image/download/ios.svg");
+	background-image: url("../image/download/ios.svg");
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;
