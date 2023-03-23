@@ -8,7 +8,11 @@ const handleLoginAPI = (userEmail, userPassword) => {
 };
 
 const handleCreateUser = (data) => {
-    return axios.post("/api/create-user", data);
-}
+	return axios.post("/api/create-user", data);
+};
 
-export { handleLoginAPI , handleCreateUser};
+const getAllUsers = () => {
+	return axios.get("/api/users");
+};
+
+export { handleLoginAPI, handleCreateUser, getAllUsers };

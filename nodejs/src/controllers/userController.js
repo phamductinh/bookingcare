@@ -7,12 +7,12 @@ const getAllUsers = (req, res) => {
 	userModel.getAllUsers((error, results) => {
 		if (error) {
 			return res.status(500).send({
-				code: "500",
+				code: 500,
 				msg: errMsg.failed,
 			});
 		} else {
 			return res.status(200).send({
-				code: "200",
+				code: 200,
 				data: results,
 			});
 		}
@@ -22,7 +22,7 @@ const getAllUsers = (req, res) => {
 let getUser = (req, res) => {
 	let userId = req.query.id;
 	if (!userId) {
-		return res.status(400).send({ code: "400", msg: errMsg.missing_input });
+		return res.status(400).send({ code: 400, msg: errMsg.missing_input });
 	}
 
 	userModel.getUserById(userId, (error, user) => {
@@ -30,7 +30,7 @@ let getUser = (req, res) => {
 			throw error;
 		}
 		return res.send({
-			code: "200",
+			code: 200,
 			data: user,
 		});
 	});
@@ -72,7 +72,7 @@ let updateUser = (req, res) => {
     userModel.updateAUser(userData, (error, results, fields) => {
       if (error) throw error;
       return res.send({
-        code: "200",
+        code: 200,
         msg: successMsg.update_user_succeed,
       });
     });
@@ -83,18 +83,18 @@ let deleteUser = (req, res) => {
 	if (!userId) {
 		return res
 			.status(400)
-			.send({ code: "400", msg: errMsg.missing_input });
+			.send({ code: 400, msg: errMsg.missing_input });
 	}
 	userModel.getUserById(userId, (error, user) => {
 		if (!user) {
 			return res
 				.status(400)
-				.send({ code: "400", msg: errMsg.not_exist });
+				.send({ code: 400, msg: errMsg.not_exist });
 		}
 		userModel.deleteAUser(userId, (error, results, fields) => {
 			if (error) throw error;
 			return res.send({
-				code: "200",
+				code: 200,
 				msg: successMsg.dalete_user_succeed,
 			});
 		});
