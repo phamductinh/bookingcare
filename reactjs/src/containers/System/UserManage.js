@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import "./UserManage.css";
 import { getAllUsers } from "../../services/userService";
@@ -13,7 +12,8 @@ class UserManage extends Component {
 	}
 
 	async componentDidMount() {
-		let res = await getAllUsers();
+		let token = localStorage.getItem("token");
+		let res = await getAllUsers(token);
 		if (res && res.code === 200) {
 			this.setState({
 				arrUsers: res.data,

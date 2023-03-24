@@ -55,8 +55,8 @@ class Login extends Component {
 				});
 			}
 			if (data && data.code === 200) {
-				localStorage.setItem("token", data.token);
 				this.props.userLoginSuccess(data.user);
+				localStorage.setItem("token", data.token);
 			}
 		} catch (error) {
 			if (error.response) {
@@ -109,7 +109,6 @@ class Login extends Component {
 			"fullName",
 			"address",
 			"gender",
-			"role",
 			"phoneNumber",
 		];
 		for (let i = 0; i < arrInput.length; i++) {
@@ -135,7 +134,7 @@ class Login extends Component {
 			fullName: this.state.fullName,
 			address: this.state.address,
 			gender: this.state.gender,
-			role: this.state.role,
+			role: this.state.role ? this.state.role : "User",
 			phoneNumber: this.state.phoneNumber,
 		};
 		let isValid = this.validateModalInput();
@@ -393,6 +392,8 @@ const mapDispatchToProps = (dispatch) => {
 		navigate: (path) => dispatch(push(path)),
 		userLoginSuccess: (userInfor) =>
 			dispatch(actions.userLoginSuccess(userInfor)),
+		adminLoginSuccess: (adminInfor) =>
+			dispatch(actions.adminLoginSuccess(adminInfor)),
 	};
 };
 

@@ -14,7 +14,7 @@ app.use(function (req, res, next) {
 	);
 	res.setHeader(
 		"Access-Control-Allow-Headers",
-		"X-Requested-With,content-type"
+		"Authorization ,Content-type"
 	);
 	res.setHeader("Access-Control-Allow-Credentials", true);
 	next();
@@ -26,6 +26,19 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 viewEngine(app);
 initWebRoutes(app);
+
+app.use((req, res, next) => {
+	const err = new Error("Not Found");
+	err.status = 404;
+	next(err);
+});
+
+app.use((err, req, res, next) => {
+	res.locals.error = err;
+	const status = err.status || 500;
+	res.status(status);
+	res.render("error");
+});
 
 let port = process.env.PORT || 9999;
 app.listen(port, () => {

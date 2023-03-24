@@ -36,9 +36,16 @@ let getUserById = (userId, callback) => {
 };
 
 let createUser = (userData, callback) => {
-	let { email, password, fullName, address, gender, role, phoneNumber } =
-		userData;
-	if (!email || !password || !fullName || !address || !gender || !role) {
+	let {
+		email,
+		password,
+		fullName,
+		address,
+		gender,
+		role = "User",
+		phoneNumber,
+	} = userData;
+	if (!email || !password || !fullName || !address || !gender) {
 		let error = new Error(errMsg.missing_input);
 		error.statusCode = 400;
 		return callback(error);

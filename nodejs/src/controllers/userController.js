@@ -68,28 +68,24 @@ let createUser = (req, res) => {
 // };
 
 let updateUser = (req, res) => {
-    let userData = req.body;
-    userModel.updateAUser(userData, (error, results, fields) => {
-      if (error) throw error;
-      return res.send({
-        code: 200,
-        msg: successMsg.update_user_succeed,
-      });
-    });
-  };
+	let userData = req.body;
+	userModel.updateAUser(userData, (error, results, fields) => {
+		if (error) throw error;
+		return res.send({
+			code: 200,
+			msg: successMsg.update_user_succeed,
+		});
+	});
+};
 
 let deleteUser = (req, res) => {
 	let userId = req.body.id;
 	if (!userId) {
-		return res
-			.status(400)
-			.send({ code: 400, msg: errMsg.missing_input });
+		return res.status(400).send({ code: 400, msg: errMsg.missing_input });
 	}
 	userModel.getUserById(userId, (error, user) => {
 		if (!user) {
-			return res
-				.status(400)
-				.send({ code: 400, msg: errMsg.not_exist });
+			return res.status(400).send({ code: 400, msg: errMsg.not_exist });
 		}
 		userModel.deleteAUser(userId, (error, results, fields) => {
 			if (error) throw error;

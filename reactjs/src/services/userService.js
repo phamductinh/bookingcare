@@ -11,8 +11,12 @@ const handleCreateUser = (data) => {
 	return axios.post("/api/create-user", data);
 };
 
-const getAllUsers = () => {
-	return axios.get("/api/users");
+const getAllUsers = (token) => {
+	return axios.get("/api/users", {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
 };
 
 export { handleLoginAPI, handleCreateUser, getAllUsers };
