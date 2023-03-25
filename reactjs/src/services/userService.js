@@ -19,4 +19,20 @@ const getAllUsers = (token) => {
 	});
 };
 
-export { handleLoginAPI, handleCreateUser, getAllUsers };
+const deleteUser = (token, userId) => {
+	return axios.delete(`/api/delete-user?id=${userId}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+};
+
+const editUser = (token, userData) => {
+	return axios.put("/api/edit-user", userData, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+};
+
+export { handleLoginAPI, handleCreateUser, getAllUsers, deleteUser, editUser };

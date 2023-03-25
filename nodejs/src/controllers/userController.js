@@ -53,15 +53,13 @@ let createUser = (req, res) => {
 };
 
 // let updateUser = (req, res) => {
-// 	let id = req.params.id;
 // 	let userData = req.body;
 // 	userModel.updateAUser,
 // 		userData,
-// 		id,
 // 		(error, results, fields) => {
 // 			if (error) throw error;
 // 			return res.send({
-// 				code: "200",
+// 				code: 200,
 // 				msg: "User has been updated successfully.",
 // 			});
 // 		};
@@ -79,7 +77,7 @@ let updateUser = (req, res) => {
 };
 
 let deleteUser = (req, res) => {
-	let userId = req.body.id;
+	let userId = req.query.id;
 	if (!userId) {
 		return res.status(400).send({ code: 400, msg: errMsg.missing_input });
 	}

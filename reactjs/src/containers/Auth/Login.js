@@ -229,7 +229,7 @@ class Login extends Component {
 				{setModalIsOpen ? (
 					<div id="add-new-modal" className="modal">
 						<div className="modal-content">
-							<p>Create a new user</p>
+							<p>Create user</p>
 							<input
 								className="email"
 								type="email"

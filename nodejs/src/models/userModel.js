@@ -104,14 +104,16 @@ let createUser = (userData, callback) => {
 	});
 };
 
-// let updateAUser = (id, userData, callback) => {
+// let updateAUser = (userData, callback) => {
 // 	let values = [
 // 		userData.fullName,
 // 		userData.address,
 // 		userData.gender,
+//         userData.role,
 // 		userData.phoneNumber,
+//         userData.id
 // 	];
-// 	if (!id) {
+// 	if (!userData.id) {
 // 		let error = new Error("Please provide id!");
 // 		error.statusCode = 400;
 // 		return callback(error);
@@ -121,7 +123,7 @@ let createUser = (userData, callback) => {
 // 		error.statusCode = 400;
 // 		return callback(error);
 // 	}
-// 	db.query(updateUserQuery, values, id, callback);
+// 	db.query(updateUserQuery, values, callback);
 // };
 
 let updateAUser = (userData, callback) => {
@@ -129,6 +131,7 @@ let updateAUser = (userData, callback) => {
 		userData.fullName,
 		userData.address,
 		userData.gender,
+        userData.role,
 		userData.phoneNumber,
 		userData.id,
 	];

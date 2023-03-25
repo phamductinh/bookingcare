@@ -1,15 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import "./UserManage.css";
 import {
 	getAllUsers,
 	handleCreateUser,
 	deleteUser,
 	editUser,
 } from "../../services/userService";
-import UserModal from "../Modal/UserModal";
+import "./UserModal.css";
 
-class UserManage extends Component {
+class UserModal extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -50,7 +49,7 @@ class UserManage extends Component {
 		});
 	}
 
-	handleOpenModalEdit(user) {
+	handleOpenModalEdit(user) {        
 		this.setState({
 			setModalEditUser: true,
 			newEmail: user.email,
@@ -195,76 +194,9 @@ class UserManage extends Component {
 	};
 
 	render() {
-		let { arrUsers, setModalIsOpen, setModalEditUser } = this.state;
+        let {  setModalIsOpen, setModalEditUser } = this.state;
 		return (
-			<div className="user-container">
-				<div className="title text-center">Manage users</div>
-				<div className="mx-3">
-					<button
-						className="btn btn-primary px-3"
-						onClick={() => this.handleOpenModal()}
-					>
-						Add new user
-					</button>
-				</div>
-				<div className="users-table mt-3 mx-3">
-					<table id="customers">
-						<tr>
-							<th width="20%" className="text-center">
-								Email
-							</th>
-							<th width="20%" className="text-center">
-								Fullname
-							</th>
-							<th width="20%" className="text-center">
-								Address
-							</th>
-							<th width="14%" className="text-center">
-								Gender
-							</th>
-							<th width="14%" className="text-center">
-								Role
-							</th>
-							<th width="12%" className="text-center">
-								Actions
-							</th>
-						</tr>
-
-						{arrUsers &&
-							arrUsers.map((item, index) => {
-								return (
-									<tr>
-										<td>{item.email}</td>
-										<td>{item.fullName}</td>
-										<td>{item.address}</td>
-										<td>{item.gender}</td>
-										<td>{item.role}</td>
-										<td className="text-center">
-											<button
-												className="btn-edit"
-												onClick={() =>
-													this.handleOpenModalEdit(
-														item
-													)
-												}
-											>
-												<i className="fas fa-pencil-alt"></i>
-											</button>
-											<button
-												className="btn-delete"
-												onClick={() =>
-													this.handleDeleteUser(item)
-												}
-											>
-												<i className="fas fa-trash"></i>
-											</button>
-										</td>
-									</tr>
-								);
-							})}
-					</table>
-				</div>
-
+			<>
 				{setModalIsOpen ? (
 					<div id="add-new-modal" className="modal">
 						<div className="modal-content">
@@ -413,145 +345,7 @@ class UserManage extends Component {
 						</div>
 					</div>
 				) : null}
-
-				{setModalEditUser ? (
-					<div id="add-new-modal" className="modal">
-						<div className="modal-content">
-							<p>Edit user</p>
-							<input
-								className="email"
-								type="email"
-								placeholder="Email"
-								value={this.state.newEmail}
-								disabled
-								onChange={(event) =>
-									this.handleOnchangeModalInput(
-										event,
-										"newEmail"
-									)
-								}
-							/>
-							<div className="pass-field">
-								<input
-									className="password-edit"
-									type="password"
-									disabled
-									autoComplete="off"
-									placeholder="Password"
-									value={this.state.newPassword}
-									onChange={(event) =>
-										this.handleOnchangeModalInput(
-											event,
-											"newPassword"
-										)
-									}
-								/>
-							</div>
-							<input
-								className="fullname"
-								name="fullName"
-								type="text"
-								placeholder="Fullname"
-								value={this.state.fullName}
-								onChange={(event) =>
-									this.handleOnchangeModalInput(
-										event,
-										"fullName"
-									)
-								}
-							/>
-							<input
-								className="address"
-								name="address"
-								type="text"
-								placeholder="Address"
-								value={this.state.address}
-								onChange={(event) =>
-									this.handleOnchangeModalInput(
-										event,
-										"address"
-									)
-								}
-							/>
-
-							<div className="modal-select">
-								<input
-									className="phoneNumber"
-									type="tel"
-									placeholder="Phone"
-									value={this.state.phoneNumber}
-									onChange={(event) =>
-										this.handleOnchangeModalInput(
-											event,
-											"phoneNumber"
-										)
-									}
-								/>
-								<select
-									name="gender"
-									id="gender-select"
-									value={this.state.gender}
-									onChange={(event) =>
-										this.handleOnchangeModalInput(
-											event,
-											"gender"
-										)
-									}
-								>
-									<option value="" disabled>
-										Gender
-									</option>
-									<option value="Male">Male</option>
-									<option value="Female">Female</option>
-									<option value="Other">Other</option>
-								</select>
-
-								<select
-									name="role"
-									id="role-select"
-									value={this.state.role}
-									onChange={(event) =>
-										this.handleOnchangeModalInput(
-											event,
-											"role"
-										)
-									}
-								>
-									<option value="" disabled>
-										Role
-									</option>
-									<option value="Admin">Admin</option>
-									<option value="Doctor">Doctor</option>
-									<option value="User">User</option>
-								</select>
-							</div>
-							<div
-								className="errMsgSignUp"
-								style={{ color: "red" }}
-							>
-								{this.state.errMsgSignUp}
-							</div>
-
-							<div className="modal-btn">
-								<button
-									className="btn-add-new"
-									type="button"
-									onClick={() => this.handleEditUser()}
-								>
-									Save
-								</button>
-								<button
-									className="btn-cancel"
-									type="button"
-									onClick={() => this.handleCloseModal()}
-								>
-									Cancel
-								</button>
-							</div>
-						</div>
-					</div>
-				) : null}
-			</div>
+			</>
 		);
 	}
 }
@@ -564,4 +358,4 @@ const mapDispatchToProps = (dispatch) => {
 	return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserManage);
+export default connect(mapStateToProps, mapDispatchToProps)(UserModal);
