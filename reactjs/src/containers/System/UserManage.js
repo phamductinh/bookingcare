@@ -8,6 +8,7 @@ import {
 	editUser,
 } from "../../services/userService";
 import UserModal from "../Modal/UserModal";
+import LoadingSpinner from "../../components/Common/Loading";
 
 class UserManage extends Component {
 	constructor(props) {
@@ -27,6 +28,7 @@ class UserManage extends Component {
 			phoneNumber: "",
 			setModalIsOpen: false,
 			setModalEditUser: false,
+			isLoading: false,
 		};
 	}
 
@@ -36,10 +38,14 @@ class UserManage extends Component {
 
 	getAllUsersReact = async () => {
 		let token = localStorage.getItem("token");
+		this.setState({
+			isLoading: true,
+		});
 		let res = await getAllUsers(token);
 		if (res && res.code === 200) {
 			this.setState({
 				arrUsers: res.data,
+				isLoading: false,
 			});
 		}
 	};
@@ -115,6 +121,7 @@ class UserManage extends Component {
 	handleAddNewUser = async (data) => {
 		this.setState({
 			errMsgSignUp: "",
+            isLoading: true
 		});
 		let newUserData = {
 			email: this.state.newEmail,
@@ -145,6 +152,7 @@ class UserManage extends Component {
 					role: "",
 					phoneNumber: "",
 					setModalIsOpen: false,
+                    isLoading: false
 				});
 			} catch (error) {
 				if (error.response) {
@@ -161,9 +169,15 @@ class UserManage extends Component {
 	handleDeleteUser = async (user) => {
 		try {
 			let token = localStorage.getItem("token");
+            this.setState({
+                isLoading: true
+            })
 			let res = await deleteUser(token, user.id);
 			if (res && res.code === 200) {
 				await this.getAllUsersReact();
+                // this.setState({
+                //     isLoading: false
+                // })
 			}
 		} catch (error) {
 			console.log(error);
@@ -195,7 +209,8 @@ class UserManage extends Component {
 	};
 
 	render() {
-		let { arrUsers, setModalIsOpen, setModalEditUser } = this.state;
+		let { arrUsers, setModalIsOpen, setModalEditUser, isLoading } =
+			this.state;
 		return (
 			<div className="user-container">
 				<div className="title text-center">Manage users</div>
@@ -551,6 +566,8 @@ class UserManage extends Component {
 						</div>
 					</div>
 				) : null}
+
+				{isLoading && <LoadingSpinner />}
 			</div>
 		);
 	}
