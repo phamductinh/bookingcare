@@ -17,7 +17,7 @@ import Login from "./Auth/Login";
 // import Login from '../routes/Login';
 import Header from "./Header/Header";
 import System from "../routes/System";
-// import HomePage from "./HomePage/HomePage";
+import HomePage from "./HomePage/HomePage";
 
 import { CustomToastCloseButton } from "../components/CustomToast";
 import ConfirmModal from "../components/ConfirmModal";
@@ -64,24 +64,24 @@ class App extends Component {
 									component={userIsAuthenticated(System)}
 								/>
 
-								{/* <Route
+								<Route
 									path={path.HOMEPAGE}
 									component={HomePage}
-								/> */}
+								/>
 							</Switch>
 						</span>
 
 						<ToastContainer
-							className="toast-container"
-							toastClassName="toast-item"
-							bodyClassName="toast-item-body"
-							autoClose={false}
-							hideProgressBar={true}
-							pauseOnHover={false}
-							pauseOnFocusLoss={true}
-							closeOnClick={false}
-							draggable={false}
-							closeButton={<CustomToastCloseButton />}
+							position="bottom-right"
+							autoClose={5000}
+							hideProgressBar={false}
+							newestOnTop={false}
+							closeOnClick
+							rtl={false}
+							pauseOnFocusLoss
+							draggable
+							pauseOnHover
+							theme="light"
 						/>
 					</div>
 				</Router>

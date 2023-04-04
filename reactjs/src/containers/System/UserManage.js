@@ -8,6 +8,8 @@ import {
 	editUser,
 } from "../../services/userService";
 import UserModal from "../Modal/UserModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import LoadingSpinner from "../../components/Common/Loading";
 
 class UserManage extends Component {
@@ -29,6 +31,7 @@ class UserManage extends Component {
 			setModalIsOpen: false,
 			setModalEditUser: false,
 			isLoading: false,
+			confirmDelete: false,
 		};
 	}
 
@@ -38,9 +41,9 @@ class UserManage extends Component {
 
 	getAllUsersReact = async () => {
 		let token = localStorage.getItem("token");
-		this.setState({
-			isLoading: true,
-		});
+		// this.setState({
+		// 	isLoading: true,
+		// });
 		let res = await getAllUsers(token);
 		if (res && res.code === 200) {
 			this.setState({
@@ -121,7 +124,7 @@ class UserManage extends Component {
 	handleAddNewUser = async (data) => {
 		this.setState({
 			errMsgSignUp: "",
-            isLoading: true
+			// isLoading: true,
 		});
 		let newUserData = {
 			email: this.state.newEmail,
@@ -142,6 +145,7 @@ class UserManage extends Component {
 				let response = await handleCreateUser(newUserData);
 				await this.getAllUsersReact();
 				console.log("check response", response);
+                toast.success("Add user successfully !")
 				this.setState({
 					newEmail: "",
 					newPassword: "",
@@ -152,7 +156,7 @@ class UserManage extends Component {
 					role: "",
 					phoneNumber: "",
 					setModalIsOpen: false,
-                    isLoading: false
+					isLoading: false,
 				});
 			} catch (error) {
 				if (error.response) {
@@ -166,18 +170,16 @@ class UserManage extends Component {
 		}
 	};
 
-	handleDeleteUser = async (user) => {
+	handleDeleteUser = async () => {
 		try {
 			let token = localStorage.getItem("token");
-            this.setState({
-                isLoading: true
-            })
-			let res = await deleteUser(token, user.id);
+			let res = await deleteUser(token, this.state.userId);
 			if (res && res.code === 200) {
 				await this.getAllUsersReact();
-                // this.setState({
-                //     isLoading: false
-                // })
+                toast.success("Delete successfully !")
+				this.setState({
+					confirmDelete: false,
+				});
 			}
 		} catch (error) {
 			console.log(error);
@@ -202,15 +204,34 @@ class UserManage extends Component {
 					setModalEditUser: false,
 				});
 				await this.getAllUsersReact();
+                toast.success("Update successfully !")
 			}
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
+	handleConfirmDelete = (user) => {
+		this.setState({
+			confirmDelete: true,
+			userId: user.id,
+		});
+	};
+
+	handleCloseConfirmDelete() {
+		this.setState({
+			confirmDelete: false,
+		});
+	}
+
 	render() {
-		let { arrUsers, setModalIsOpen, setModalEditUser, isLoading } =
-			this.state;
+		let {
+			arrUsers,
+			setModalIsOpen,
+			setModalEditUser,
+			isLoading,
+			confirmDelete,
+		} = this.state;
 		return (
 			<div className="user-container">
 				<div className="title text-center">Manage users</div>
@@ -268,7 +289,9 @@ class UserManage extends Component {
 											<button
 												className="btn-delete"
 												onClick={() =>
-													this.handleDeleteUser(item)
+													this.handleConfirmDelete(
+														item
+													)
 												}
 											>
 												<i className="fas fa-trash"></i>
@@ -563,6 +586,26 @@ class UserManage extends Component {
 									Cancel
 								</button>
 							</div>
+						</div>
+					</div>
+				) : null}
+
+				{confirmDelete ? (
+					<div className="confirm-delete">
+						<div className="confirmation-text">Are you sure ?</div>
+						<div className="button-container">
+							<button
+								className="cancel-button"
+								onClick={() => this.handleCloseConfirmDelete()}
+							>
+								Cancel
+							</button>
+							<button
+								className="confirmation-button"
+								onClick={() => this.handleDeleteUser()}
+							>
+								Delete
+							</button>
 						</div>
 					</div>
 				) : null}

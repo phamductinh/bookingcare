@@ -5,8 +5,8 @@ import "./HomePage.css";
 class HomePage extends Component {
 	render() {
 		return (
-			<div className="container">
-				<div id="header" className="header-container">
+			<div className="homepage-container">
+				<div id="header" className="header-homepage">
 					<div className="home-header">
 						<div className="left-content">
 							<i className="fas fa-bars"></i>
