@@ -145,6 +145,7 @@ class Login extends Component {
 		} else if (isValid === true) {
 			try {
 				let response = await handleCreateUser(newUserData);
+				toast.success("Create user successfully!");
 				console.log("check response", response);
 				this.setState({
 					newEmail: "",

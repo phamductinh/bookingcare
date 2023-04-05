@@ -89,7 +89,7 @@ class HomePage extends Component {
 										className="icon-child"
 										style={{
 											backgroundImage:
-												"url(./image/icons/khamchuyenkhoa.png)",
+												"url(/image/icons/khamchuyenkhoa.png)",
 										}}
 									></div>
 									<div className="text-child">
