@@ -85,13 +85,9 @@ class HomePage extends Component {
 						<div className="content-down">
 							<div className="options">
 								<div className="option-child">
-									<div
-										className="icon-child"
-										style={{
-											backgroundImage:
-												"url(/image/icons/khamchuyenkhoa.png)",
-										}}
-									></div>
+									<div className="icon-child">
+                                        <img src="./image/icons/khamchuyenkhoa.png" alt="" />
+									</div>
 									<div className="text-child">
 										Khám
 										<br />

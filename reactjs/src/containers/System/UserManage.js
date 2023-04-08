@@ -41,11 +41,12 @@ class UserManage extends Component {
 	}
 
 	getAllUsersReact = async () => {
-		let token = localStorage.getItem("token");
 		this.setState({
 			isLoading: true,
 		});
+		let token = localStorage.getItem("token");
 		let res = await getAllUsers(token);
+		// console.log("test");
 		if (res && res.code === 200) {
 			this.setState({
 				arrUsers: res.data,
@@ -274,7 +275,7 @@ class UserManage extends Component {
 							{arrUsers &&
 								arrUsers.map((item, index) => {
 									return (
-										<tr>
+										<tr key={index}>
 											<td>{item.email}</td>
 											<td>{item.fullName}</td>
 											<td>{item.address}</td>
