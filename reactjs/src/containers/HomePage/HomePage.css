@@ -245,10 +245,38 @@
 	cursor: pointer;
 	transition: all 0.3s linear;
 }
+.options .option-child:first-child .icon-child {
+	background-image: url("./image/icons/khamchuyenkhoa.png");
+}
+.options .option-child:nth-child(2) .icon-child {
+	background-image: url("./image/icons/khamtuxa.png");
+}
+.options .option-child:nth-child(3) .icon-child {
+	background-image: url("./image/icons/dichvuxetnghiem.png");
+}
+.options .option-child:nth-child(4) .icon-child {
+	background-image: url("./image/icons/suckhoetinhthan.png");
+}
+.options .option-child:nth-child(5) .icon-child {
+	background-image: url("./image/icons/khamtongquat.png");
+}
+
+.options2 .option-child:first-child .icon-child {
+	background-image: url("./image/icons/khamnhakhoa.png");
+}
+.options2 .option-child:nth-child(2) .icon-child {
+	background-image: url("./image/icons/phau-thuat.jpg");
+}
+.options2 .option-child:nth-child(3) .icon-child {
+	background-image: url("./image/icons/khamtainha.png");
+}
+.options2 .option-child:last-child .icon-child {
+	background-image: url("./image/icons/icon-lich-su.jpg");
+}
 .icon-child img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50px;
+	width: 50px;
+	height: 50px;
+	border-radius: 50px;
 }
 .icon-child:hover {
 	transform: scale(1.1);

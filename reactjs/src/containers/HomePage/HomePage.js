@@ -85,9 +85,7 @@ class HomePage extends Component {
 						<div className="content-down">
 							<div className="options">
 								<div className="option-child">
-									<div className="icon-child">
-                                        <img src="./image/icons/khamchuyenkhoa.png" alt="" />
-									</div>
+									<div className="icon-child"></div>
 									<div className="text-child">
 										Khám
 										<br />
@@ -95,13 +93,7 @@ class HomePage extends Component {
 									</div>
 								</div>
 								<div className="option-child">
-									<div
-										className="icon-child"
-										style={{
-											backgroundImage:
-												"url(./image/icons/khamtuxa.png)",
-										}}
-									></div>
+									<div className="icon-child"></div>
 									<div className="text-child">
 										Khám
 										<br />
@@ -109,26 +101,14 @@ class HomePage extends Component {
 									</div>
 								</div>
 								<div className="option-child">
-									<div
-										className="icon-child"
-										style={{
-											backgroundImage:
-												"url(./image/icons/dichvuxetnghiem.png)",
-										}}
-									></div>
+									<div className="icon-child"></div>
 									<div className="text-child">
 										Xét nghiệm
 										<br />y học
 									</div>
 								</div>
 								<div className="option-child">
-									<div
-										className="icon-child"
-										style={{
-											backgroundImage:
-												"url(./image/icons/suckhoetinhthan.png)",
-										}}
-									></div>
+									<div className="icon-child"></div>
 									<div className="text-child">
 										Sức khỏe
 										<br />
@@ -136,29 +116,17 @@ class HomePage extends Component {
 									</div>
 								</div>
 								<div className="option-child">
-									<div
-										className="icon-child"
-										style={{
-											backgroundImage:
-												"url(./image/icons/khamchuyenkhoa.png)",
-										}}
-									></div>
+									<div className="icon-child"></div>
 									<div className="text-child">
 										Khám
 										<br />
-										Chuyên khoa
+										Tổng quát
 									</div>
 								</div>
 							</div>
 							<div className="options2">
 								<div className="option-child">
-									<div
-										className="icon-child"
-										style={{
-											backgroundImage:
-												"url(./image/icons/khamnhakhoa.png)",
-										}}
-									></div>
+									<div className="icon-child"></div>
 									<div className="text-child">
 										Khám
 										<br />
@@ -166,13 +134,7 @@ class HomePage extends Component {
 									</div>
 								</div>
 								<div className="option-child">
-									<div
-										className="icon-child"
-										style={{
-											backgroundImage:
-												"url(./image/icons/phau-thuat.jpg)",
-										}}
-									></div>
+									<div className="icon-child"></div>
 									<div className="text-child">
 										Gói
 										<br />
@@ -180,26 +142,14 @@ class HomePage extends Component {
 									</div>
 								</div>
 								<div className="option-child">
-									<div
-										className="icon-child"
-										style={{
-											backgroundImage:
-												"url(./image/icons/khamtainha.png)",
-										}}
-									></div>
+									<div className="icon-child"></div>
 									<div className="text-child">
 										Sản phẩm
 										<br />y tế
 									</div>
 								</div>
 								<div className="option-child">
-									<div
-										className="icon-child"
-										style={{
-											backgroundImage:
-												"url(./image/icons/icon-lich-su.jpg)",
-										}}
-									></div>
+									<div className="icon-child"></div>
 									<div className="text-child">
 										Sức khỏe
 										<br />
@@ -217,8 +167,7 @@ class HomePage extends Component {
 							<div
 								className="slide-img"
 								style={{
-									backgroundImage:
-										"url(./image/slides/chuyendoiso.png)",
+									backgroundImage: 'url(./)',
 								}}
 							></div>
 							<div className="slide-content">
