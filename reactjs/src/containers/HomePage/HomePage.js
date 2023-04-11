@@ -167,7 +167,7 @@ class HomePage extends Component {
 							<div
 								className="slide-img"
 								style={{
-									backgroundImage: 'url(./)',
+									backgroundImage: "url(./)",
 								}}
 							></div>
 							<div className="slide-content">
