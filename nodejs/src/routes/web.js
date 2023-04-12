@@ -17,6 +17,9 @@ let initWebRoutes = (app) => {
 	router.put("/api/edit-user", verifyJWT, userController.updateUser);
 	router.delete("/api/delete-user", verifyJWT, userController.deleteUser);
 
+	router.get("/api/get-all-telemedicine", homeController.getAllTelemedicine);
+	router.post("/api/create-telemedicine", homeController.createTelemedicine);
+
 	return app.use("/", router);
 };
 

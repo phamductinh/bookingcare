@@ -23,6 +23,7 @@ app.use(function (req, res, next) {
 app.use(express.json());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+app.set("views", __dirname + "/views");
 
 viewEngine(app);
 initWebRoutes(app);

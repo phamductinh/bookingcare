@@ -10,6 +10,8 @@ let updateUserQuery = `UPDATE user SET fullName = ?, address = ?, gender = ?, ro
 
 let deleteUserById = `DELETE FROM user WHERE id = ?`;
 
+let findAllTelemedicine = "SELECT * FROM telemedicine";
+
 let createTelemedicine = `INSERT INTO telemedicine (name, description, image) VALUES (?,?,?)`;
 
 module.exports = {
@@ -20,4 +22,5 @@ module.exports = {
 	updateUserQuery,
 	deleteUserById,
 	createTelemedicine,
+	findAllTelemedicine,
 };

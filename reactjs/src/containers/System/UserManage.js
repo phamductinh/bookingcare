@@ -46,7 +46,7 @@ class UserManage extends Component {
 		});
 		let token = localStorage.getItem("token");
 		let res = await getAllUsers(token);
-		// console.log("test");
+		console.log("test");
 		if (res && res.code === 200) {
 			this.setState({
 				arrUsers: res.data,
