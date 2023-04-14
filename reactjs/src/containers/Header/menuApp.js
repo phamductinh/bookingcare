@@ -7,9 +7,15 @@ export const adminMenu = [
 				name: "menu.admin.manage-user",
 				link: "/system/user-manage",
 			},
+		],
+	},
+	{
+		//quản lý người dùng
+		name: "menu.admin.manage-telemedicine",
+		menus: [
 			{
-				name: "menu.system.system-administrator.product-manage",
-				link: "/system/product-manage",
+				name: "menu.admin.manage-telemedicine",
+				link: "/system/manage-telemedicine",
 			},
 		],
 	},

@@ -13,7 +13,8 @@
 			}
 		},
 		"admin": {
-			"manage-user": "Quản lý người dùng"
+			"manage-user": "Quản lý người dùng",
+			"manage-telemedicine": "Quản lý khám từ xa"
 		}
 	},
 	"system": {
