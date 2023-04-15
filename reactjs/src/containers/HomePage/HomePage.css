@@ -584,16 +584,25 @@
 	width: 100%;
 }
 .telem-prev {
+	background-image: url("./image/icons/left.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 	position: absolute;
 	bottom: 20px;
 	left: 10px;
 	width: 100%;
 }
+
 .telem-next {
 	position: absolute;
 	bottom: 20px;
 	right: 10px;
 	width: 100%;
+	background-image: url("./image/icons/right.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 .telem-buttons button {
 	width: 40px;

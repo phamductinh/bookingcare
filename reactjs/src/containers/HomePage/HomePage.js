@@ -1,9 +1,49 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { getALLTelemedicine } from "../../services/homeService";
 import "./HomePage.css";
+<link
+	rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+	integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+	crossorigin="anonymous"
+	referrerpolicy="no-referrer"
+/>;
 
 class HomePage extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			arrTelems: [],
+		};
+	}
+
+	async componentDidMount() {
+		await this.getALLTelemedicineReact();
+	}
+
+	getALLTelemedicineReact = async () => {
+		let res = await getALLTelemedicine();
+		console.log("check res", res);
+		if (res && res.code === 200) {
+			this.setState({
+				arrTelems: res.data,
+			});
+		}
+	};
+
+	handleNext() {
+		let lists = document.querySelectorAll(".telem-slide-item");
+		document.getElementById("telem-slide").appendChild(lists[0]);
+	}
+
+	handlePrev() {
+		let lists = document.querySelectorAll(".telem-slide-item");
+		document.getElementById("telem-slide").prepend(lists[lists.length - 1]);
+	}
+
 	render() {
+		let arrTelems = this.state.arrTelems;
 		return (
 			<div className="homepage-container">
 				<div id="header" className="header-homepage">
@@ -161,7 +201,7 @@ class HomePage extends Component {
 					</div>
 				</div>
 
-				<div className="slider-container">
+				{/* <div className="slider-container">
 					<div id="slide">
 						<div className="slide-item">
 							<div
@@ -366,7 +406,7 @@ class HomePage extends Component {
 							</button>
 						</div>
 					</div>
-				</div>
+				</div> */}
 
 				<div className="telemedicine-container">
 					<div className="telem-content-up">
@@ -377,141 +417,46 @@ class HomePage extends Component {
 					</div>
 					<div className="telem-slide-container">
 						<div id="telem-slide">
-							<div
-								className="telem-slide-item"
-								onclick="window.open('/telemedicine/telemedicine.html')"
-							>
-								<div className="telem-icon">
-									<i className="fas fa-video"></i>
-								</div>
-								<div
-									className="telem-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/telemedicine/tam-ly-2.jpg)",
-									}}
-								></div>
-								<div className="telem-content">
-									Tư vấn, trị liệu Tâm lý từ xa
-								</div>
-							</div>
-							<div
-								className="telem-slide-item"
-								onclick="window.open('/telemedicine/telemedicine.html')"
-							>
-								<div className="telem-icon">
-									<i className="fas fa-video"></i>
-								</div>
-								<div
-									className="telem-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/telemedicine/doctor-2.jpg)",
-									}}
-								></div>
-								<div className="telem-content">
-									Sức khỏe tâm thần từ xa
-								</div>
-							</div>
-							<div
-								className="telem-slide-item"
-								onclick="window.open('/telemedicine/telemedicine.html')"
-							>
-								<div className="telem-icon">
-									<i className="fas fa-video"></i>
-								</div>
-								<div
-									className="telem-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/telemedicine/da-lieu-hn.jpg)",
-									}}
-								></div>
-								<div className="telem-content">
-									Bác sĩ Da liễu từ xa
-								</div>
-							</div>
-							<div
-								className="telem-slide-item"
-								onclick="window.open('/telemedicine/telemedicine.html')"
-							>
-								<div className="telem-icon">
-									<i className="fas fa-video"></i>
-								</div>
-								<div
-									className="telem-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/telemedicine/kham-benh-co-xuong-khop-1.jpg)",
-									}}
-								></div>
-								<div className="telem-content">
-									Bác sĩ Cơ Xương Khớp từ xa
-								</div>
-							</div>
-							<div
-								className="telem-slide-item"
-								onclick="window.open('/telemedicine/telemedicine.html')"
-							>
-								<div className="telem-icon">
-									<i className="fas fa-video"></i>
-								</div>
-								<div
-									className="telem-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/telemedicine/quy-trinh-kham-cot-song.jpg)",
-									}}
-								></div>
-								<div className="telem-content">
-									Bác sĩ Cột sống từ xa
-								</div>
-							</div>
-							<div
-								className="telem-slide-item"
-								onclick="window.open('/telemedicine/telemedicine.html')"
-							>
-								<div className="telem-icon">
-									<i className="fas fa-video"></i>
-								</div>
-								<div
-									className="telem-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/telemedicine/tim-mach.jpg)",
-									}}
-								></div>
-								<div className="telem-content">
-									Bác sĩ Nội khoa từ xa
-								</div>
-							</div>
-							<div
-								className="telem-slide-item"
-								onclick="window.open('/telemedicine/telemedicine.html')"
-							>
-								<div className="telem-icon">
-									<i className="fas fa-video"></i>
-								</div>
-								<div
-									className="telem-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/telemedicine/bac-si-tieu-hoa.jpg)",
-									}}
-								></div>
-								<div className="telem-content">
-									Bác sĩ Tiêu hóa từ xa
-								</div>
-							</div>
+							{arrTelems &&
+								arrTelems.length > 0 &&
+								arrTelems.map((item, index) => {
+									let imageBase64 = new Buffer(
+										item.image,
+										"base64"
+									).toString("binary");
+									return (
+										<div
+											className="telem-slide-item"
+											key={index}
+										>
+											<div className="telem-icon">
+												<i className="fas fa-video"></i>
+											</div>
+											<div
+												className="telem-slide-img"
+												style={{
+													backgroundImage: `url(${imageBase64})`,
+												}}
+											></div>
+											<div className="telem-content">
+												{item.name}
+											</div>
+										</div>
+									);
+								})}
 						</div>
 					</div>
 					<div className="telem-buttons">
-						<button className="telem-prev" id="telem-prev">
-							<i className="fas fa-long-arrow-left"></i>
-						</button>
-						<button className="telem-next" id="telem-next">
-							<i className="fas fa-long-arrow-right"></i>
-						</button>
+						<button
+							className="telem-prev"
+							id="telem-prev"
+							onClick={() => this.handlePrev()}
+						></button>
+						<button
+							className="telem-next"
+							id="telem-next"
+							onClick={() => this.handleNext()}
+						></button>
 					</div>
 				</div>
 

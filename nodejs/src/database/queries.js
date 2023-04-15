@@ -12,7 +12,7 @@ let deleteUserById = `DELETE FROM user WHERE id = ?`;
 
 let findAllTelemedicine = "SELECT * FROM telemedicine";
 
-let createTelemedicine = `INSERT INTO telemedicine (name, description, image) VALUES (?,?,?)`;
+let createTelemedicineQuery = `INSERT INTO telemedicine (name, description, descriptionHTML, image) VALUES (?,?,?,?)`;
 
 module.exports = {
 	findAllUsers,
@@ -21,6 +21,6 @@ module.exports = {
 	createAUser,
 	updateUserQuery,
 	deleteUserById,
-	createTelemedicine,
+	createTelemedicineQuery,
 	findAllTelemedicine,
 };

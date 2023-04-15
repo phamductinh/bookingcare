@@ -1,12 +1,12 @@
 import db from "../configs/connectDB";
-import homeModel from "../models/homeModel";
+import telemedicineModel from "../models/telemedicineModel";
 
 let getHomePage = (req, res) => {
 	return res.send("hello");
 };
 
 const getAllTelemedicine = (req, res) => {
-	homeModel.getAllTelemedicine((error, results) => {
+	telemedicineModel.getAllTelemedicine((error, results) => {
 		if (error) {
 			return res.status(500).send({
 				code: 500,
@@ -23,8 +23,9 @@ const getAllTelemedicine = (req, res) => {
 
 let createTelemedicine = (req, res) => {
 	let data = req.body;
-	homeModel.createTelemedicine(data, (err, results) => {
+	telemedicineModel.createNewTelemedicine(data, (err, results) => {
 		if (err) {
+			console.log(err);
 			return res.status(400).send({
 				code: 400,
 				msg: "Something wrong !",

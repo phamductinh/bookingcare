@@ -1,5 +1,8 @@
 import db from "../configs/connectDB";
-import { findAllTelemedicine, createTelemedicine } from "../database/queries";
+import {
+	findAllTelemedicine,
+	createTelemedicineQuery,
+} from "../database/queries";
 
 let getAllTelemedicine = (callback) => {
 	db.query(findAllTelemedicine, (error, results) => {
@@ -12,18 +15,22 @@ let getAllTelemedicine = (callback) => {
 };
 
 let createNewTelemedicine = (data, callback) => {
-	let { name, description, image } = data;
-	if (!name || !description) {
+	let { name, description, descriptionHTML, image } = data;
+	if (!name || !description || !descriptionHTML) {
 		let error = new Error("Missing input !");
 		error.statusCode = 400;
 		return callback(error);
 	}
-	db.query(createTelemedicine, data, (err, results) => {
-		if (err) {
-			return callback(err);
+	db.query(
+		createTelemedicineQuery,
+		[name, description, descriptionHTML, image],
+		(err, results) => {
+			if (err) {
+				return callback(err);
+			}
+			callback(null, results);
 		}
-		callback(null, results);
-	});
+	);
 };
 
 module.exports = {

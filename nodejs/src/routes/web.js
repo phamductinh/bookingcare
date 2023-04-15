@@ -1,5 +1,5 @@
 import express from "express";
-import homeController from "../controllers/homeController";
+import telemedicineController from "../controllers/telemedicineController";
 import authController from "../controllers/authController";
 import userController from "../controllers/userController";
 import { verifyJWT } from "../middlewares/verifyJWT";
@@ -7,7 +7,6 @@ import { verifyJWT } from "../middlewares/verifyJWT";
 let router = express.Router();
 
 let initWebRoutes = (app) => {
-	router.get("/", homeController.getHomePage);
 	router.post("/api/login", authController.login);
 	router.post("/api/register", authController.register);
 
@@ -17,8 +16,14 @@ let initWebRoutes = (app) => {
 	router.put("/api/edit-user", verifyJWT, userController.updateUser);
 	router.delete("/api/delete-user", verifyJWT, userController.deleteUser);
 
-	router.get("/api/get-all-telemedicine", homeController.getAllTelemedicine);
-	router.post("/api/create-telemedicine", homeController.createTelemedicine);
+	router.get(
+		"/api/get-all-telemedicine",
+		telemedicineController.getAllTelemedicine
+	);
+	router.post(
+		"/api/create-telemedicine",
+		telemedicineController.createTelemedicine
+	);
 
 	return app.use("/", router);
 };
