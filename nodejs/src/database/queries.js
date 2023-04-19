@@ -14,6 +14,10 @@ let findAllTelemedicine = "SELECT * FROM telemedicine";
 
 let createTelemedicineQuery = `INSERT INTO telemedicine (name, description, descriptionHTML, image) VALUES (?,?,?,?)`;
 
+let findAllSpecialtyQuery = "SELECT * FROM specialty";
+
+let createNewSpecialtyQuery = `INSERT INTO specialty (name, description, descriptionHTML, image) VALUES (?,?,?,?)`;
+
 module.exports = {
 	findAllUsers,
 	findUserById,
@@ -23,4 +27,6 @@ module.exports = {
 	deleteUserById,
 	createTelemedicineQuery,
 	findAllTelemedicine,
+	findAllSpecialtyQuery,
+	createNewSpecialtyQuery,
 };

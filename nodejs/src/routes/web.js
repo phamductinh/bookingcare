@@ -2,6 +2,7 @@ import express from "express";
 import telemedicineController from "../controllers/telemedicineController";
 import authController from "../controllers/authController";
 import userController from "../controllers/userController";
+import specialtyController from "../controllers/specialtyController";
 import { verifyJWT } from "../middlewares/verifyJWT";
 
 let router = express.Router();
@@ -23,6 +24,15 @@ let initWebRoutes = (app) => {
 	router.post(
 		"/api/create-telemedicine",
 		telemedicineController.createTelemedicine
+	);
+
+    router.get(
+		"/api/get-all-specialty",
+		specialtyController.getAllSpecialty
+	);
+	router.post(
+		"/api/create-specialty",
+		specialtyController.createSpecialty
 	);
 
 	return app.use("/", router);

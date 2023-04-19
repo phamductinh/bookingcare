@@ -2,6 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import viewEngine from "./configs/viewEngine";
 import initWebRoutes from "./routes/web";
+import fileUpload from "express-fileupload";
+
 require("dotenv").config();
 
 let app = express();
@@ -33,6 +35,12 @@ app.use((req, res, next) => {
 	err.status = 404;
 	next(err);
 });
+
+app.use(
+	fileUpload({
+		limits: { fileSize: 10 * 1024 * 1024 },
+	})
+);
 
 app.use((err, req, res, next) => {
 	res.locals.error = err;

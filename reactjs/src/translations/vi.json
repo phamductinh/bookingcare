@@ -14,7 +14,8 @@
 		},
 		"admin": {
 			"manage-user": "Quản lý người dùng",
-			"manage-telemedicine": "Quản lý khám từ xa"
+			"manage-telemedicine": "Quản lý khám từ xa",
+			"manage-specialty": "Quản lý chuyên khoa"
 		}
 	},
 	"system": {

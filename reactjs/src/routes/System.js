@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import UserManage from "../containers/System/UserManage";
 import ManageTelemedicine from "../containers/System/ManageTelemedicine";
-import RegisterPackageGroupOrAcc from "../containers/System/RegisterPackageGroupOrAcc";
+import ManageSpecialty from "../containers/System/ManageSpecialty";
 
 class System extends Component {
 	render() {
@@ -21,8 +21,8 @@ class System extends Component {
 							component={ManageTelemedicine}
 						/>
 						<Route
-							path="/system/register-package-group-or-account"
-							component={RegisterPackageGroupOrAcc}
+							path="/system/manage-specialty"
+							component={ManageSpecialty}
 						/>
 						<Route
 							component={() => {

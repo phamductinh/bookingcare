@@ -19,4 +19,14 @@ export const adminMenu = [
 			},
 		],
 	},
+	{
+		//quản lý người dùng
+		name: "menu.admin.manage-specialty",
+		menus: [
+			{
+				name: "menu.admin.manage-specialty",
+				link: "/system/manage-specialty",
+			},
+		],
+	},
 ];
