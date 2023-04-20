@@ -1,13 +1,12 @@
 import db from "../configs/connectDB";
 import specialtyModel from "../models/specialtyModel";
-import fileUpload from "express-fileupload";
 
 const getAllSpecialty = (req, res) => {
 	specialtyModel.getAllSpecialtyModel((error, results) => {
 		if (error) {
 			return res.status(500).send({
 				code: 500,
-				msg: errMsg.failed,
+				msg: "Error fetch data !",
 			});
 		} else {
 			return res.status(200).send({
@@ -20,9 +19,10 @@ const getAllSpecialty = (req, res) => {
 
 let createSpecialty = (req, res) => {
 	let data = req.body;
-	specialtyModel.createNewSpecialtyModel(data, (err, results) => {
+	let file = req.files.image;
+	console.log(file);
+	specialtyModel.createNewSpecialtyModel(data, file, (err, results) => {
 		if (err) {
-			console.log(err);
 			return res.status(400).send({
 				code: 400,
 				msg: "Something wrong !",

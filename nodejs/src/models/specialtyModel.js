@@ -3,6 +3,7 @@ import {
 	findAllSpecialtyQuery,
 	createNewSpecialtyQuery,
 } from "../database/queries";
+import fileUpload from "express-fileupload";
 
 let getAllSpecialtyModel = (callback) => {
 	db.query(findAllSpecialtyQuery, (error, results) => {
@@ -14,19 +15,18 @@ let getAllSpecialtyModel = (callback) => {
 	});
 };
 
-let createNewSpecialtyModel = (data, callback) => {
-	let { name, description, descriptionHTML, image } = data;
+let createNewSpecialtyModel = (data, file, callback) => {
+	let { name, description, descriptionHTML } = data;
 	if (!name || !description || !descriptionHTML) {
 		let error = new Error("Missing input !");
 		error.statusCode = 400;
 		return callback(error);
 	}
-	let file = req.files.image;
-	let filename = Date.now() + "_" + file.name;
-	file.mv(__dirname + "/uploads/" + filename, (err) => {
+	let filename = file.name;
+	console.log("check name", filename);
+	file.mv(__dirname + "../public/images" + filename, (err) => {
 		if (err) {
-			console.error(err);
-			return res.status(500).json({ message: "Error uploading file" });
+			return res.status(501).json({ message: "Error uploading file" });
 		}
 		db.query(
 			createNewSpecialtyQuery,

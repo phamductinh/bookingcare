@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./ManageSpecialty.css";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Header/Header";
 import MarkdownIt from "markdown-it";
@@ -9,9 +9,9 @@ import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
 import { CommonUtils } from "../../utils";
 import {
-	handleCreateTelemedicine,
-	getALLTelemedicine,
-} from "../../services/homeService";
+	handleCreateSpecialty,
+	getALLSpecialty,
+} from "../../services/specialtyService";
 
 const mdParser = new MarkdownIt();
 
@@ -23,12 +23,12 @@ class ManageSpecialty extends Component {
 			image: "",
 			description: "",
 			descriptionHTML: "",
-			arrTelems: [],
+			arrSpecialty: [],
 		};
 	}
 
 	async componentDidMount() {
-		await this.getALLTelemedicineReact();
+		await this.getALLSpecialtyReact();
 	}
 
 	handleOnchangeInput = (event, id) => {
@@ -47,39 +47,34 @@ class ManageSpecialty extends Component {
 	};
 
 	handleOnchangeImage = async (event) => {
-		let data = event.target.files;
-		let file = data[0];
-		if (file) {
-			let base64 = await CommonUtils.getBase64(file);
-			this.setState({
-				imageBase64: base64,
-			});
-		}
+		let file = event.target.files[0];
+		this.setState({
+			image: file,
+		});
 	};
 
-	getALLTelemedicineReact = async () => {
-		let res = await getALLTelemedicine();
+	getALLSpecialtyReact = async () => {
+		let res = await getALLSpecialty();
 		console.log("check res", res);
 		if (res && res.code === 200) {
 			this.setState({
-				arrTelems: res.data,
+				arrSpecialty: res.data,
 			});
 		}
 	};
 
-	handleCreateNewTelemedicine = async () => {
+	handleCreateNewSpecialty = async () => {
 		let infor = {
 			name: this.state.name,
 			description: this.state.description,
 			descriptionHTML: this.state.descriptionHTML,
-			image: this.state.imageBase64,
+			image: this.state.image,
 		};
-		console.log(infor);
 		try {
-			let res = await handleCreateTelemedicine(infor);
+			let res = await handleCreateSpecialty(infor);
 			if (res && res.code === 200) {
-				await this.getALLTelemedicineReact();
-				toast.success("Add new telemedicine successfully !");
+				await this.getALLSpecialtyReact();
+				toast.success("Add new specialty successfully !");
 				this.setState({
 					name: "",
 					description: "",
@@ -89,13 +84,14 @@ class ManageSpecialty extends Component {
 			}
 		} catch (error) {
 			console.log(error);
-			toast.error("Add new telemedicine failed !");
+			toast.error("Add new specialty failed !");
 		}
 	};
 
 	render() {
 		const { name, image, description } = this.state;
-		let arrTelems = this.state.arrTelems;
+		let arrSpecialty = this.state.arrSpecialty;
+		console.log(this.state);
 		return (
 			<>
 				{this.props.isLoggedIn && <Header />}
@@ -104,7 +100,7 @@ class ManageSpecialty extends Component {
 					<form>
 						<div className="tele-input">
 							<div className="tele-name">
-								<label htmlFor="name">Telemedicine Name:</label>
+								<label htmlFor="name">Specialty Name:</label>
 								<input
 									type="text"
 									value={name}
@@ -119,7 +115,7 @@ class ManageSpecialty extends Component {
 									id="file-input"
 									type="file"
 									name="file"
-									value={image}
+									// value={image}
 									accept="image/png, image/jpeg"
 									onChange={(event) =>
 										this.handleOnchangeImage(event, "image")
@@ -129,9 +125,7 @@ class ManageSpecialty extends Component {
 							<button
 								className="btn-add-new-tele"
 								type="button"
-								onClick={() =>
-									this.handleCreateNewTelemedicine()
-								}
+								onClick={() => this.handleCreateNewSpecialty()}
 							>
 								Thêm mới
 							</button>
@@ -166,8 +160,8 @@ class ManageSpecialty extends Component {
 							</th>
 						</tr>
 
-						{arrTelems &&
-							arrTelems.map((item, index) => {
+						{arrSpecialty &&
+							arrSpecialty.map((item, index) => {
 								let imageBase64 = new Buffer(
 									item.image,
 									"base64"
