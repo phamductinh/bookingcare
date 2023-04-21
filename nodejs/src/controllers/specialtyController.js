@@ -19,8 +19,6 @@ const getAllSpecialty = (req, res) => {
 
 let createSpecialty = (req, res) => {
 	let data = req.body;
-	let file = req.files.image;
-	console.log(file);
 	specialtyModel.createNewSpecialtyModel(data, file, (err, results) => {
 		if (err) {
 			return res.status(400).send({

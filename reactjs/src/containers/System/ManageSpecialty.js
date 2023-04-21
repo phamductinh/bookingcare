@@ -68,10 +68,10 @@ class ManageSpecialty extends Component {
 			name: this.state.name,
 			description: this.state.description,
 			descriptionHTML: this.state.descriptionHTML,
-			image: this.state.image,
 		};
+		let image = this.state.image;
 		try {
-			let res = await handleCreateSpecialty(infor);
+			let res = await handleCreateSpecialty(infor, image);
 			if (res && res.code === 200) {
 				await this.getALLSpecialtyReact();
 				toast.success("Add new specialty successfully !");
