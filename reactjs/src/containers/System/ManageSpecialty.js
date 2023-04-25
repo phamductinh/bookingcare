@@ -64,14 +64,16 @@ class ManageSpecialty extends Component {
 	};
 
 	handleCreateNewSpecialty = async () => {
-		let infor = {
+		let data = {
 			name: this.state.name,
 			description: this.state.description,
 			descriptionHTML: this.state.descriptionHTML,
 		};
-		let image = this.state.image;
+		let file = this.state.image;
+		const formData = new FormData();
+		formData.append("file", file);
 		try {
-			let res = await handleCreateSpecialty(infor, image);
+			let res = await handleCreateSpecialty(data, formData);
 			if (res && res.code === 200) {
 				await this.getALLSpecialtyReact();
 				toast.success("Add new specialty successfully !");

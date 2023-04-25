@@ -15,23 +15,29 @@ let getAllSpecialtyModel = (callback) => {
 	});
 };
 
-let createNewSpecialtyModel = (data, callback) => {
+let createNewSpecialtyModel = (data, file, callback) => {
 	let { name, description, descriptionHTML, image } = data;
 	if (!name || !description || !descriptionHTML) {
 		let error = new Error("Missing input !");
 		error.statusCode = 400;
 		return callback(error);
 	}
-	db.query(
-		createNewSpecialtyQuery,
-		[name, description, descriptionHTML, image],
-		(err, results) => {
-			if (err) {
-				return callback(err);
-			}
-			callback(null, results);
+	let filename = file.name;
+	file.mv(path.join(__dirname, "../public/images", filename), (err) => {
+		if (err) {
+			return callback(err);
 		}
-	);
+		db.query(
+			createNewSpecialtyQuery,
+			[name, description, descriptionHTML, image],
+			(err, results) => {
+				if (err) {
+					return callback(err);
+				}
+				callback(null, results);
+			}
+		);
+	});
 };
 
 module.exports = {
