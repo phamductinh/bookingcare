@@ -1,7 +1,7 @@
 import axios from "../axios";
 
-const handleCreateSpecialty = (data, formData) => {
-	return axios.post("/api/create-specialty", data, formData);
+const handleCreateSpecialty = (data) => {
+	return axios.post("/api/create-specialty", data);
 };
 
 const getALLSpecialty = () => {

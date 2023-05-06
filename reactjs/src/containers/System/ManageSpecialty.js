@@ -47,15 +47,18 @@ class ManageSpecialty extends Component {
 	};
 
 	handleOnchangeImage = async (event) => {
-		let file = event.target.files[0];
-		this.setState({
-			image: file,
-		});
+		let data = event.target.files;
+		let file = data[0];
+		if (file) {
+			let base64 = await CommonUtils.getBase64(file);
+			this.setState({
+				imageBase64: base64,
+			});
+		}
 	};
 
 	getALLSpecialtyReact = async () => {
 		let res = await getALLSpecialty();
-		console.log("check res", res);
 		if (res && res.code === 200) {
 			this.setState({
 				arrSpecialty: res.data,
@@ -64,16 +67,15 @@ class ManageSpecialty extends Component {
 	};
 
 	handleCreateNewSpecialty = async () => {
-		let data = {
+		let infor = {
 			name: this.state.name,
 			description: this.state.description,
 			descriptionHTML: this.state.descriptionHTML,
+			image: this.state.imageBase64,
 		};
-		let file = this.state.image;
-		const formData = new FormData();
-		formData.append("file", file);
+		console.log(infor);
 		try {
-			let res = await handleCreateSpecialty(data, formData);
+			let res = await handleCreateSpecialty(infor);
 			if (res && res.code === 200) {
 				await this.getALLSpecialtyReact();
 				toast.success("Add new specialty successfully !");
@@ -145,19 +147,16 @@ class ManageSpecialty extends Component {
 					</form>
 					<table id="customers">
 						<tr>
-							<th width="20%" className="text-center">
+							<th width="10%" className="text-center">
+								Id
+							</th>
+							<th width="30%" className="text-center">
 								Name
 							</th>
-							<th width="20%" className="text-center">
-								Description
-							</th>
-							<th width="20%" className="text-center">
-								DescriptionHTML
-							</th>
-							<th width="20%" className="text-center">
+							<th width="40%" className="text-center">
 								Image
 							</th>
-							<th width="12%" className="text-center">
+							<th width="20%" className="text-center">
 								Actions
 							</th>
 						</tr>
@@ -174,17 +173,10 @@ class ManageSpecialty extends Component {
 										height="160px"
 										className="tele-col"
 									>
+										<td className="text-center">
+											{item.id}
+										</td>
 										<td>{item.name}</td>
-										<td>
-											<div className="description-table">
-												{item.description}
-											</div>
-										</td>
-										<td>
-											<div className="description-table">
-												{item.descriptionHTML}
-											</div>
-										</td>
 										<td>
 											<div
 												className="tele-image-table"

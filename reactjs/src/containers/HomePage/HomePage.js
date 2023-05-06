@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getALLTelemedicine } from "../../services/homeService";
+import { getALLSpecialty } from "../../services/specialtyService";
 import "./HomePage.css";
 <link
 	rel="stylesheet"
@@ -15,19 +16,30 @@ class HomePage extends Component {
 		super(props);
 		this.state = {
 			arrTelems: [],
+			arrSpecialty: [],
 		};
 	}
 
 	async componentDidMount() {
 		await this.getALLTelemedicineReact();
+		await this.getALLSpecialtyReact();
 	}
 
 	getALLTelemedicineReact = async () => {
 		let res = await getALLTelemedicine();
-		console.log("check res", res);
 		if (res && res.code === 200) {
 			this.setState({
 				arrTelems: res.data,
+			});
+		}
+	};
+
+	getALLSpecialtyReact = async () => {
+		let res = await getALLSpecialty();
+		console.log("check res", res);
+		if (res && res.code === 200) {
+			this.setState({
+				arrSpecialty: res.data,
 			});
 		}
 	};
@@ -36,14 +48,23 @@ class HomePage extends Component {
 		let lists = document.querySelectorAll(".telem-slide-item");
 		document.getElementById("telem-slide").appendChild(lists[0]);
 	}
-
 	handlePrev() {
 		let lists = document.querySelectorAll(".telem-slide-item");
 		document.getElementById("telem-slide").prepend(lists[lists.length - 1]);
 	}
 
+	handleNextSpecialty() {
+		let lists = document.querySelectorAll(".spec-slide-item");
+		document.getElementById("spec-slide").appendChild(lists[0]);
+	}
+	handlePrevSpecialty() {
+		let lists = document.querySelectorAll(".spec-slide-item");
+		document.getElementById("spec-slide").prepend(lists[lists.length - 1]);
+	}
+
 	render() {
-		let arrTelems = this.state.arrTelems;
+		let { arrTelems, arrSpecialty } = this.state;
+		console.log(arrTelems);
 		return (
 			<div className="homepage-container">
 				<div id="header" className="header-homepage">
@@ -420,7 +441,7 @@ class HomePage extends Component {
 							{arrTelems &&
 								arrTelems.length > 0 &&
 								arrTelems.map((item, index) => {
-									let imageBase64 = new Buffer(
+									let telemImage = new Buffer(
 										item.image,
 										"base64"
 									).toString("binary");
@@ -435,7 +456,7 @@ class HomePage extends Component {
 											<div
 												className="telem-slide-img"
 												style={{
-													backgroundImage: `url(${imageBase64})`,
+													backgroundImage: `url(${telemImage})`,
 												}}
 											></div>
 											<div className="telem-content">
@@ -467,110 +488,43 @@ class HomePage extends Component {
 					</div>
 					<div className="spec-slide-container">
 						<div id="spec-slide">
-							<div
-								className="spec-slide-item"
-								onclick="window.open('/specialty/specialty.html')"
-							>
-								<div
-									className="spec-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/specialties/co-xuong-khop.jpg)",
-									}}
-								></div>
-								<div className="spec-content">
-									Cơ xương khớp
-								</div>
-							</div>
-							<div
-								className="spec-slide-item"
-								onclick="window.open('/specialty/specialty.html')"
-							>
-								<div
-									className="spec-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/specialties/thankinh.jpg)",
-									}}
-								></div>
-								<div className="spec-content">Thần kinh</div>
-							</div>
-							<div
-								className="spec-slide-item"
-								onclick="window.open('/specialty/specialty.html')"
-							>
-								<div
-									className="spec-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/specialties/tieuhoa.jpg)",
-									}}
-								></div>
-								<div className="spec-content">Tiêu hóa</div>
-							</div>
-							<div
-								className="spec-slide-item"
-								onclick="window.open('/specialty/specialty.html')"
-							>
-								<div
-									className="spec-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/specialties/timmach.jpg)",
-									}}
-								></div>
-								<div className="spec-content">Tim mạch</div>
-							</div>
-							<div
-								className="spec-slide-item"
-								onclick="window.open('/specialty/specialty.html')"
-							>
-								<div
-									className="spec-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/specialties/taimuihong.jpg)",
-									}}
-								></div>
-								<div className="spec-content">Tai mũi họng</div>
-							</div>
-							<div
-								className="spec-slide-item"
-								onclick="window.open('/specialty/specialty.html')"
-							>
-								<div
-									className="spec-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/specialties/cotsong.jpg)",
-									}}
-								></div>
-								<div className="spec-content">Cột sống</div>
-							</div>
-							<div
-								className="spec-slide-item"
-								onclick="window.open('/specialty/specialty.html')"
-							>
-								<div
-									className="spec-slide-img"
-									style={{
-										backgroundImage:
-											"url(./image/specialties/yhoccotruyen.jpg)",
-									}}
-								></div>
-								<div className="spec-content">
-									Y học cổ truyền
-								</div>
-							</div>
+							{arrSpecialty &&
+								arrSpecialty.length > 0 &&
+								arrSpecialty.map((item, index) => {
+									let specialtyImage = new Buffer(
+										item.image,
+										"base64"
+									).toString("binary");
+									return (
+										<div
+											className="spec-slide-item"
+											key={index}
+										>
+											<div
+												className="spec-slide-img"
+												style={{
+													backgroundImage: `url(${specialtyImage})`,
+												}}
+											></div>
+											<div className="spec-content">
+												{item.name}
+											</div>
+										</div>
+									);
+								})}
 						</div>
 					</div>
-					<div className="spec-buttons">
-						<button className="spec-prev" id="spec-prev">
-							<i className="fas fa-long-arrow-left"></i>
-						</button>
-						<button className="spec-next" id="spec-next">
-							<i className="fas fa-long-arrow-right"></i>
-						</button>
+					<div className="telem-buttons">
+						<button
+							className="telem-prev"
+							id="telem-prev"
+							onClick={() => this.handleNextSpecialty()}
+						></button>
+						<button
+							className="telem-next"
+							id="telem-next"
+							onClick={() => this.handleNextSpecialty()}
+						></button>
 					</div>
 				</div>
 

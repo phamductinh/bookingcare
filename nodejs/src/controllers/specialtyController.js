@@ -19,9 +19,9 @@ const getAllSpecialty = (req, res) => {
 
 let createSpecialty = (req, res) => {
 	let data = req.body;
-	let file = req.files.image;
-	specialtyModel.createNewSpecialtyModel(data, file, (err, results) => {
+	specialtyModel.createNewSpecialtyModel(data, (err, results) => {
 		if (err) {
+			console.log(err);
 			return res.status(400).send({
 				code: 400,
 				msg: "Something wrong !",

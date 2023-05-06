@@ -151,19 +151,16 @@ class ManageTelemedicine extends Component {
 					</form>
 					<table id="customers">
 						<tr>
-							<th width="20%" className="text-center">
+							<th width="10%" className="text-center">
+								Id
+							</th>
+							<th width="30%" className="text-center">
 								Name
 							</th>
-							<th width="20%" className="text-center">
-								Description
-							</th>
-							<th width="20%" className="text-center">
-								DescriptionHTML
-							</th>
-							<th width="20%" className="text-center">
+							<th width="40%" className="text-center">
 								Image
 							</th>
-							<th width="12%" className="text-center">
+							<th width="20%" className="text-center">
 								Actions
 							</th>
 						</tr>
@@ -180,17 +177,10 @@ class ManageTelemedicine extends Component {
 										height="160px"
 										className="tele-col"
 									>
+										<td className="text-center">
+											{item.id}
+										</td>
 										<td>{item.name}</td>
-										<td>
-											<div className="description-table">
-												{item.description}
-											</div>
-										</td>
-										<td>
-											<div className="description-table">
-												{item.descriptionHTML}
-											</div>
-										</td>
 										<td>
 											<div
 												className="tele-image-table"
