@@ -2,6 +2,7 @@ import db from "../configs/connectDB";
 import {
 	findAllTelemedicine,
 	createTelemedicineQuery,
+    deleteTelemedicineById
 } from "../database/queries";
 
 let getAllTelemedicine = (callback) => {
@@ -33,7 +34,13 @@ let createNewTelemedicine = (data, callback) => {
 	);
 };
 
+let deleteTelemedicineModel = (id, callback) => {
+	return db.query(deleteTelemedicineById, [id], callback);
+};
+
+
 module.exports = {
 	createNewTelemedicine,
 	getAllTelemedicine,
+    deleteTelemedicineModel
 };

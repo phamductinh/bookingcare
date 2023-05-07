@@ -34,7 +34,22 @@ let createSpecialty = (req, res) => {
 	});
 };
 
+let deleteSpecialty = (req, res) => {
+	let id = req.query.id;
+	if (!id) {
+		return res.status(400).send({ code: 400, msg: "Missing id!" });
+	}
+	specialtyModel.deleteSpecialtyModel(id, (error, results, fields) => {
+		if (error) throw error;
+		return res.send({
+			code: 200,
+			msg: "Delete successfully!",
+		});
+	});
+};
+
 module.exports = {
 	createSpecialty,
 	getAllSpecialty,
+    deleteSpecialty
 };

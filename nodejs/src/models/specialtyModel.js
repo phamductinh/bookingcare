@@ -2,8 +2,8 @@ import db from "../configs/connectDB";
 import {
 	findAllSpecialtyQuery,
 	createNewSpecialtyQuery,
+    deleteSpecialtyById
 } from "../database/queries";
-import fileUpload from "express-fileupload";
 
 let getAllSpecialtyModel = (callback) => {
 	db.query(findAllSpecialtyQuery, (error, results) => {
@@ -34,7 +34,12 @@ let createNewSpecialtyModel = (data, callback) => {
 	);
 };
 
+let deleteSpecialtyModel = (id, callback) => {
+	return db.query(deleteSpecialtyById, [id], callback);
+};
+
 module.exports = {
 	getAllSpecialtyModel,
 	createNewSpecialtyModel,
+    deleteSpecialtyModel
 };

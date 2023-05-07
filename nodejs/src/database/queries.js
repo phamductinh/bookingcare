@@ -10,13 +10,19 @@ let updateUserQuery = `UPDATE user SET fullName = ?, address = ?, gender = ?, ro
 
 let deleteUserById = `DELETE FROM user WHERE id = ?`;
 
+//Telemedicine
 let findAllTelemedicine = "SELECT * FROM telemedicine";
 
 let createTelemedicineQuery = `INSERT INTO telemedicine (name, description, descriptionHTML, image) VALUES (?,?,?,?)`;
 
+let deleteTelemedicineById = `DELETE FROM telemedicine WHERE id = ?`;
+
+//Specialty
 let findAllSpecialtyQuery = "SELECT * FROM specialty";
 
 let createNewSpecialtyQuery = `INSERT INTO specialty (name, description, descriptionHTML, image) VALUES (?,?,?,?)`;
+
+let deleteSpecialtyById = `DELETE FROM specialty WHERE id = ?`;
 
 module.exports = {
 	findAllUsers,
@@ -29,4 +35,6 @@ module.exports = {
 	findAllTelemedicine,
 	findAllSpecialtyQuery,
 	createNewSpecialtyQuery,
+	deleteSpecialtyById,
+	deleteTelemedicineById,
 };
