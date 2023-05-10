@@ -8,4 +8,8 @@ const getALLTelemedicine = () => {
 	return axios.get("/api/get-all-telemedicine");
 };
 
-export { handleCreateTelemedicine, getALLTelemedicine };
+const deleteTelemedicine = (id) => {
+	return axios.delete(`/api/delete-telemedicine?id=${id}`);
+};
+
+export { handleCreateTelemedicine, getALLTelemedicine, deleteTelemedicine };

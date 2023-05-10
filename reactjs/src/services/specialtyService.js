@@ -8,4 +8,8 @@ const getALLSpecialty = () => {
 	return axios.get("/api/get-all-specialty");
 };
 
-export { handleCreateSpecialty, getALLSpecialty };
+const deleteSpecialty = (id) => {
+	return axios.delete(`/api/delete-specialty?id=${id}`);
+};
+
+export { handleCreateSpecialty, getALLSpecialty, deleteSpecialty };

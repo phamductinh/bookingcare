@@ -12,7 +12,8 @@ import { CommonUtils } from "../../utils";
 import {
 	handleCreateTelemedicine,
 	getALLTelemedicine,
-} from "../../services/homeService";
+	deleteTelemedicine,
+} from "../../services/telemedicineService";
 
 const mdParser = new MarkdownIt();
 
@@ -25,6 +26,7 @@ class ManageTelemedicine extends Component {
 			description: "",
 			descriptionHTML: "",
 			arrTelems: [],
+			confirmDelete: false,
 		};
 	}
 
@@ -94,8 +96,37 @@ class ManageTelemedicine extends Component {
 		}
 	};
 
+	handleDeleteTelemedicine = async () => {
+		try {
+			let res = await deleteTelemedicine(this.state.telemedicineId);
+			if (res && res.code === 200) {
+				await this.getALLTelemedicineReact();
+				toast.success("Delete successfully !");
+				this.setState({
+					confirmDelete: false,
+				});
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error("Something wrong !");
+		}
+	};
+
+	handleConfirmDelete = (user) => {
+		this.setState({
+			confirmDelete: true,
+			telemedicineId: user.id,
+		});
+	};
+
+	handleCloseConfirmDelete() {
+		this.setState({
+			confirmDelete: false,
+		});
+	}
+
 	render() {
-		const { name, image, description } = this.state;
+		const { name, image, description, confirmDelete } = this.state;
 		let arrTelems = this.state.arrTelems;
 		console.log(arrTelems);
 		return (
@@ -216,6 +247,26 @@ class ManageTelemedicine extends Component {
 							})}
 					</table>
 				</div>
+
+				{confirmDelete ? (
+					<div className="confirm-delete">
+						<div className="confirmation-text">Are you sure ?</div>
+						<div className="button-container">
+							<button
+								className="cancel-button"
+								onClick={() => this.handleCloseConfirmDelete()}
+							>
+								Cancel
+							</button>
+							<button
+								className="confirmation-button"
+								onClick={() => this.handleDeleteTelemedicine()}
+							>
+								Delete
+							</button>
+						</div>
+					</div>
+				) : null}
 			</>
 		);
 	}

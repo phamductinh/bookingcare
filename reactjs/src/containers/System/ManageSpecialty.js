@@ -11,6 +11,7 @@ import { CommonUtils } from "../../utils";
 import {
 	handleCreateSpecialty,
 	getALLSpecialty,
+    deleteSpecialty,
 } from "../../services/specialtyService";
 
 const mdParser = new MarkdownIt();
@@ -24,6 +25,7 @@ class ManageSpecialty extends Component {
 			description: "",
 			descriptionHTML: "",
 			arrSpecialty: [],
+            confirmDelete: false,
 		};
 	}
 
@@ -92,8 +94,37 @@ class ManageSpecialty extends Component {
 		}
 	};
 
+    handleDeleteSpecialty = async () => {
+		try {
+			let res = await deleteSpecialty(this.state.specialtyId);
+			if (res && res.code === 200) {
+				await this.getALLSpecialtyReact();
+				toast.success("Delete successfully !");
+				this.setState({
+					confirmDelete: false,
+				});
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error("Something wrong !");
+		}
+	};
+
+	handleConfirmDelete = (user) => {
+		this.setState({
+			confirmDelete: true,
+			specialtyId: user.id,
+		});
+	};
+
+	handleCloseConfirmDelete() {
+		this.setState({
+			confirmDelete: false,
+		});
+	}
+
 	render() {
-		const { name, image, description } = this.state;
+		const { name, image, description, confirmDelete } = this.state;
 		let arrSpecialty = this.state.arrSpecialty;
 		console.log(this.state);
 		return (
@@ -212,6 +243,26 @@ class ManageSpecialty extends Component {
 							})}
 					</table>
 				</div>
+
+                {confirmDelete ? (
+					<div className="confirm-delete">
+						<div className="confirmation-text">Are you sure ?</div>
+						<div className="button-container">
+							<button
+								className="cancel-button"
+								onClick={() => this.handleCloseConfirmDelete()}
+							>
+								Cancel
+							</button>
+							<button
+								className="confirmation-button"
+								onClick={() => this.handleDeleteSpecialty()}
+							>
+								Delete
+							</button>
+						</div>
+					</div>
+				) : null}
 			</>
 		);
 	}

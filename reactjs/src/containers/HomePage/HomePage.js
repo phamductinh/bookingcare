@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getALLTelemedicine } from "../../services/homeService";
+import { getALLTelemedicine } from "../../services/telemedicineService";
 import { getALLSpecialty } from "../../services/specialtyService";
 import "./HomePage.css";
 <link
