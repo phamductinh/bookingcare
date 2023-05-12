@@ -29,12 +29,20 @@ let initWebRoutes = (app) => {
 		"/api/delete-telemedicine",
 		telemedicineController.deleteTelemedicine
 	);
+    router.put(
+		"/api/update-telemedicine",
+		telemedicineController.updateTelemedicine
+	);
 
 	router.get("/api/get-all-specialty", specialtyController.getAllSpecialty);
 	router.post("/api/create-specialty", specialtyController.createSpecialty);
 	router.delete(
 		"/api/delete-telemedicine",
 		specialtyController.deleteSpecialty
+	);
+    router.put(
+		"/api/update-specialty",
+		specialtyController.updateSpecialty
 	);
 
 	return app.use("/", router);

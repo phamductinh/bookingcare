@@ -34,6 +34,12 @@ let createNewSpecialtyModel = (data, callback) => {
 	);
 };
 
+let updateSpecialtyModel = (data, callback) => {
+	db.query(updateSpecialtyQuery, data, (error, results, fields) => {
+		callback(error, results, fields);
+	});
+};
+
 let deleteSpecialtyModel = (id, callback) => {
 	return db.query(deleteSpecialtyById, [id], callback);
 };
@@ -41,5 +47,6 @@ let deleteSpecialtyModel = (id, callback) => {
 module.exports = {
 	getAllSpecialtyModel,
 	createNewSpecialtyModel,
-    deleteSpecialtyModel
+    deleteSpecialtyModel,
+    updateSpecialtyModel
 };

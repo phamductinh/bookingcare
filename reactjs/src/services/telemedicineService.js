@@ -12,4 +12,8 @@ const deleteTelemedicine = (id) => {
 	return axios.delete(`/api/delete-telemedicine?id=${id}`);
 };
 
-export { handleCreateTelemedicine, getALLTelemedicine, deleteTelemedicine };
+const updateTelemedicine = (data) => {
+	return axios.put(`/api/update-telemedicine`, data);
+};
+
+export { handleCreateTelemedicine, getALLTelemedicine, deleteTelemedicine, updateTelemedicine };

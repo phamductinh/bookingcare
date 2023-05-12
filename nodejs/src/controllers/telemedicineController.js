@@ -38,6 +38,22 @@ let createTelemedicine = (req, res) => {
 	});
 };
 
+let updateTelemedicine = (req, res) => {
+	let id = req.query.id;
+	let { name, description, descriptionHTML, image } = req.body;
+	if (!id) {
+		return res.status(400).send({ code: 400, msg: "Missing id!" });
+	}
+	let data = [id, name, description, descriptionHTML, image];
+	telemedicineModel.updateTelemedicineModel(data, (error, results, fields) => {
+		if (error) throw error;
+		return res.send({
+			code: 200,
+			msg: "Update successfully!",
+		});
+	});
+};
+
 let deleteTelemedicine = (req, res) => {
 	let id = req.query.id;
 	if (!id) {
@@ -57,4 +73,5 @@ module.exports = {
 	createTelemedicine,
 	getAllTelemedicine,
 	deleteTelemedicine,
+    updateTelemedicine
 };

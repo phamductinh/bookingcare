@@ -12,4 +12,8 @@ const deleteSpecialty = (id) => {
 	return axios.delete(`/api/delete-specialty?id=${id}`);
 };
 
-export { handleCreateSpecialty, getALLSpecialty, deleteSpecialty };
+const updateSpecialty = (data) => {
+	return axios.put(`/api/update-specialty`, data);
+};
+
+export { handleCreateSpecialty, getALLSpecialty, deleteSpecialty, updateSpecialty };

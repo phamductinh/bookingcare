@@ -15,12 +15,18 @@ let findAllTelemedicine = "SELECT * FROM telemedicine";
 
 let createTelemedicineQuery = `INSERT INTO telemedicine (name, description, descriptionHTML, image) VALUES (?,?,?,?)`;
 
+let updateTelemedicineQuery =
+	"UPDATE telemedicine SET name = ?, description = ?, descriptionHTML = ?, image = ? WHERE id = ?";
+
 let deleteTelemedicineById = `DELETE FROM telemedicine WHERE id = ?`;
 
 //Specialty
 let findAllSpecialtyQuery = "SELECT * FROM specialty";
 
 let createNewSpecialtyQuery = `INSERT INTO specialty (name, description, descriptionHTML, image) VALUES (?,?,?,?)`;
+
+let updateSpecialtyQuery =
+	"UPDATE specialty SET name = ?, description = ?, descriptionHTML = ?, image = ? WHERE id = ?";
 
 let deleteSpecialtyById = `DELETE FROM specialty WHERE id = ?`;
 
@@ -37,4 +43,6 @@ module.exports = {
 	createNewSpecialtyQuery,
 	deleteSpecialtyById,
 	deleteTelemedicineById,
+    updateTelemedicineQuery,
+    updateSpecialtyQuery
 };
