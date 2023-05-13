@@ -21,6 +21,22 @@ const getAllTelemedicine = (req, res) => {
 	});
 };
 
+let getTelemedicineById = (req, res) => {
+	let id = req.body.id;
+	if (!id) {
+		return res.status(400).send({ code: 400, msg: "Missing id!" });
+	}
+	telemedicineModel.getTelemedicineByIdModel(id, (error, data) => {
+		if (error) {
+			throw error;
+		}
+		return res.send({
+			code: 200,
+			data: data,
+		});
+	});
+};
+
 let createTelemedicine = (req, res) => {
 	let data = req.body;
 	telemedicineModel.createNewTelemedicine(data, (err, results) => {
@@ -39,19 +55,20 @@ let createTelemedicine = (req, res) => {
 };
 
 let updateTelemedicine = (req, res) => {
-	let id = req.query.id;
-	let { name, description, descriptionHTML, image } = req.body;
+	let { name, description, descriptionHTML, image, id } = req.body;
 	if (!id) {
 		return res.status(400).send({ code: 400, msg: "Missing id!" });
 	}
-	let data = [id, name, description, descriptionHTML, image];
-	telemedicineModel.updateTelemedicineModel(data, (error, results, fields) => {
-		if (error) throw error;
-		return res.send({
-			code: 200,
-			msg: "Update successfully!",
-		});
-	});
+	telemedicineModel.updateTelemedicineModel(
+		[name, description, descriptionHTML, image, id],
+		(error, results, fields) => {
+			if (error) throw error;
+			return res.send({
+				code: 200,
+				msg: "Update successfully!",
+			});
+		}
+	);
 };
 
 let deleteTelemedicine = (req, res) => {
@@ -73,5 +90,6 @@ module.exports = {
 	createTelemedicine,
 	getAllTelemedicine,
 	deleteTelemedicine,
-    updateTelemedicine
+	updateTelemedicine,
+	getTelemedicineById,
 };

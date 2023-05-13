@@ -51,6 +51,18 @@
 	color: #fff;
 }
 
+.btn-edit-tele{
+    width: 150px;
+	height: 47px;
+	margin-top: 55px;
+	margin-left: 60px;
+	border-radius: 10px;
+	border: none;
+	outline: none;
+	background-color: rgb(255, 187, 0);
+	color: #fff;
+}
+
 .btn-add-new-tele:hover {
 	background: #0d45a5;
 }

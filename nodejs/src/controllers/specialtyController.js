@@ -35,19 +35,21 @@ let createSpecialty = (req, res) => {
 };
 
 let updateSpecialty = (req, res) => {
-	let id = req.query.id;
-	let { name, description, descriptionHTML, image } = req.body;
+	let { name, description, descriptionHTML, image, id } = req.body;
 	if (!id) {
 		return res.status(400).send({ code: 400, msg: "Missing id!" });
 	}
-	let data = [id, name, description, descriptionHTML, image];
-	specialtyModel.updateSpecialtyModel(data, (error, results, fields) => {
-		if (error) throw error;
-		return res.send({
-			code: 200,
-			msg: "Update successfully!",
-		});
-	});
+	specialtyModel.updateSpecialtyModel(
+		[name, description, descriptionHTML, image, id],
+		(error, results, fields) => {
+			if (error) throw error;
+			console.log(error);
+			return res.send({
+				code: 200,
+				msg: "Update successfully!",
+			});
+		}
+	);
 };
 
 let deleteSpecialty = (req, res) => {
@@ -67,6 +69,6 @@ let deleteSpecialty = (req, res) => {
 module.exports = {
 	createSpecialty,
 	getAllSpecialty,
-    deleteSpecialty,
-    updateSpecialty
+	deleteSpecialty,
+	updateSpecialty,
 };

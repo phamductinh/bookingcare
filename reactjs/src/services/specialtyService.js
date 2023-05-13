@@ -16,4 +16,9 @@ const updateSpecialty = (data) => {
 	return axios.put(`/api/update-specialty`, data);
 };
 
-export { handleCreateSpecialty, getALLSpecialty, deleteSpecialty, updateSpecialty };
+export {
+	handleCreateSpecialty,
+	getALLSpecialty,
+	deleteSpecialty,
+	updateSpecialty,
+};

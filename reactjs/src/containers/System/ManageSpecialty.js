@@ -11,7 +11,8 @@ import { CommonUtils } from "../../utils";
 import {
 	handleCreateSpecialty,
 	getALLSpecialty,
-    deleteSpecialty,
+	deleteSpecialty,
+	updateSpecialty,
 } from "../../services/specialtyService";
 
 const mdParser = new MarkdownIt();
@@ -25,7 +26,7 @@ class ManageSpecialty extends Component {
 			description: "",
 			descriptionHTML: "",
 			arrSpecialty: [],
-            confirmDelete: false,
+			confirmDelete: false,
 		};
 	}
 
@@ -94,7 +95,7 @@ class ManageSpecialty extends Component {
 		}
 	};
 
-    handleDeleteSpecialty = async () => {
+	handleDeleteSpecialty = async () => {
 		try {
 			let res = await deleteSpecialty(this.state.specialtyId);
 			if (res && res.code === 200) {
@@ -107,6 +108,48 @@ class ManageSpecialty extends Component {
 		} catch (error) {
 			console.log(error);
 			toast.error("Something wrong !");
+		}
+	};
+
+	handleEditSpecialty = async () => {
+		let data = {
+			name: this.state.name,
+			description: this.state.description,
+			descriptionHTML: this.state.descriptionHTML,
+			image: this.state.imageBase64,
+			id: this.state.id,
+		};
+        console.log(data)
+		try {
+			let res = await updateSpecialty(data);
+			if (res && res.code === 200) {
+				await this.getALLSpecialtyReact();
+				toast.success("Update successfully !");
+				this.setState({
+					name: "",
+					description: "",
+					descriptionHTML: "",
+					image: "",
+					showBtnEdit: false,
+				});
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error("Update failed !");
+		}
+	};
+
+	handleFillDataEdit = (item) => {
+		try {
+			this.setState({
+				id: item.id,
+				name: item.name,
+				description: item.description,
+				descriptionHTML: item.descriptionHTML,
+				showBtnEdit: true,
+			});
+		} catch (error) {
+			console.log(error);
 		}
 	};
 
@@ -124,7 +167,8 @@ class ManageSpecialty extends Component {
 	}
 
 	render() {
-		const { name, image, description, confirmDelete } = this.state;
+		const { name, image, description, confirmDelete, showBtnEdit } =
+			this.state;
 		let arrSpecialty = this.state.arrSpecialty;
 		console.log(this.state);
 		return (
@@ -157,13 +201,25 @@ class ManageSpecialty extends Component {
 									}
 								/>
 							</div>
-							<button
-								className="btn-add-new-tele"
-								type="button"
-								onClick={() => this.handleCreateNewSpecialty()}
-							>
-								Thêm mới
-							</button>
+							{showBtnEdit ? (
+								<button
+									className="btn-edit-tele"
+									type="button"
+									onClick={() => this.handleEditSpecialty()}
+								>
+									Lưu
+								</button>
+							) : (
+								<button
+									className="btn-add-new-tele"
+									type="button"
+									onClick={() =>
+										this.handleCreateNewSpecialty()
+									}
+								>
+									Thêm mới
+								</button>
+							)}
 						</div>
 
 						<div className="description">
@@ -220,7 +276,7 @@ class ManageSpecialty extends Component {
 											<button
 												className="btn-edit"
 												onClick={() =>
-													this.handleOpenModalEdit(
+													this.handleFillDataEdit(
 														item
 													)
 												}
@@ -244,7 +300,7 @@ class ManageSpecialty extends Component {
 					</table>
 				</div>
 
-                {confirmDelete ? (
+				{confirmDelete ? (
 					<div className="confirm-delete">
 						<div className="confirmation-text">Are you sure ?</div>
 						<div className="button-container">

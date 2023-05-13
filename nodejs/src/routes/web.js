@@ -21,6 +21,10 @@ let initWebRoutes = (app) => {
 		"/api/get-all-telemedicine",
 		telemedicineController.getAllTelemedicine
 	);
+	router.get(
+		"/api/get-telemedicine",
+		telemedicineController.getTelemedicineById
+	);
 	router.post(
 		"/api/create-telemedicine",
 		telemedicineController.createTelemedicine

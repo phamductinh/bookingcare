@@ -16,6 +16,15 @@ let getAllTelemedicine = (callback) => {
 	});
 };
 
+let getTelemedicineByIdModel = (id, callback) => {
+	db.query(findTelemedicineById, id, (error, results) => {
+		if (error) {
+			return callback(error);
+		}
+		return callback(null, results[0]);
+	});
+};
+
 let createNewTelemedicine = (data, callback) => {
 	let { name, description, descriptionHTML, image } = data;
 	if (!name || !description || !descriptionHTML) {
@@ -50,4 +59,5 @@ module.exports = {
 	getAllTelemedicine,
 	deleteTelemedicineModel,
 	updateTelemedicineModel,
+    getTelemedicineByIdModel
 };

@@ -13,6 +13,8 @@ let deleteUserById = `DELETE FROM user WHERE id = ?`;
 //Telemedicine
 let findAllTelemedicine = "SELECT * FROM telemedicine";
 
+let findTelemedicineById = `SELECT * FROM telemedicine WHERE id = ?`;
+
 let createTelemedicineQuery = `INSERT INTO telemedicine (name, description, descriptionHTML, image) VALUES (?,?,?,?)`;
 
 let updateTelemedicineQuery =
@@ -44,5 +46,6 @@ module.exports = {
 	deleteSpecialtyById,
 	deleteTelemedicineById,
     updateTelemedicineQuery,
-    updateSpecialtyQuery
+    updateSpecialtyQuery,
+    findTelemedicineById
 };

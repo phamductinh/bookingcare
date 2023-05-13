@@ -7,6 +7,7 @@
     "@formatjs/intl-relativetimeformat": "^7.3.6",
     "@fortawesome/fontawesome-free-webfonts": "^1.0.9",
     "axios": "^1.3.4",
+    "base-64": "^1.0.0",
     "bootstrap": "^5.0.1",
     "connected-react-router": "^6.9.1",
     "jwt-decode": "^3.1.2",

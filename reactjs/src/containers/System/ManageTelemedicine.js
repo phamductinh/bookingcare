@@ -13,7 +13,9 @@ import {
 	handleCreateTelemedicine,
 	getALLTelemedicine,
 	deleteTelemedicine,
+	updateTelemedicine,
 } from "../../services/telemedicineService";
+import { encode, decode } from "base-64";
 
 const mdParser = new MarkdownIt();
 
@@ -27,6 +29,7 @@ class ManageTelemedicine extends Component {
 			descriptionHTML: "",
 			arrTelems: [],
 			confirmDelete: false,
+			showBtnEdit: false,
 		};
 	}
 
@@ -112,6 +115,43 @@ class ManageTelemedicine extends Component {
 		}
 	};
 
+	handleEditTelemedicine = async () => {
+		let data = {
+			name: this.state.name,
+			description: this.state.description,
+			descriptionHTML: this.state.descriptionHTML,
+			image: this.state.imageBase64,
+			id: this.state.id,
+		};
+		try {
+			let res = await updateTelemedicine(data);
+			if (res && res.code === 200) {
+				await this.getALLTelemedicineReact();
+				toast.success("Update successfully !");
+				this.setState({
+					name: "",
+					description: "",
+					descriptionHTML: "",
+					image: "",
+					showBtnEdit: false,
+				});
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error("Update failed !");
+		}
+	};
+
+	handleFillDataEdit = (item) => {
+		this.setState({
+			id: item.id,
+			name: item.name,
+			description: item.description,
+			descriptionHTML: item.descriptionHTML,
+			showBtnEdit: true,
+		});
+	};
+
 	handleConfirmDelete = (user) => {
 		this.setState({
 			confirmDelete: true,
@@ -126,7 +166,8 @@ class ManageTelemedicine extends Component {
 	}
 
 	render() {
-		const { name, image, description, confirmDelete } = this.state;
+		const { name, image, description, confirmDelete, showBtnEdit } =
+			this.state;
 		let arrTelems = this.state.arrTelems;
 		console.log(arrTelems);
 		return (
@@ -152,22 +193,33 @@ class ManageTelemedicine extends Component {
 									id="file-input"
 									type="file"
 									name="file"
-									value={image}
 									accept="image/png, image/jpeg"
 									onChange={(event) =>
 										this.handleOnchangeImage(event, "image")
 									}
 								/>
 							</div>
-							<button
-								className="btn-add-new-tele"
-								type="button"
-								onClick={() =>
-									this.handleCreateNewTelemedicine()
-								}
-							>
-								Thêm mới
-							</button>
+							{showBtnEdit ? (
+								<button
+									className="btn-edit-tele"
+									type="button"
+									onClick={() =>
+										this.handleEditTelemedicine()
+									}
+								>
+									Lưu
+								</button>
+							) : (
+								<button
+									className="btn-add-new-tele"
+									type="button"
+									onClick={() =>
+										this.handleCreateNewTelemedicine()
+									}
+								>
+									Thêm mới
+								</button>
+							)}
 						</div>
 
 						<div className="description">
@@ -213,18 +265,22 @@ class ManageTelemedicine extends Component {
 										</td>
 										<td>{item.name}</td>
 										<td>
-											<div
-												className="tele-image-table"
-												style={{
-													backgroundImage: `url(${imageBase64})`,
-												}}
-											></div>
+											{item.image ? (
+												<div
+													className="tele-image-table"
+													style={{
+														backgroundImage: `url(${imageBase64})`,
+													}}
+												></div>
+											) : (
+												<div>Null</div>
+											)}
 										</td>
 										<td className="text-center">
 											<button
 												className="btn-edit"
 												onClick={() =>
-													this.handleOpenModalEdit(
+													this.handleFillDataEdit(
 														item
 													)
 												}
