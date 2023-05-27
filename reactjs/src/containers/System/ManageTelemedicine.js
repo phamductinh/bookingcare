@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import "./ManageTelemedicine.css";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Header/Header";
 import MarkdownIt from "markdown-it";
@@ -15,7 +14,6 @@ import {
 	deleteTelemedicine,
 	updateTelemedicine,
 } from "../../services/telemedicineService";
-import { encode, decode } from "base-64";
 
 const mdParser = new MarkdownIt();
 
@@ -166,8 +164,7 @@ class ManageTelemedicine extends Component {
 	}
 
 	render() {
-		const { name, image, description, confirmDelete, showBtnEdit } =
-			this.state;
+		const { name, description, confirmDelete, showBtnEdit } = this.state;
 		let arrTelems = this.state.arrTelems;
 		console.log(arrTelems);
 		return (

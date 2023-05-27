@@ -29,4 +29,14 @@ export const adminMenu = [
 			},
 		],
 	},
+	{
+		//quản lý người dùng
+		name: "menu.admin.manage-doctor",
+		menus: [
+			{
+				name: "menu.admin.manage-doctor",
+				link: "/system/manage-doctor",
+			},
+		],
+	},
 ];

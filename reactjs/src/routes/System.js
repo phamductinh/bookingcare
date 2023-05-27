@@ -4,6 +4,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import UserManage from "../containers/System/UserManage";
 import ManageTelemedicine from "../containers/System/ManageTelemedicine";
 import ManageSpecialty from "../containers/System/ManageSpecialty";
+import ManageDoctor from "../containers/System/ManageDoctor";
 
 class System extends Component {
 	render() {
@@ -23,6 +24,10 @@ class System extends Component {
 						<Route
 							path="/system/manage-specialty"
 							component={ManageSpecialty}
+						/>
+						<Route
+							path="/system/manage-doctor"
+							component={ManageDoctor}
 						/>
 						<Route
 							component={() => {

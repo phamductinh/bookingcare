@@ -3,6 +3,8 @@ import telemedicineController from "../controllers/telemedicineController";
 import authController from "../controllers/authController";
 import userController from "../controllers/userController";
 import specialtyController from "../controllers/specialtyController";
+import doctorController from "../controllers/doctorController";
+import clinicController from "../controllers/clinicController";
 import { verifyJWT } from "../middlewares/verifyJWT";
 
 let router = express.Router();
@@ -16,6 +18,12 @@ let initWebRoutes = (app) => {
 	router.post("/api/create-user", userController.createUser);
 	router.put("/api/edit-user", verifyJWT, userController.updateUser);
 	router.delete("/api/delete-user", verifyJWT, userController.deleteUser);
+
+	router.get("/api/get-all-doctors", doctorController.getAllDoctors);
+	router.get("/api/get-a-doctor", doctorController.getADoctor);
+	router.post("/api/create-doctor", doctorController.createADoctor);
+	router.put("/api/update-doctor", doctorController.updateADoctor);
+	router.delete("/api/delete-doctor", doctorController.deleteDoctor);
 
 	router.get(
 		"/api/get-all-telemedicine",
@@ -33,7 +41,7 @@ let initWebRoutes = (app) => {
 		"/api/delete-telemedicine",
 		telemedicineController.deleteTelemedicine
 	);
-    router.put(
+	router.put(
 		"/api/update-telemedicine",
 		telemedicineController.updateTelemedicine
 	);
@@ -44,10 +52,9 @@ let initWebRoutes = (app) => {
 		"/api/delete-telemedicine",
 		specialtyController.deleteSpecialty
 	);
-    router.put(
-		"/api/update-specialty",
-		specialtyController.updateSpecialty
-	);
+	router.put("/api/update-specialty", specialtyController.updateSpecialty);
+
+	router.get("/api/get-all-clinics", clinicController.getAllClinics);
 
 	return app.use("/", router);
 };

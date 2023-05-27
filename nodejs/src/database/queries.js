@@ -10,6 +10,17 @@ let updateUserQuery = `UPDATE user SET fullName = ?, address = ?, gender = ?, ro
 
 let deleteUserById = `DELETE FROM user WHERE id = ?`;
 
+//doctor
+let findAllDoctorsQuery = `SELECT * FROM doctor`;
+
+let findDoctorById = `SELECT * FROM doctor WHERE id = ?`;
+
+let createADoctorQuery = `INSERT INTO doctor (name, introduction, clinicId, specialtyId, description, address, price) VALUES (?,?,?,?,?,?,?)`;
+
+let updateDoctorQuery = `UPDATE doctor SET name = ?, introduction = ?, clinicId = ?, specialtyId = ?, description = ?, address = ?, price = ? WHERE id = ?`;
+
+let deleteDoctorById = `DELETE FROM doctor WHERE id = ?`;
+
 //Telemedicine
 let findAllTelemedicine = "SELECT * FROM telemedicine";
 
@@ -32,6 +43,8 @@ let updateSpecialtyQuery =
 
 let deleteSpecialtyById = `DELETE FROM specialty WHERE id = ?`;
 
+let findAllClinicsQuery = "SELECT * FROM clinic";
+
 module.exports = {
 	findAllUsers,
 	findUserById,
@@ -45,7 +58,13 @@ module.exports = {
 	createNewSpecialtyQuery,
 	deleteSpecialtyById,
 	deleteTelemedicineById,
-    updateTelemedicineQuery,
-    updateSpecialtyQuery,
-    findTelemedicineById
+	updateTelemedicineQuery,
+	updateSpecialtyQuery,
+	findTelemedicineById,
+	findAllDoctorsQuery,
+	findDoctorById,
+	createADoctorQuery,
+	updateDoctorQuery,
+	deleteDoctorById,
+	findAllClinicsQuery,
 };
