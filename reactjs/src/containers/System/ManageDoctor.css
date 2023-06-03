@@ -86,19 +86,20 @@
 	border: 1px solid rgb(141, 141, 141);
 	outline: none;
 }
-.pass-field {
+.price-field {
 	display: flex;
 }
 .name,
-.price,
 .address {
 	width: 100%;
 }
-.password {
-	width: 49%;
+.price {
+	width: 50%;
 }
-.password-edit {
-	width: 100%;
+.doctor-image {
+	width: 49%;
+	margin-left: 8px !important;
+	padding: 3px !important;
 }
 .confirm-password {
 	margin-left: 2% !important;
@@ -126,7 +127,7 @@
 	border-radius: 4px;
 }
 
-#specialty-select {
+#specialty-select-doctor {
 	height: 35px;
 	width: 49%;
 	padding-left: 8px;
@@ -234,4 +235,13 @@
 .cancel-button:hover {
 	background-color: #b2b2b2;
 	cursor: pointer;
+}
+
+.doctor-img-table {
+	width: 100px;
+	height: 100px;
+	margin: 0 auto;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 }

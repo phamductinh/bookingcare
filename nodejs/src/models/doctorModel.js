@@ -37,6 +37,7 @@ let createDoctorModel = (doctorData, callback) => {
 		description,
 		address,
 		price,
+		image,
 	} = doctorData;
 
 	db.query(
@@ -49,6 +50,7 @@ let createDoctorModel = (doctorData, callback) => {
 			description,
 			address,
 			price,
+			image,
 		],
 		(err, results) => {
 			if (err) {

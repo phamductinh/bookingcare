@@ -39,14 +39,14 @@ let createADoctor = (req, res) => {
 	let doctorData = req.body;
 	doctorModel.createDoctorModel(doctorData, (err, results) => {
 		if (err) {
-			return res.status(err.statusCode).send({
-				code: err.statusCode,
-				msg: err.message,
+			return res.status(400).send({
+				code: 400,
+				msg: "Something wrong!",
 			});
 		}
-		return res.status(201).send({
+		return res.status(200).send({
 			code: 200,
-			msg: successMsg.create_user_succeed,
+			msg: "Create doctor successfully!",
 		});
 	});
 };

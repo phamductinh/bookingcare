@@ -170,7 +170,6 @@ class ManageSpecialty extends Component {
 		const { name, image, description, confirmDelete, showBtnEdit } =
 			this.state;
 		let arrSpecialty = this.state.arrSpecialty;
-		console.log(this.state);
 		return (
 			<>
 				{this.props.isLoggedIn && <Header />}

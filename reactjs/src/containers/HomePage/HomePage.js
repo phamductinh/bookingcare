@@ -3,13 +3,9 @@ import { connect } from "react-redux";
 import { getALLTelemedicine } from "../../services/telemedicineService";
 import { getALLSpecialty } from "../../services/specialtyService";
 import "./HomePage.css";
-<link
-	rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-	integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-	crossorigin="anonymous"
-	referrerpolicy="no-referrer"
-/>;
+import { getAllDoctors } from "../../services/doctorService";
+import { withRouter } from "react-router";
+import Fuse from "fuse.js";
 
 class HomePage extends Component {
 	constructor(props) {
@@ -17,12 +13,14 @@ class HomePage extends Component {
 		this.state = {
 			arrTelems: [],
 			arrSpecialty: [],
+			arrDoctors: [],
 		};
 	}
 
 	async componentDidMount() {
 		await this.getALLTelemedicineReact();
 		await this.getALLSpecialtyReact();
+		await this.getALLDoctorReact();
 	}
 
 	getALLTelemedicineReact = async () => {
@@ -34,14 +32,69 @@ class HomePage extends Component {
 		}
 	};
 
+	getALLDoctorReact = async () => {
+		let res = await getAllDoctors();
+		if (res && res.code === 200) {
+			this.setState({
+				arrDoctors: res.data,
+			});
+		}
+	};
+
 	getALLSpecialtyReact = async () => {
 		let res = await getALLSpecialty();
-		console.log("check res", res);
 		if (res && res.code === 200) {
 			this.setState({
 				arrSpecialty: res.data,
 			});
 		}
+	};
+
+	handleOnchangeKeyword = async (event) => {
+		await this.setState({
+			keyword: event.target.value,
+		});
+	};
+
+	handleOnchangeSelect = async (event) => {
+		await this.setState({
+			specialtyId: event.target.value,
+		});
+	};
+
+	filterDoctors() {
+		let arrDoctors = this.state.arrDoctors;
+		let { keyword, specialtyId } = this.state;
+		let filteredResults;
+		const fuse = new Fuse(arrDoctors, {
+			keys: ["name", "specialtyId"],
+		});
+		if (keyword && specialtyId) {
+			filteredResults = fuse
+				.search({
+					$and: [{ name: keyword }, { specialtyId: specialtyId }],
+				})
+				.map((result) => result.item);
+		} else if (keyword) {
+			filteredResults = fuse
+				.search({ name: keyword })
+				.map((result) => result.item);
+		} else if (specialtyId) {
+			filteredResults = fuse
+				.search({ specialtyId: specialtyId })
+				.map((result) => result.item);
+		} else {
+			filteredResults = "";
+		}
+		console.log("filter", filteredResults);
+		this.setState({
+			arrDoctorFilter: filteredResults,
+		});
+	}
+
+	handleViewDetail = (doctor) => {
+		console.log("check doctor", doctor);
+		this.props.history.push(`/detail-doctor/${doctor.id}`);
 	};
 
 	handleNext() {
@@ -62,9 +115,21 @@ class HomePage extends Component {
 		document.getElementById("spec-slide").prepend(lists[lists.length - 1]);
 	}
 
+	handleNextDoctor() {
+		let lists = document.querySelectorAll(".doctor-slide-item");
+		document.getElementById("doctor-slide").appendChild(lists[0]);
+	}
+	handlePrevDoctor() {
+		let lists = document.querySelectorAll(".doctor-slide-item");
+		document
+			.getElementById("doctor-slide")
+			.prepend(lists[lists.length - 1]);
+	}
+
 	render() {
-		let { arrTelems, arrSpecialty } = this.state;
-		console.log(arrTelems);
+		let { arrTelems, arrSpecialty, arrDoctors, arrDoctorFilter } =
+			this.state;
+		console.log(arrDoctors);
 		return (
 			<div className="homepage-container">
 				<div id="header" className="header-homepage">
@@ -429,6 +494,91 @@ class HomePage extends Component {
 					</div>
 				</div> */}
 
+				<div className="search-container">
+					<div className="search-box">
+						<input
+							className="search-input"
+							type="text"
+							autoComplete="off"
+							placeholder="Nhập tên bác sĩ"
+							onChange={(event) =>
+								this.handleOnchangeKeyword(event)
+							}
+						/>
+						<select
+							name="specialty"
+							id="specialty-select"
+							value={this.state.specialty}
+							onChange={(event) =>
+								this.handleOnchangeSelect(event, "specialty")
+							}
+							defaultValue={""}
+						>
+							<option value="" disabled defaultValue>
+								Chọn chuyên khoa
+							</option>
+							{arrSpecialty &&
+								arrSpecialty.length > 0 &&
+								arrSpecialty.map((item, index) => (
+									<option key={index} value={item.id}>
+										{item.name}
+									</option>
+								))}
+						</select>
+						<button
+							className="btn-search-doctor"
+							onClick={() => this.filterDoctors()}
+						>
+							<i className="fa-solid fa-magnifying-glass"></i>
+						</button>
+					</div>
+					<div className="search-results">
+						<div className="search-results-list">
+							{arrDoctorFilter &&
+								arrDoctorFilter.length > 0 &&
+								arrDoctorFilter.map((item, index) => {
+									return (
+										<div
+											className="result-content"
+											key={index}
+											onClick={() =>
+												this.handleViewDetail(item)
+											}
+										>
+											<div
+												className="result-img"
+												style={{
+													backgroundImage: `url(${
+														item.image !== null
+															? Buffer.from(
+																	item.image,
+																	"base64"
+															  ).toString(
+																	"binary"
+															  )
+															: "https://ihfeducation.ihf.info/images/no_avatar.gif"
+													})`,
+												}}
+											></div>
+											<div className="result-infor">
+												<div className="result-name">
+													{item.name
+														? item.name
+														: "Unknown name"}
+												</div>
+												<div className="result-specialty">
+													{item.specialty
+														? item.specialty
+														: ""}
+												</div>
+											</div>
+										</div>
+									);
+								})}
+						</div>
+					</div>
+				</div>
+
 				<div className="telemedicine-container">
 					<div className="telem-content-up">
 						<div className="telem-title">
@@ -523,7 +673,7 @@ class HomePage extends Component {
 						<button
 							className="telem-next"
 							id="telem-next"
-							onClick={() => this.handleNextSpecialty()}
+							onClick={() => this.handlePrevSpecialty()}
 						></button>
 					</div>
 				</div>
@@ -661,137 +811,53 @@ class HomePage extends Component {
 					</div>
 					<div className="doctor-slide-container">
 						<div id="doctor-slide">
-							<div
-								className="doctor-slide-item"
-								onclick="window.open('/outstanding-doctor/outstanding.html')"
-							>
-								<div
-									className="doctor-img"
-									style={{
-										backgroundImage:
-											"url(./image/doctors/nguyen-thi-hoai-an.jpg)",
-									}}
-								></div>
-								<div className="doctor-infor">
-									<div className="doctor-name">
-										Phó Giáo sư, Tiến sĩ, Bác sĩ Nguyễn Thị
-										Hoài An
-									</div>
-									<div>
-										<p>Tai Mũi Họng</p>
-									</div>
-								</div>
-							</div>
-							<div
-								className="doctor-slide-item"
-								onclick="window.open('/outstanding-doctor/outstanding.html')"
-							>
-								<div
-									className="doctor-img"
-									style={{
-										backgroundImage:
-											"url(./image/doctors/bshung.jpg)",
-									}}
-								></div>
-								<div className="doctor-infor">
-									<div className="doctor-name">
-										Phó Giáo sư, Tiến sĩ, Bác sĩ cao cấp
-										Nguyễn Duy Hưng
-									</div>
-									<div>
-										<p>Da liễu</p>
-									</div>
-								</div>
-							</div>
-							<div
-								className="doctor-slide-item"
-								onclick="window.open('/outstanding-doctor/outstanding.html')"
-							>
-								<div
-									className="doctor-img"
-									style={{
-										backgroundImage:
-											"url(./image/doctors/tran-minh-khuyen.jpg)",
-									}}
-								></div>
-								<div className="doctor-infor">
-									<div className="doctor-name">
-										Bác sĩ Chuyên khoa II Trần Minh Khuyên
-									</div>
-									<div>
-										<p>Sức khỏe tâm thần</p>
-									</div>
-								</div>
-							</div>
-							<div
-								className="doctor-slide-item"
-								onclick="window.open('/outstanding-doctor/outstanding.html')"
-							>
-								<div
-									className="doctor-img"
-									style={{
-										backgroundImage:
-											"url(./image/doctors/tuyet-nga.jpg)",
-									}}
-								></div>
-								<div className="doctor-infor">
-									<div className="doctor-name">
-										Bác sĩ Chuyên khoa I Phí Thị Tuyết Nga
-									</div>
-									<div>
-										<p>Sản Phụ khoa</p>
-									</div>
-								</div>
-							</div>
-							<div
-								className="doctor-slide-item"
-								onclick="window.open('/outstanding-doctor/outstanding.html')"
-							>
-								<div
-									className="doctor-img"
-									style={{
-										backgroundImage:
-											"url(./image/doctors/le-thi-tuyet-lan.jpg)",
-									}}
-								></div>
-								<div className="doctor-infor">
-									<div className="doctor-name">
-										Phó Giáo sư, Tiến sĩ, Bác sĩ Lê Thị
-										Tuyết Lan
-									</div>
-									<div>
-										<p>Dị ứng miễn dịch</p>
-									</div>
-								</div>
-							</div>
-							<div
-								className="doctor-slide-item"
-								onclick="window.open('/outstanding-doctor/outstanding.html')"
-							>
-								<div
-									className="doctor-img"
-									style={{
-										backgroundImage:
-											"url(./image/doctors/hoai-huong.jpg)",
-									}}
-								></div>
-								<div className="doctor-infor">
-									<div className="doctor-name">
-										Bác sĩ chuyên khoa II Trần Thị Hoài
-										Hương
-									</div>
-									<div>
-										<p>Da liễu</p>
-									</div>
-								</div>
-							</div>
+							{arrDoctors &&
+								arrDoctors.length > 0 &&
+								arrDoctors.map((item, index) => {
+									let doctorImage = new Buffer(
+										item.image,
+										"base64"
+									).toString("binary");
+									return (
+										<div
+											className="doctor-slide-item"
+											key={index}
+											onClick={() =>
+												this.handleViewDetail(item)
+											}
+										>
+											<div
+												className="doctor-img"
+												style={{
+													backgroundImage: `url(${doctorImage})`,
+												}}
+											></div>
+											<div className="doctor-infor">
+												<div className="doctor-name">
+													Bác sĩ {item.name}
+												</div>
+												<div>
+													<p>{item.specialty}</p>
+												</div>
+											</div>
+										</div>
+									);
+								})}
 						</div>
 					</div>
 					<div className="doctor-buttons">
-						<button className="doctor-prev" id="doctor-prev">
+						<button
+							className="doctor-prev"
+							id="doctor-prev"
+							onClick={() => this.handleNextDoctor()}
+						>
 							<i className="fas fa-long-arrow-left"></i>
 						</button>
-						<button className="doctor-next" id="doctor-next">
+						<button
+							className="doctor-next"
+							id="doctor-next"
+							onClick={() => this.handlePrevDoctor()}
+						>
 							<i className="fas fa-long-arrow-right"></i>
 						</button>
 					</div>
@@ -1099,4 +1165,6 @@ const mapDispatchToProps = (dispatch) => {
 	return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
+export default withRouter(
+	connect(mapStateToProps, mapDispatchToProps)(HomePage)
+);

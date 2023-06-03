@@ -9,11 +9,11 @@ const getAllDoctors = () => {
 };
 
 const getDoctorById = (doctorId) => {
-	return axios.get("/api/get-doctor", doctorId);
+	return axios.get(`/api/get-a-doctor?id=${doctorId}`);
 };
 
 const deleteDoctor = (doctorId) => {
-	return axios.delete(`/api/delete-user?id=${doctorId}`);
+	return axios.delete(`/api/delete-doctor?id=${doctorId}`);
 };
 
 const updateDoctor = (doctorData) => {

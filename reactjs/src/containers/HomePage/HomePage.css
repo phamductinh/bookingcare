@@ -291,6 +291,125 @@
 	color: #45c3d2;
 }
 
+.search-container {
+	width: 100%;
+	height: auto;
+	border-top: 3px solid #efeef5;
+	border-bottom: 3px solid #efeef5;
+}
+
+.search-box {
+	width: 70%;
+	height: 60px;
+	margin: 32px auto;
+	display: block;
+	/* border: 1px solid red; */
+}
+
+.search-input {
+	width: 50%;
+	height: 60px;
+	padding: 20px;
+	font-size: 18px;
+	outline: none;
+	border: none;
+	border-top-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+		rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+#specialty-select {
+	width: 30%;
+	height: 60px;
+	font-size: 17px;
+	margin-left: 30px;
+	border-top-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+	outline: none;
+	border: none;
+	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+		rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.btn-search-doctor {
+	width: 10%;
+	height: 60px;
+	border: none;
+	outline: none;
+	margin-left: 30px;
+	text-align: center;
+	border-top-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+	background-color: #d4d3d3;
+	color: #555;
+	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+		rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+.btn-search-doctor i {
+	font-size: 28px;
+}
+.btn-search-doctor:hover {
+	background-color: gold;
+	color: whitesmoke;
+}
+
+.search-results {
+	height: auto;
+	padding: 0 100px 20px;
+}
+.search-results-list {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.result-content {
+	cursor: pointer;
+	width: 270px;
+	height: 270px;
+	margin: 10px;
+	border-radius: 5px;
+	border: 1px solid #eee;
+}
+
+.result-content:hover {
+	background-color: #eee;
+}
+
+.result-content:hover .result-name {
+	color: #45c3d2;
+}
+
+.result-img {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	margin: 20px auto;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	transition: all 0.3s linear;
+	cursor: pointer;
+	z-index: 1;
+}
+.result-img:hover {
+	transform: scale(1.05);
+}
+.result-infor {
+	text-align: center;
+}
+.result-specialty {
+	font-size: 14px;
+}
+.result-name {
+	font-size: 19px;
+	cursor: pointer;
+	margin-bottom: 5px;
+}
+.result-name:hover {
+	color: #45c3d2;
+}
+
 /* slideshow */
 .slider-container {
 	padding-top: 30px;
@@ -1198,8 +1317,8 @@
 	color: #fff;
 }
 .doctor-img {
-	width: 120px;
-	height: 120px;
+	width: 150px;
+	height: 150px;
 	border-radius: 50%;
 	margin: 20px auto;
 	background-position: center;
@@ -1231,10 +1350,10 @@
 	text-align: center;
 }
 .doctor-infor p {
-	font-size: 12px;
+	font-size: 13px;
 }
 .doctor-name {
-	font-size: 13px;
+	font-size: 15px;
 	margin-bottom: 5px;
 }
 .doctor-name:hover {

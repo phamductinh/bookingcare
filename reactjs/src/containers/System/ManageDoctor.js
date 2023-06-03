@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Header/Header";
 import LoadingSpinner from "../../components/Common/Loading";
+import { CommonUtils } from "../../utils";
 import MdEditor from "react-markdown-editor-lite";
 import MarkdownIt from "markdown-it";
 import "react-markdown-editor-lite/lib/index.css";
@@ -27,17 +28,11 @@ class ManageDoctor extends Component {
 			arrClinics: [],
 			arrSpecialty: [],
 			id: "",
-			email: "",
-			password: "",
-			newEmail: "",
-			newPassword: "",
-			confirmPass: "",
-			fullName: "",
+			name: "",
 			address: "",
-			gender: "",
-			role: "",
-			phoneNumber: "",
-			setModalIsOpen: true,
+			image: "",
+			imageBase64: "",
+			setModalIsOpen: false,
 			setModalEditUser: false,
 			isLoading: false,
 			confirmDelete: false,
@@ -96,14 +91,13 @@ class ManageDoctor extends Component {
 	handleOpenModalEdit(user) {
 		this.setState({
 			setModalEditUser: true,
-			newEmail: user.email,
-			newPassword: user.password,
-			fullName: user.fullName,
+			name: user.name,
+			introduction: user.introduction,
+			clinicId: user.clinicId,
+			specialtyId: user.specialtyId,
+			description: user.description,
 			address: user.address,
-			gender: user.gender,
-			role: user.role,
-			phoneNumber: user.phoneNumber,
-			userId: user.id,
+			price: user.price,
 		});
 	}
 
@@ -111,95 +105,84 @@ class ManageDoctor extends Component {
 		this.setState({
 			setModalEditUser: false,
 			setModalIsOpen: false,
-			newEmail: "",
-			newPassword: "",
-			confirmPass: "",
-			fullName: "",
+			name: "",
+			introduction: "",
+			clinicId: "",
+			specialtyId: "",
+			description: "",
 			address: "",
-			gender: "",
-			role: "",
-			phoneNumber: "",
+			price: "",
+			image: "",
+			isLoading: false,
 			errMsgSignUp: "",
 		});
 	}
 
-	handleOnchangeModalInput = (event, id) => {
+	handleOnchangeModalInput = async (event, id) => {
 		let copyState = { ...this.state };
 		copyState[id] = event.target.value;
-		this.setState({
+		await this.setState({
 			...copyState,
 		});
 		console.log("check state", this.state);
 	};
 
-	validateModalInput = () => {
-		let isValid = true;
-		let arrInput = [
-			"newEmail",
-			"newPassword",
-			"confirmPass",
-			"fullName",
-			"address",
-			"gender",
-			"role",
-			"phoneNumber",
-		];
-		for (let i = 0; i < arrInput.length; i++) {
-			if (!this.state[arrInput[i]]) {
-				isValid = false;
-				this.setState({
-					errMsgSignUp: "Missing input parameters !",
-				});
-				break;
-			}
-		}
-		return isValid;
+	handleEditorChange = async ({ html, text }) => {
+		await this.setState({
+			descriptionHTML: html,
+		});
 	};
 
-	handleAddNewUser = async (data) => {
-		let newUserData = {
-			email: this.state.newEmail,
-			password: this.state.newPassword,
-			fullName: this.state.fullName,
-			address: this.state.address,
-			gender: this.state.gender,
-			role: this.state.role,
-			phoneNumber: this.state.phoneNumber,
-		};
-		let isValid = this.validateModalInput();
-		if (newUserData.password !== this.state.confirmPass) {
-			this.setState({
-				errMsgSignUp: "Passwords are not the same !",
+	handleOnchangeImage = async (event) => {
+		let data = event.target.files;
+		let file = data[0];
+		if (file) {
+			let base64 = await CommonUtils.getBase64(file);
+			await this.setState({
+				imageBase64: base64,
 			});
-		} else if (isValid === true) {
-			try {
-				this.setState({
-					errMsgSignUp: "",
-					isLoading: true,
-				});
-				let response = await handleCreateDoctor(newUserData);
-				await this.getAllUsersReact();
-				console.log("check response", response);
-				toast.success("Add user successfully !");
-				this.setState({
-					newEmail: "",
-					newPassword: "",
-					confirmPass: "",
-					fullName: "",
-					address: "",
-					gender: "",
-					role: "",
-					phoneNumber: "",
-					setModalIsOpen: false,
-					isLoading: false,
-				});
-			} catch (error) {
-				if (error.response) {
-					if (error.response.data) {
-						this.setState({
-							errMsgSignUp: error.response.data.msg,
-						});
-					}
+		}
+	};
+
+	handleAddNewDoctor = async () => {
+		let newDoctorData = {
+			name: this.state.name,
+			introduction: this.state.introduction,
+			clinicId: this.state.clinic,
+			specialtyId: this.state.specialty,
+			description: this.state.descriptionHTML,
+			address: this.state.address,
+			price: this.state.price,
+			image: this.state.imageBase64,
+		};
+		console.log("data", newDoctorData);
+		try {
+			this.setState({
+				errMsgSignUp: "",
+				isLoading: true,
+			});
+			let response = await handleCreateDoctor(newDoctorData);
+			await this.getAllDoctorsReact();
+			console.log("check response", response);
+			toast.success("Add doctor successfully !");
+			this.setState({
+				name: "",
+				introduction: "",
+				clinicId: "",
+				specialtyId: "",
+				description: "",
+				address: "",
+				price: "",
+				image: "",
+				setModalIsOpen: false,
+				isLoading: false,
+			});
+		} catch (error) {
+			if (error.response) {
+				if (error.response.data) {
+					this.setState({
+						errMsgSignUp: error.response.data.msg,
+					});
 				}
 			}
 		}
@@ -207,10 +190,9 @@ class ManageDoctor extends Component {
 
 	handleDeleteUser = async () => {
 		try {
-			let token = localStorage.getItem("token");
-			let res = await deleteDoctor(token, this.state.userId);
+			let res = await deleteDoctor(this.state.userId);
 			if (res && res.code === 200) {
-				await this.getAllUsersReact();
+				await this.getAllDoctorsReact();
 				toast.success("Delete successfully !");
 				this.setState({
 					confirmDelete: false,
@@ -288,8 +270,11 @@ class ManageDoctor extends Component {
 					<div className="users-table mt-3 mx-3">
 						<table id="customers">
 							<tr>
-								<th width="20%" className="text-center">
+								<th width="5%" className="text-center">
 									Id
+								</th>
+								<th width="20%" className="text-center">
+									Image
 								</th>
 								<th width="20%" className="text-center">
 									Name
@@ -297,22 +282,34 @@ class ManageDoctor extends Component {
 								<th width="20%" className="text-center">
 									Introduction
 								</th>
-								<th width="14%" className="text-center">
+								<th width="15%" className="text-center">
 									Address
 								</th>
-								<th width="14%" className="text-center">
+								<th width="10%" className="text-center">
 									Price
 								</th>
-								<th width="12%" className="text-center">
+								<th width="10%" className="text-center">
 									Actions
 								</th>
 							</tr>
 
 							{arrDoctors &&
 								arrDoctors.map((item, index) => {
+									let imageBase64 = new Buffer(
+										item.image,
+										"base64"
+									).toString("binary");
 									return (
 										<tr key={index}>
 											<td>{item.id}</td>
+											<td>
+												<div
+													className="doctor-img-table"
+													style={{
+														backgroundImage: `url(${imageBase64})`,
+													}}
+												></div>
+											</td>
 											<td>{item.name}</td>
 											<td>{item.introduction}</td>
 											<td>{item.address}</td>
@@ -367,6 +364,13 @@ class ManageDoctor extends Component {
 									placeholder="Introduction"
 									cols="30"
 									rows="5"
+									value={this.state.introduction}
+									onChange={(event) =>
+										this.handleOnchangeModalInput(
+											event,
+											"introduction"
+										)
+									}
 								></textarea>
 
 								<input
@@ -382,19 +386,33 @@ class ManageDoctor extends Component {
 										)
 									}
 								/>
-								<input
-									className="price"
-									name="price"
-									type="text"
-									placeholder="Price"
-									value={this.state.price}
-									onChange={(event) =>
-										this.handleOnchangeModalInput(
-											event,
-											"price"
-										)
-									}
-								/>
+								<div className="price-field">
+									<input
+										className="price"
+										name="price"
+										type="text"
+										placeholder="Price"
+										value={this.state.price}
+										onChange={(event) =>
+											this.handleOnchangeModalInput(
+												event,
+												"price"
+											)
+										}
+									/>
+									<input
+										className="doctor-image"
+										name="image"
+										type="file"
+										accept="image/png, image/jpeg"
+										onChange={(event) =>
+											this.handleOnchangeImage(
+												event,
+												"image"
+											)
+										}
+									/>
+								</div>
 								<div className="modal-select">
 									<select
 										name="clinic"
@@ -424,7 +442,7 @@ class ManageDoctor extends Component {
 
 									<select
 										name="specialty"
-										id="specialty-select"
+										id="specialty-select-doctor"
 										value={this.state.specialty}
 										onChange={(event) =>
 											this.handleOnchangeModalInput(
@@ -465,7 +483,9 @@ class ManageDoctor extends Component {
 									<button
 										className="btn-add-new"
 										type="button"
-										onClick={() => this.handleAddNewUser()}
+										onClick={() =>
+											this.handleAddNewDoctor()
+										}
 									>
 										Add
 									</button>

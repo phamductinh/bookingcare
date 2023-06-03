@@ -11,11 +11,11 @@ let updateUserQuery = `UPDATE user SET fullName = ?, address = ?, gender = ?, ro
 let deleteUserById = `DELETE FROM user WHERE id = ?`;
 
 //doctor
-let findAllDoctorsQuery = `SELECT * FROM doctor`;
+let findAllDoctorsQuery = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image,doctor.specialtyId, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN clinic ON clinic.id = doctor.clinicId JOIN specialty ON specialty.id = doctor.specialtyId`;
 
-let findDoctorById = `SELECT * FROM doctor WHERE id = ?`;
+let findDoctorById = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN clinic ON clinic.id = doctor.clinicId JOIN specialty ON specialty.id = doctor.specialtyId WHERE doctor.id = ?`;
 
-let createADoctorQuery = `INSERT INTO doctor (name, introduction, clinicId, specialtyId, description, address, price) VALUES (?,?,?,?,?,?,?)`;
+let createADoctorQuery = `INSERT INTO doctor (name, introduction, clinicId, specialtyId, description, address, price, image) VALUES (?,?,?,?,?,?,?,?)`;
 
 let updateDoctorQuery = `UPDATE doctor SET name = ?, introduction = ?, clinicId = ?, specialtyId = ?, description = ?, address = ?, price = ? WHERE id = ?`;
 
