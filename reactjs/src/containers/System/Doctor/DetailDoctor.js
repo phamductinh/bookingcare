@@ -117,9 +117,9 @@ class DetailDoctor extends Component {
 								</button>
 								<div className="choose-and-book">
 									<p>
-										Chọn{" "}
+										Click{" "}
 										<i className="fas fa-hand-pointer"></i>
-										và đặt (Phí đặt lịch 0đ)
+										và đặt lịch (Miễn phí)
 									</p>
 								</div>
 							</div>
@@ -327,4 +327,6 @@ const mapDispatchToProps = (dispatch) => {
 	return {};
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DetailDoctor));
+export default withRouter(
+	connect(mapStateToProps, mapDispatchToProps)(DetailDoctor)
+);

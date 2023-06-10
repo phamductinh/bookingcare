@@ -5,6 +5,7 @@ import userController from "../controllers/userController";
 import specialtyController from "../controllers/specialtyController";
 import doctorController from "../controllers/doctorController";
 import clinicController from "../controllers/clinicController";
+import bookingController from "../controllers/bookingController";
 import { verifyJWT } from "../middlewares/verifyJWT";
 
 let router = express.Router();
@@ -55,6 +56,11 @@ let initWebRoutes = (app) => {
 	router.put("/api/update-specialty", specialtyController.updateSpecialty);
 
 	router.get("/api/get-all-clinics", clinicController.getAllClinics);
+
+	router.post(
+		"/api/booking-an-appointment",
+		bookingController.bookingAnAppointment
+	);
 
 	return app.use("/", router);
 };

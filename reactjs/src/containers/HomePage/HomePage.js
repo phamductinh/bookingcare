@@ -5,7 +5,6 @@ import { getALLSpecialty } from "../../services/specialtyService";
 import "./HomePage.css";
 import { getAllDoctors } from "../../services/doctorService";
 import { withRouter } from "react-router";
-import Fuse from "fuse.js";
 
 class HomePage extends Component {
 	constructor(props) {
@@ -63,26 +62,23 @@ class HomePage extends Component {
 	};
 
 	filterDoctors() {
-		let arrDoctors = this.state.arrDoctors;
 		let { keyword, specialtyId } = this.state;
+		let arrDoctors = this.state.arrDoctors;
 		let filteredResults;
-		const fuse = new Fuse(arrDoctors, {
-			keys: ["name", "specialtyId"],
-		});
 		if (keyword && specialtyId) {
-			filteredResults = fuse
-				.search({
-					$and: [{ name: keyword }, { specialtyId: specialtyId }],
-				})
-				.map((result) => result.item);
+			filteredResults = arrDoctors.filter(
+				(doctor) =>
+					doctor.name.toLowerCase().includes(keyword.toLowerCase()) &&
+					doctor.specialtyId === specialtyId
+			);
 		} else if (keyword) {
-			filteredResults = fuse
-				.search({ name: keyword })
-				.map((result) => result.item);
+			filteredResults = arrDoctors.filter((doctor) =>
+				doctor.name.toLowerCase().includes(keyword.toLowerCase())
+			);
 		} else if (specialtyId) {
-			filteredResults = fuse
-				.search({ specialtyId: specialtyId })
-				.map((result) => result.item);
+			filteredResults = arrDoctors.filter(
+				(doctor) => doctor.specialtyId === specialtyId
+			);
 		} else {
 			filteredResults = "";
 		}
@@ -93,7 +89,6 @@ class HomePage extends Component {
 	}
 
 	handleViewDetail = (doctor) => {
-		console.log("check doctor", doctor);
 		this.props.history.push(`/detail-doctor/${doctor.id}`);
 	};
 
@@ -129,7 +124,6 @@ class HomePage extends Component {
 	render() {
 		let { arrTelems, arrSpecialty, arrDoctors, arrDoctorFilter } =
 			this.state;
-		console.log(arrDoctors);
 		return (
 			<div className="homepage-container">
 				<div id="header" className="header-homepage">
@@ -668,12 +662,12 @@ class HomePage extends Component {
 						<button
 							className="telem-prev"
 							id="telem-prev"
-							onClick={() => this.handleNextSpecialty()}
+							onClick={() => this.handlePrevSpecialty()}
 						></button>
 						<button
 							className="telem-next"
 							id="telem-next"
-							onClick={() => this.handlePrevSpecialty()}
+							onClick={() => this.handleNextSpecialty()}
 						></button>
 					</div>
 				</div>
@@ -685,10 +679,7 @@ class HomePage extends Component {
 					</div>
 					<div className="faci-slide-container">
 						<div id="faci-slide">
-							<div
-								className="faci-slide-item"
-								onclick="window.open('/facility/facility.html')"
-							>
+							<div className="faci-slide-item">
 								<div
 									className="faci-slide-img"
 									style={{
@@ -700,10 +691,7 @@ class HomePage extends Component {
 									Bệnh viện Hữu nghị Việt Đức
 								</div>
 							</div>
-							<div
-								className="faci-slide-item"
-								onclick="window.open('/facility/facility.html')"
-							>
+							<div className="faci-slide-item">
 								<div
 									className="faci-slide-img"
 									style={{
@@ -715,10 +703,7 @@ class HomePage extends Component {
 									Bệnh viện Chợ Rẫy
 								</div>
 							</div>
-							<div
-								className="faci-slide-item"
-								onclick="window.open('/facility/facility.html')"
-							>
+							<div className="faci-slide-item">
 								<div
 									className="faci-slide-img"
 									style={{
@@ -730,10 +715,7 @@ class HomePage extends Component {
 									Phòng khám Bệnh viện Đại học Y Dược 1
 								</div>
 							</div>
-							<div
-								className="faci-slide-item"
-								onclick="window.open('/facility/facility.html')"
-							>
+							<div className="faci-slide-item">
 								<div
 									className="faci-slide-img"
 									style={{
@@ -745,10 +727,7 @@ class HomePage extends Component {
 									Bệnh viện K - Cơ sở Phan Chu Trinh
 								</div>
 							</div>
-							<div
-								className="faci-slide-item"
-								onclick="window.open('/facility/facility.html')"
-							>
+							<div className="faci-slide-item">
 								<div
 									className="faci-slide-img"
 									style={{
@@ -760,10 +739,7 @@ class HomePage extends Component {
 									Bệnh viện Ung bướu Hưng Việt
 								</div>
 							</div>
-							<div
-								className="faci-slide-item"
-								onclick="window.open('/facility/facility.html')"
-							>
+							<div className="faci-slide-item">
 								<div
 									className="faci-slide-img"
 									style={{
@@ -775,10 +751,7 @@ class HomePage extends Component {
 									Hệ thống y tế MEDLATEC
 								</div>
 							</div>
-							<div
-								className="faci-slide-item"
-								onclick="window.open('/facility/facility.html')"
-							>
+							<div className="faci-slide-item">
 								<div
 									className="faci-slide-img"
 									style={{
@@ -849,14 +822,14 @@ class HomePage extends Component {
 						<button
 							className="doctor-prev"
 							id="doctor-prev"
-							onClick={() => this.handleNextDoctor()}
+							onClick={() => this.handlePrevDoctor()}
 						>
 							<i className="fas fa-long-arrow-left"></i>
 						</button>
 						<button
 							className="doctor-next"
 							id="doctor-next"
-							onClick={() => this.handlePrevDoctor()}
+							onClick={() => this.handleNextDoctor()}
 						>
 							<i className="fas fa-long-arrow-right"></i>
 						</button>

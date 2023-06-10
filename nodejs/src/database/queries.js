@@ -45,6 +45,11 @@ let deleteSpecialtyById = `DELETE FROM specialty WHERE id = ?`;
 
 let findAllClinicsQuery = "SELECT * FROM clinic";
 
+let findBookedAppointmentQuery =
+	"SELECT * from booking WHERE booking_date = ? AND booking_time = ?";
+
+let bookingAnAppointmentQuery = `INSERT INTO booking (userId, doctorId, booking_date, booking_time,fullName, gender, phoneNumber, birthday, address, reason, status) VALUES (?,?,?,?,?,?,?,?,?,?,?)`;
+
 module.exports = {
 	findAllUsers,
 	findUserById,
@@ -67,4 +72,6 @@ module.exports = {
 	updateDoctorQuery,
 	deleteDoctorById,
 	findAllClinicsQuery,
+	findBookedAppointmentQuery,
+	bookingAnAppointmentQuery,
 };

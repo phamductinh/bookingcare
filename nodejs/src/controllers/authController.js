@@ -87,6 +87,7 @@ let login = async (req, res) => {
 							expiresIn: "1d",
 						}
 					);
+                    delete result[0].password;
 					return res.status(200).send({
 						code: 200,
 						msg: "Logged in!",
