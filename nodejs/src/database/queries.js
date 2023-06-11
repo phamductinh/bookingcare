@@ -50,7 +50,19 @@ let findBookedAppointmentQuery =
 
 let bookingAnAppointmentQuery = `INSERT INTO booking (userId, doctorId, booking_date, booking_time,fullName, gender, phoneNumber, birthday, address, reason, status) VALUES (?,?,?,?,?,?,?,?,?,?,?)`;
 
+let getBookingByDateQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
+FROM booking 
+JOIN user ON user.id = booking.userId
+JOIN doctor ON doctor.id = booking.doctorId
+WHERE status = 'Pending' AND booking_date = ?`;
+
+let confirmBookingQuery = `UPDATE booking SET status = 'Confirmed' WHERE id = ?`;
+let deleteBookingById = `DELETE FROM booking WHERE id = ?`;
+
 module.exports = {
+	deleteBookingById,
+	confirmBookingQuery,
+	getBookingByDateQuery,
 	findAllUsers,
 	findUserById,
 	findByEmail,

@@ -5,6 +5,7 @@ import UserManage from "../containers/System/UserManage";
 import ManageTelemedicine from "../containers/System/ManageTelemedicine";
 import ManageSpecialty from "../containers/System/ManageSpecialty";
 import ManageDoctor from "../containers/System/ManageDoctor";
+import ManageBooking from "../containers/System/Doctor/ManageBooking";
 
 class System extends Component {
 	render() {
@@ -28,6 +29,10 @@ class System extends Component {
 						<Route
 							path="/system/manage-doctor"
 							component={ManageDoctor}
+						/>
+						<Route
+							path="/system/manage-booking"
+							component={ManageBooking}
 						/>
 						<Route
 							component={() => {

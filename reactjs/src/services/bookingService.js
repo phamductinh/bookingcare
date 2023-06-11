@@ -4,4 +4,21 @@ const bookingAnAppointmentService = (data) => {
 	return axios.post("/api/booking-an-appointment", data);
 };
 
-export { bookingAnAppointmentService };
+const getBookingByDate = (date) => {
+	return axios.get(`/api/get-booking-by-date?booking_date=${date}`);
+};
+
+const confirmBooking = (bookingId) => {
+	return axios.put(`/api/confirm-booking?id=${bookingId}`);
+};
+
+const deleteBooking = (bookingId) => {
+	return axios.delete(`/api/delete-booking?id=${bookingId}`);
+};
+
+export {
+	bookingAnAppointmentService,
+	getBookingByDate,
+	confirmBooking,
+	deleteBooking,
+};

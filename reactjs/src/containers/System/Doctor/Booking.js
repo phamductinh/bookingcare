@@ -76,16 +76,6 @@ class DetailDoctor extends Component {
 			console.log("check response", response);
 			toast.success("Booking successfully !");
 			this.setState({
-				userId: "",
-				doctorId: "",
-				booking_date: "",
-				booking_time: "",
-				fullName: "",
-				gender: "",
-				phoneNumber: "",
-				birthday: "",
-				address: "",
-				reason: "",
 				isLoading: false,
 			});
 		} catch (error) {
