@@ -48,11 +48,17 @@ class DetailDoctor extends Component {
 		await this.setState({
 			...copyState,
 		});
-		console.log("check state", this.state);
 	};
 
 	handleBooking = async () => {
 		let formatedDate = new Date(this.state.date).getTime();
+		let formattedDate = new Date(formatedDate);
+
+		let day = formattedDate.getDate();
+		let month = formattedDate.getMonth() + 1;
+		let year = formattedDate.getFullYear();
+
+		let formattedDateString = `${day}/${month}/${year}`;
 		let data = {
 			userId: this.props.userInfor.id,
 			doctorId: this.props.match.params.id,
@@ -65,6 +71,9 @@ class DetailDoctor extends Component {
 			address: this.state.address,
 			reason: this.state.reason,
 			status: "Pending",
+			receiverEmail: this.props.userInfor.email,
+			doctorName: this.state.detailDoctor.name,
+			booking_date_formated: formattedDateString,
 		};
 		console.log("data", data);
 		try {
@@ -100,7 +109,7 @@ class DetailDoctor extends Component {
 			let time = i + ":00";
 			arrTime.push(time);
 		}
-		console.log(this.props.userInfor);
+		console.log(detailDoctor);
 		return (
 			<>
 				<div className="booking-detail-doctor-container">

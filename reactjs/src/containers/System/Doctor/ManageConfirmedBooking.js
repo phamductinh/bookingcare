@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import "./ManageBooking.css";
+import "./ManageConfirmedBooking.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../../Header/Header";
@@ -9,9 +9,11 @@ import {
 	confirmBooking,
 	deleteBooking,
 	getBookingByDate,
+	getAllConfirmedBooking,
+	finishBooking,
 } from "../../../services/bookingService";
 
-class ManageBooking extends Component {
+class ManageConfirmedBooking extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -21,52 +23,28 @@ class ManageBooking extends Component {
 		};
 	}
 
-	async componentDidMount() {}
-
-	handleDeleteUser = async () => {
-		try {
-			this.setState({
-				isLoading: true,
-			});
-			let res = await deleteBooking(this.state.bookingId);
-			if (res && res.code === 200) {
-				toast.success("Delete successfully !");
-				await getBookingByDate(this.state.formatedDate);
-				this.setState({
-					confirmDelete: false,
-					isLoading: false,
-				});
-			}
-		} catch (error) {
-			console.log(error);
-			toast.error("Something wrong !");
-		}
-	};
-
-	handleConfirmBooking = async (item) => {
-		try {
-			let res = await confirmBooking(item.id);
-			if (res && res.code === 200) {
-				toast.success("Confirm successfully !");
-				await getBookingByDate(this.state.formatedDate);
-			}
-		} catch (error) {
-			console.log(error);
-			toast.error("Something wrong !");
-		}
-	};
-
-	handleOnchangeInput = async (event) => {
-		let date = event.target.value;
-		let formatedDate = new Date(date).getTime();
-		this.setState({
-			formatedDate: formatedDate,
-		});
-		let res = await getBookingByDate(formatedDate);
+	async componentDidMount() {
+		let res = await getAllConfirmedBooking();
 		if (res && res.code === 200) {
 			this.setState({
-				arrBooking: res.data,
+				arrConfirmedBooking: res.data,
 			});
+		}
+	}
+
+	handleConfirmBooking = async () => {
+		try {
+			let res = await finishBooking(this.state.bookingId);
+			if (res && res.code === 200) {
+				toast.success("Update successfully !");
+				this.setState({
+					confirmDelete: false,
+				});
+				await this.componentDidMount();
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error("Something wrong !");
 		}
 	};
 
@@ -84,24 +62,16 @@ class ManageBooking extends Component {
 	}
 
 	render() {
-		let { isLoading, confirmDelete, arrBooking } = this.state;
-		let currentDate = new Date().toISOString().split("T")[0];
-
+		let { isLoading, confirmDelete, arrConfirmedBooking } = this.state;
+		console.log(arrConfirmedBooking);
 		return (
 			<>
 				{this.props.isLoggedIn && <Header />}
 				<div className="user-container">
-					<div className="title text-center">Manage booking</div>
-					<div className="mx-3">
-						<input
-							className="date-choose"
-							type="date"
-							min={currentDate}
-							onChange={(event) =>
-								this.handleOnchangeInput(event)
-							}
-						/>
+					<div className="title text-center">
+						Manage confirmed booking
 					</div>
+
 					<div className="users-table mt-3 mx-3">
 						<table id="customers">
 							<tr>
@@ -114,10 +84,10 @@ class ManageBooking extends Component {
 								<th width="15%" className="text-center">
 									Address
 								</th>
-								<th width="5%" className="text-center">
+								<th width="7%" className="text-center">
 									Gender
 								</th>
-								<th width="7%" className="text-center">
+								<th width="10%" className="text-center">
 									Birthday
 								</th>
 								<th width="10%" className="text-center">
@@ -129,13 +99,13 @@ class ManageBooking extends Component {
 								<th width="10%" className="text-center">
 									Status
 								</th>
-								<th width="15%" className="text-center">
+								<th width="10%" className="text-center">
 									Actions
 								</th>
 							</tr>
 
-							{arrBooking &&
-								arrBooking.map((item, index) => {
+							{arrConfirmedBooking &&
+								arrConfirmedBooking.map((item, index) => {
 									return (
 										<tr key={index}>
 											<td>{item.booking_time}</td>
@@ -147,7 +117,7 @@ class ManageBooking extends Component {
 											<td>{item.reason}</td>
 											<td>{item.status}</td>
 											<td className="text-center">
-												<button
+												{/* <button
 													className="btn-confirm"
 													onClick={() =>
 														this.handleConfirmBooking(
@@ -156,7 +126,7 @@ class ManageBooking extends Component {
 													}
 												>
 													Confirm
-												</button>
+												</button> */}
 												<button
 													className="btn-refuse"
 													onClick={() =>
@@ -165,7 +135,7 @@ class ManageBooking extends Component {
 														)
 													}
 												>
-													Decline
+													Finish
 												</button>
 											</td>
 										</tr>
@@ -177,7 +147,7 @@ class ManageBooking extends Component {
 					{confirmDelete ? (
 						<div className="confirm-delete">
 							<div className="confirmation-text">
-								You want to decline this appointment?
+								Finish this appointment?
 							</div>
 							<div className="button-container">
 								<button
@@ -190,9 +160,9 @@ class ManageBooking extends Component {
 								</button>
 								<button
 									className="confirmation-button"
-									onClick={() => this.handleDeleteUser()}
+									onClick={() => this.handleConfirmBooking()}
 								>
-									Decline
+									Yes
 								</button>
 							</div>
 						</div>
@@ -215,4 +185,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManageBooking);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(ManageConfirmedBooking);

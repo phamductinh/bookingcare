@@ -4,7 +4,6 @@ import { Route, Switch } from "react-router-dom";
 import { ConnectedRouter as Router } from "connected-react-router";
 import { history } from "../redux";
 import { ToastContainer } from "react-toastify";
-
 import {
 	userIsAuthenticated,
 	userIsNotAuthenticated,
@@ -23,6 +22,8 @@ import { CustomToastCloseButton } from "../components/CustomToast";
 import ConfirmModal from "../components/ConfirmModal";
 import DetailDoctor from "./System/Doctor/DetailDoctor";
 import Booking from "./System/Doctor/Booking";
+import CallingHome from "./VideoCall/CallingHome";
+import Room from "./VideoCall/Room";
 
 class App extends Component {
 	handlePersistorState = () => {
@@ -82,6 +83,16 @@ class App extends Component {
 									<Route
 										path={"/booking/:id"}
 										component={Booking}
+									/>
+									<Route
+										exact
+										path="/calling-home"
+										component={CallingHome}
+									/>
+									<Route
+										exact
+										path={"/room/:code"}
+										component={Room}
 									/>
 								</Switch>
 							</CustomScrollbars>

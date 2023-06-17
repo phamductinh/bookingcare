@@ -17,7 +17,9 @@
 			"manage-telemedicine": "Quản lý khám từ xa",
 			"manage-specialty": "Quản lý chuyên khoa",
 			"manage-doctor": "Quản lý bác sĩ",
-			"manage-booking": "Quản lý đặt lịch"
+			"manage-booking": "Quản lý đặt lịch",
+			"manage-confirmed-booking": "Quản lý lịch hẹn đã xác nhận",
+			"manage-finished-booking": "Quản lý lịch hẹn đã khám"
 		}
 	},
 	"system": {

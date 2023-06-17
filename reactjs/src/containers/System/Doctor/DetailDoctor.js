@@ -83,28 +83,7 @@ class DetailDoctor extends Component {
 						</div>
 						<div className="detail-doctor-schedule">
 							<div className="detail-doctor-schedule-left">
-								{/* <select
-									className="date-chooser"
-									id="date-chooser"
-								>
-									<option value="2812">
-										Hôm nay - 28/12
-									</option>
-									<option value="2912">Thứ 5 - 29/12</option>
-									<option value="3012">Thứ 6 - 30/12</option>
-								</select>
-								<h2>
-									<i className="fas fa-calendar-alt"></i>LỊCH
-									KHÁM
-								</h2>
-								<div className="available-schedule">
-									<a>07:00 - 07:30</a>
-									<a>07:30 - 08:00</a>
-									<a>08:00 - 08:30</a>
-									<a>08:30 - 09:00</a>
-									<a>09:00 - 09:30</a>
-									<a>09:30 - 10:00</a>
-								</div> */}
+								
 								<h3>Bạn đang gặp vấn đề về sức khỏe ?</h3>
 								<button
 									className="booking-now"

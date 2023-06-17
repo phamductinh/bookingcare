@@ -6,17 +6,44 @@ import {
 	getBookingByDateQuery,
 	confirmBookingQuery,
 	deleteBookingById,
+	findAllConfirmedBookingQuery,
+	finishBookingQuery,
+	findAllFinishedBookingQuery,
 } from "../database/queries";
 import emailService from "../services/emailService";
 
-let confirmBookingModel = async (bookingId, callback) => {
-	await emailService.sendSimpleEmail({
-		receiverEmail: "phamductinh.t18@gmail.com",
-		fullName: "Pham Duc Tinh",
-		booking_time: "7:00",
-		doctorName: "Pham Duc Tinh",
+let getAllConfirmedBookingModel = (callback) => {
+	db.query(findAllConfirmedBookingQuery, (error, results) => {
+		if (error) {
+			callback(error, null);
+		} else {
+			callback(null, results);
+		}
 	});
+};
+
+let getAllFinishedBookingModel = (callback) => {
+	db.query(findAllFinishedBookingQuery, (error, results) => {
+		if (error) {
+			callback(error, null);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
+let confirmBookingModel = async (bookingId, callback) => {
 	db.query(confirmBookingQuery, bookingId, (error, results) => {
+		if (error) {
+			callback(error);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
+let finishBookingModel = async (bookingId, callback) => {
+	db.query(finishBookingQuery, bookingId, (error, results) => {
 		if (error) {
 			callback(error);
 		} else {
@@ -48,7 +75,7 @@ let bookingAnAppointmentModel = (data, callback) => {
 	db.query(
 		findBookedAppointmentQuery,
 		[booking_date, booking_time],
-		(err, result) => {
+		async (err, result) => {
 			if (err) {
 				return callback(err);
 			}
@@ -61,6 +88,13 @@ let bookingAnAppointmentModel = (data, callback) => {
 				return callback(error);
 			}
 
+			await emailService.sendSimpleEmail({
+				receiverEmail: data.receiverEmail,
+				fullName: data.fullName,
+				booking_date: data.booking_date_formated,
+				booking_time: data.booking_time,
+				doctorName: data.doctorName,
+			});
 			db.query(
 				bookingAnAppointmentQuery,
 				[
@@ -109,4 +143,7 @@ module.exports = {
 	getBookingByDateModel,
 	confirmBookingModel,
 	deleteBookingModel,
+	getAllConfirmedBookingModel,
+	finishBookingModel,
+	getAllFinishedBookingModel,
 };

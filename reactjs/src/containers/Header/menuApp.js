@@ -41,6 +41,14 @@ export const adminMenu = [
 				name: "menu.admin.manage-booking",
 				link: "/system/manage-booking",
 			},
+			{
+				name: "menu.admin.manage-confirmed-booking",
+				link: "/system/manage-confirmed-booking",
+			},
+			{
+				name: "menu.admin.manage-finished-booking",
+				link: "/system/manage-finished-booking",
+			},
 		],
 	},
 ];
