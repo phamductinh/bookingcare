@@ -1,61 +1,108 @@
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import "./CallingHome.css";
+import { toast } from "react-toastify";
 
-import React, { useState } from 'react';
-import { Row, Col, Input } from 'antd';
-import axios from 'axios';
+class CallingHome extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
 
-const CallingHome = (props) => {
-    const { history } = props;
-    const [roomCode, setRoomCode] = useState('');
+	async componentDidMount() {}
 
-    const onCreateRoom = () => {
-        axios.post(`api/create-room`).then((res) => {
-            history.push(`/room/${res.data.code}`);
-        });
-    }
+	goBack = () => {
+		this.props.history.push(`/`);
+	};
 
-    const onJoinRoom = () => {
-            axios.get(`api/get-room/${roomCode}`).then((res) => {
-                history.push(`/room/${res.data.code}`);
-        }).catch(err => {
-            console.log(err);
-        });
-    }
+	handleOnchangeCode = async (event) => {
+		await this.setState({
+			code: event.target.value,
+		});
+		console.log(this.state.code);
+	};
 
-    return (
-        <>
-            <Row style={{ height: '100%' }}>
-                <Col span={24}>
-                    <button
-                        className='button__primary'
-                        onClick={onCreateRoom}
-                        style={{ marginBottom: '30px' }}
-                    >
-                        Create Room
-                     </button>
+	handleJoinRoom = () => {
+		let code = this.state.code;
+		this.props.history.push(`/room/${code}`);
+	};
 
-                    <Input
-                        style={{
-                            display: 'block',
-                            width: '500px',
-                            height: '40px',
-                            marginBottom: '10px'
-                        }}
-                        onChange={(input) => setRoomCode(input.target.value)}
-                        name='room-code'
-                    />
-                    <button
-                        className='button__primary'
-                        onClick={onJoinRoom}
-                    >
-                        Join Room
-                     </button>
-                </Col>
-                <Col span={24}>
+	render() {
+		return (
+			<>
+				<div className="booking-detail-doctor-container">
+					<div className="detail-doctor-header">
+						<div className="detail-doctor-header-left">
+							<i
+								className="fas fa-long-arrow-left"
+								onClick={this.goBack}
+							></i>
+						</div>
+						<div className="detail-doctor-header-right">
+							<div className="detail-doctor-header-support">
+								<i className="far fa-question-circle"></i>
+								Hỗ trợ
+							</div>
+							<i className="fas fa-bars"></i>
+						</div>
+					</div>
+					<div class="form-container-email">
+						<div class="logo-container-email">Join room</div>
 
-                </Col>
-            </Row>
-        </>
-    )
+						<form class="form-email">
+							<div class="form-group-email">
+								<label for="email">
+									Vui lòng nhập mã được gửi về email để tham
+									gia
+								</label>
+								<input
+									type="text"
+									id="code"
+									name="code"
+									placeholder="code"
+									required=""
+									onChange={(event) =>
+										this.handleOnchangeCode(event)
+									}
+								/>
+							</div>
+
+							<button
+								class="form-submit-btn-email"
+								type="button"
+								onClick={() => this.handleJoinRoom()}
+							>
+								Join
+							</button>
+						</form>
+					</div>
+
+					<div className="booking-detail-doctor-container">
+						<div className="footer2">
+							<div className="footer-left">
+								<p>&copy; 2022 Pham Duc Tinh</p>
+							</div>
+							<div className="footer-right">
+								<i className="fab fa-facebook-square"></i>
+								<i className="fab fa-youtube"></i>
+								<i className="fab fa-instagram"></i>
+								<i className="fab fa-twitter"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</>
+		);
+	}
+}
+
+const mapStateToProps = (state) => {
+	return {};
 };
 
-export default CallingHome;
+const mapDispatchToProps = (dispatch) => {
+	return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CallingHome);

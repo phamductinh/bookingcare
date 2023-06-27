@@ -86,7 +86,7 @@ class App extends Component {
 									/>
 									<Route
 										exact
-										path="/calling-home"
+										path="/join-room"
 										component={CallingHome}
 									/>
 									<Route

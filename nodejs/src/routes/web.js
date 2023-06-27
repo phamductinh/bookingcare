@@ -6,6 +6,7 @@ import specialtyController from "../controllers/specialtyController";
 import doctorController from "../controllers/doctorController";
 import clinicController from "../controllers/clinicController";
 import bookingController from "../controllers/bookingController";
+import videoCallController from "../controllers/videoCallController";
 import { verifyJWT } from "../middlewares/verifyJWT";
 
 let router = express.Router();
@@ -73,6 +74,9 @@ let initWebRoutes = (app) => {
 	router.put("/api/confirm-booking", bookingController.confirmBooking);
 	router.put("/api/finish-booking", bookingController.finishBooking);
 	router.delete("/api/delete-booking", bookingController.deleteBooking);
+
+	router.get("/api/get-room", videoCallController.getRoom);
+	router.post("/api/create-room", videoCallController.createRoom);
 
 	return app.use("/", router);
 };

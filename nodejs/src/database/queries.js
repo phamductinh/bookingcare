@@ -66,7 +66,13 @@ let finishBookingQuery = `UPDATE booking SET status = 'Done' WHERE id = ?`;
 
 let deleteBookingById = `DELETE FROM booking WHERE id = ?`;
 
+let createRoomQuery = `INSERT INTO room (code, status) VALUES (?,?)`;
+
+let findRoomByCode = `SELECT * FROM room WHERE code = ?`;
+
 module.exports = {
+    findRoomByCode,
+	createRoomQuery,
 	findAllFinishedBookingQuery,
 	finishBookingQuery,
 	findAllConfirmedBookingQuery,

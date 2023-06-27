@@ -1,6 +1,16 @@
 import { findRoomByCode, createRoomQuery } from "../database/queries";
 import { errMsg } from "../utils/resMsg";
 
+
+let getRoomModel = (code, callback) => {
+	db.query(findRoomByCode, code, (error, results) => {
+		if (error) {
+			return callback(error);
+		}
+		return callback(null, results[0]);
+	});
+};
+
 let createRoomModel = async (roomData, callback) => {
 	let code = await this.makeRandomString(5);
 	let status = 1;
@@ -54,4 +64,5 @@ makeRandomString = function (length) {
 
 module.exports = {
 	createRoomModel,
+    getRoomModel
 };
