@@ -1,7 +1,6 @@
 import { findRoomByCode, createRoomQuery } from "../database/queries";
 import { errMsg } from "../utils/resMsg";
 
-
 let getRoomModel = (code, callback) => {
 	db.query(findRoomByCode, code, (error, results) => {
 		if (error) {
@@ -11,8 +10,30 @@ let getRoomModel = (code, callback) => {
 	});
 };
 
+let makeRandomString = (length) => {
+	let firstString = "";
+	let secondString = "";
+	const characters =
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	const charactersLength = characters.length;
+
+	for (let i = 0; i < length; i++) {
+		firstString += characters.charAt(
+			Math.floor(Math.random() * charactersLength)
+		);
+	}
+
+	for (let i = 0; i < length; i++) {
+		secondString += characters.charAt(
+			Math.floor(Math.random() * charactersLength)
+		);
+	}
+
+	return `${firstString}-${secondString}`;
+};
+
 let createRoomModel = async (roomData, callback) => {
-	let code = await this.makeRandomString(5);
+	let code = await makeRandomString(5);
 	let status = 1;
 	if (!code || !status) {
 		let error = new Error(errMsg.missing_input);
@@ -40,29 +61,7 @@ let createRoomModel = async (roomData, callback) => {
 	});
 };
 
-makeRandomString = function (length) {
-	let firstString = "";
-	let secondString = "";
-	const characters =
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	const charactersLength = characters.length;
-
-	for (let i = 0; i < length; i++) {
-		firstString += characters.charAt(
-			Math.floor(Math.random() * charactersLength)
-		);
-	}
-
-	for (let i = 0; i < length; i++) {
-		secondString += characters.charAt(
-			Math.floor(Math.random() * charactersLength)
-		);
-	}
-
-	return `${firstString}-${secondString}`;
-};
-
 module.exports = {
 	createRoomModel,
-    getRoomModel
+	getRoomModel,
 };

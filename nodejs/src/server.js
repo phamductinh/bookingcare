@@ -3,10 +3,11 @@ import bodyParser from "body-parser";
 import viewEngine from "./configs/viewEngine";
 import initWebRoutes from "./routes/web";
 import fileUpload from "express-fileupload";
+import { ChatServer } from "./chatServer";
 
 require("dotenv").config();
 
-let app = express();
+let app = express() || new ChatServer().getApp();
 
 app.use(function (req, res, next) {
 	res.setHeader("Access-Control-Allow-Origin", process.env.REACT_URL);
