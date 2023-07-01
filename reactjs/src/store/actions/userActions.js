@@ -16,3 +16,9 @@ export const userLoginFail = () => ({
 export const processLogout = () => ({
 	type: actionTypes.PROCESS_LOGOUT,
 });
+
+export const joinRoomSuccess = () => ({
+	type: actionTypes.JOIN_ROOM_SUCCESS,
+});
+
+

@@ -2,6 +2,7 @@ import actionTypes from "../actions/actionTypes";
 
 const initialState = {
 	isLoggedIn: false,
+	joinRoom: false,
 	userInfo: null,
 };
 
@@ -12,6 +13,11 @@ const appReducer = (state = initialState, action) => {
 				...state,
 				isLoggedIn: true,
 				userInfo: action.userInfo,
+			};
+		case actionTypes.JOIN_ROOM_SUCCESS:
+			return {
+				...state,
+				joinRoom: true,
 			};
 		case actionTypes.USER_LOGIN_FAIL:
 			return {

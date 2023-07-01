@@ -3,11 +3,28 @@ import bodyParser from "body-parser";
 import viewEngine from "./configs/viewEngine";
 import initWebRoutes from "./routes/web";
 import fileUpload from "express-fileupload";
-import { ChatServer } from "./chatServer";
+const http = require("http");
+const server = http.createServer(app);
+const io = require("socket.io")(server);
+let app = express();
+
+io.on("connection", (socket) => {
+	socket.broadcast.emit("connected");
+
+	socket.on("disconnect", () => {
+		socket.broadcast.emit("callEnded");
+	});
+
+	socket.on("callUser", () => {
+		socket.broadcast.emit("callUser");
+	});
+
+	socket.on("answerCall", (data) => {
+		io.to(data.to).emit("callAccepted", data.signal);
+	});
+});
 
 require("dotenv").config();
-
-let app = express() || new ChatServer().getApp();
 
 app.use(function (req, res, next) {
 	res.setHeader("Access-Control-Allow-Origin", process.env.REACT_URL);

@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import "./CallingHome.css";
 import { toast } from "react-toastify";
+import * as actions from "../../store/actions/";
+import { io } from "socket.io-client";
 
 class CallingHome extends Component {
 	constructor(props) {
@@ -10,7 +12,7 @@ class CallingHome extends Component {
 		this.state = {};
 	}
 
-	async componentDidMount() {}
+	componentDidMount() {}
 
 	goBack = () => {
 		this.props.history.push(`/`);
@@ -102,7 +104,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-	return {};
+	return {
+		joinRoomSuccess: () => dispatch(actions.joinRoomSuccess()),
+	};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CallingHome);
