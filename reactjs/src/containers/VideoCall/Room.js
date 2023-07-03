@@ -4,56 +4,77 @@ import { Link } from "react-router-dom";
 import "./Room.css";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
-import Peer from "simple-peer";
-const socket = io.connect('http://localhost:5000')
+import SimplePeer from "simple-peer";
+const socket = io.connect("http://localhost:8080");
 
 class Room extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			secondUserStream: null,
+			code: props.match.params.code,
+			userVideoRef: React.createRef(),
+			partnerVideoRef: React.createRef(),
+			socket: null,
 			button1: true,
 			button2: true,
 		};
-		this.refVideo = React.createRef();
-		this.refSecondVideo = React.createRef();
-		this.socket = null;
-		this.roomCode = this.props.match.params.code;
 	}
 
-	componentDidMount() {}
-
-	handleUserJoin = () => {
-		this.setState({
-			button1: false,
+	componentDidMount() {
+		const { code, userVideoRef } = this.state;
+		const socket = new SimplePeer({
+			initiator: true,
+			trickle: false,
+			stream: userVideoRef.current.srcObject,
 		});
-		const video = this.refVideo.current;
+
+		socket.on("signal", (signal) => {
+			this.sendSignalToPeer(signal);
+		});
+
+		socket.on("stream", (stream) => {
+			const { partnerVideoRef } = this.state;
+			partnerVideoRef.current.srcObject = stream;
+		});
+
+		socket.on("disconnect", () => {
+			// Xử lý sự kiện ngắt kết nối
+		});
+
+		this.setState({ socket });
+	}
+
+	componentWillUnmount() {
+		const { socket } = this.state;
+		if (socket) {
+			socket.destroy();
+		}
+	}
+
+	sendSignalToPeer = (signal) => {
+		// Gửi signal tới server hoặc peer cần kết nối
+	};
+
+	handleReceiveSignal = (signal) => {
+		const { socket } = this.state;
+		if (socket) {
+			socket.signal(signal);
+		}
+	};
+
+	handleStartCall = () => {
 		navigator.mediaDevices
 			.getUserMedia({ video: true, audio: true })
 			.then((stream) => {
-				this.refVideo.current.srcObject = stream;
-				video.play();
+				const { userVideoRef, socket } = this.state;
+				userVideoRef.current.srcObject = stream;
+				if (socket) {
+					socket.addStream(stream);
+				}
+			})
+			.catch((error) => {
+				// Xử lý lỗi
 			});
-		socket.emit("joinRoom", this.roomCode);
-	};
-
-	handleSecondUserJoin = () => {
-		this.setState({
-			button2: false,
-		});
-		// const video = this.refSecondVideo.current;
-		// navigator.mediaDevices
-		// 	.getUserMedia({ video: true, audio: true })
-		// 	.then((stream) => {
-		// 		this.refSecondVideo.current.srcObject = stream;
-		// 		video.play();
-		// 	});
-		const peer = new Peer();
-		const video = this.refSecondVideo.current;
-		peer.on("stream", (stream) => {
-			this.refSecondVideo.current.srcObject = stream;
-			video.play();
-		});
 	};
 
 	goBack = () => {
@@ -61,7 +82,7 @@ class Room extends Component {
 	};
 
 	render() {
-		let { secondUserStream, button1, button2 } = this.state;
+		let { userVideoRef, partnerVideoRef, button1, button2 } = this.state;
 		return (
 			<>
 				<div className="booking-detail-doctor-container">
@@ -86,14 +107,14 @@ class Room extends Component {
 							<video
 								id="localVideo"
 								autoPlay
-								ref={this.refVideo}
+								ref={userVideoRef}
 								muted
 								style={{ transform: "scaleX(-1)" }}
 							></video>
 							<video
 								id="remoteVideo"
 								autoPlay
-								ref={this.refSecondVideo}
+								ref={partnerVideoRef}
 								style={{ transform: "scaleX(-1)" }}
 							></video>
 
@@ -101,7 +122,7 @@ class Room extends Component {
 							{button1 && (
 								<button
 									className="btn-join-room"
-									onClick={() => this.handleUserJoin()}
+									onClick={() => this.handleStartCall()}
 								>
 									Tham gia
 								</button>

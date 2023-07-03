@@ -3,24 +3,26 @@ import bodyParser from "body-parser";
 import viewEngine from "./configs/viewEngine";
 import initWebRoutes from "./routes/web";
 import fileUpload from "express-fileupload";
-const http = require("http");
-const server = http.createServer(app);
-const io = require("socket.io")(server);
 let app = express();
 
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
+
 io.on("connection", (socket) => {
-	socket.broadcast.emit("connected");
+	socket.on("join room", (roomID) => {
+		socket.join(roomID);
+		socket.to(roomID).emit("user joined", socket.id);
 
-	socket.on("disconnect", () => {
-		socket.broadcast.emit("callEnded");
-	});
+		socket.on("signal", (data) => {
+			io.to(data.room).emit("signal", {
+				signal: data.signal,
+				callerID: data.callerID,
+			});
+		});
 
-	socket.on("callUser", () => {
-		socket.broadcast.emit("callUser");
-	});
-
-	socket.on("answerCall", (data) => {
-		io.to(data.to).emit("callAccepted", data.signal);
+		socket.on("disconnect", () => {
+			socket.to(roomID).emit("user left", socket.id);
+		});
 	});
 });
 
