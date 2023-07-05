@@ -20,6 +20,10 @@ io.on("connection", (socket) => {
 			});
 		});
 
+		socket.on("sendMessage", (message) => {
+			io.emit("message", { user: "User", text: message });
+		});
+
 		socket.on("disconnect", () => {
 			socket.to(roomID).emit("user left", socket.id);
 		});

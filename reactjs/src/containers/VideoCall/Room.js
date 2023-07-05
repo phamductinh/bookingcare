@@ -17,6 +17,8 @@ class Room extends Component {
 			socket: null,
 			button1: true,
 			button2: true,
+			message: "",
+			messages: [],
 		};
 	}
 
@@ -42,6 +44,12 @@ class Room extends Component {
 		});
 
 		this.setState({ socket });
+
+		socket.on("message", (message) => {
+			this.setState((prevState) => ({
+				messages: [...prevState.messages, message],
+			}));
+		});
 	}
 
 	componentWillUnmount() {
@@ -77,12 +85,34 @@ class Room extends Component {
 			});
 	};
 
+	handleOnchangeMassage = (event) => {
+		this.setState({
+			message: event.target.value,
+		});
+	};
+
+	sendMessage = (e) => {
+		e.preventDefault();
+		const { message } = this.state;
+		if (message.trim() !== "") {
+			socket.emit("sendMessage", message);
+			this.setState({ message: "" });
+		}
+	};
+
 	goBack = () => {
 		this.props.history.push(`/`);
 	};
 
 	render() {
-		let { userVideoRef, partnerVideoRef, button1, button2 } = this.state;
+		let {
+			userVideoRef,
+			partnerVideoRef,
+			button1,
+			button2,
+			message,
+			messages,
+		} = this.state;
 		return (
 			<>
 				<div className="booking-detail-doctor-container">
@@ -118,7 +148,14 @@ class Room extends Component {
 								style={{ transform: "scaleX(-1)" }}
 							></video>
 
-							<div id="chatBox"></div>
+							<div id="chatBox">
+								{messages.map((msg, index) => (
+									<div key={index}>
+										<strong>{msg.user}: </strong>
+										{msg.text}
+									</div>
+								))}
+							</div>
 							{button1 && (
 								<button
 									className="btn-join-room"
@@ -141,8 +178,16 @@ class Room extends Component {
 								type="text"
 								id="messageInput"
 								placeholder="Type a message"
+								onChange={(event) =>
+									this.handleOnchangeMassage(event)
+								}
 							/>
-							<button id="sendMessageButton">Send</button>
+							<button
+								id="sendMessageButton"
+								onClick={() => this.sendMessage()}
+							>
+								Send
+							</button>
 						</div>
 					</div>
 
