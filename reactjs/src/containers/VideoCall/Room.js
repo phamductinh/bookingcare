@@ -5,7 +5,6 @@ import "./Room.css";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import SimplePeer from "simple-peer";
-const socket = io.connect("http://localhost:8080");
 
 class Room extends Component {
 	constructor(props) {
@@ -24,26 +23,39 @@ class Room extends Component {
 
 	componentDidMount() {
 		const { code, userVideoRef } = this.state;
-		const socket = new SimplePeer({
+		const socket = io.connect("http://localhost:8080"); // Create Socket.io connection
+
+		this.setState({ socket });
+
+		const peer = new SimplePeer({
 			initiator: true,
 			trickle: false,
-			stream: userVideoRef.current.srcObject,
 		});
 
-		socket.on("signal", (signal) => {
+		navigator.mediaDevices
+			.getUserMedia({ video: true, audio: true })
+			.then((stream) => {
+				userVideoRef.current.srcObject = stream;
+				peer.addStream(stream); // Add stream to SimplePeer
+			})
+			.catch((error) => {
+				console.error("Error accessing media devices:", error);
+			});
+
+		peer.on("signal", (signal) => {
 			this.sendSignalToPeer(signal);
 		});
 
-		socket.on("stream", (stream) => {
+		peer.on("stream", (stream) => {
 			const { partnerVideoRef } = this.state;
 			partnerVideoRef.current.srcObject = stream;
 		});
 
-		socket.on("disconnect", () => {
+		peer.on("disconnect", () => {
 			// Xử lý sự kiện ngắt kết nối
 		});
 
-		this.setState({ socket });
+		this.setState({ peer });
 
 		socket.on("message", (message) => {
 			this.setState((prevState) => ({
@@ -55,35 +67,36 @@ class Room extends Component {
 	componentWillUnmount() {
 		const { socket } = this.state;
 		if (socket) {
-			socket.destroy();
+			socket.disconnect();
 		}
 	}
 
 	sendSignalToPeer = (signal) => {
-		// Gửi signal tới server hoặc peer cần kết nối
+		const { socket, code } = this.state;
+		socket.emit("signal", { signal, room: code });
 	};
 
-	handleReceiveSignal = (signal) => {
-		const { socket } = this.state;
-		if (socket) {
-			socket.signal(signal);
-		}
-	};
+	// handleReceiveSignal = (signal) => {
+	// 	const { socket } = this.state;
+	// 	if (socket) {
+	// 		socket.signal(signal);
+	// 	}
+	// };
 
-	handleStartCall = () => {
-		navigator.mediaDevices
-			.getUserMedia({ video: true, audio: true })
-			.then((stream) => {
-				const { userVideoRef, socket } = this.state;
-				userVideoRef.current.srcObject = stream;
-				if (socket) {
-					socket.addStream(stream);
-				}
-			})
-			.catch((error) => {
-				// Xử lý lỗi
-			});
-	};
+	// handleStartCall = () => {
+	// 	navigator.mediaDevices
+	// 		.getUserMedia({ video: true, audio: true })
+	// 		.then((stream) => {
+	// 			const { userVideoRef, socket } = this.state;
+	// 			userVideoRef.current.srcObject = stream;
+	// 			if (socket) {
+	// 				socket.addStream(stream);
+	// 			}
+	// 		})
+	// 		.catch((error) => {
+	// 			// Xử lý lỗi
+	// 		});
+	// };
 
 	handleOnchangeMassage = (event) => {
 		this.setState({
@@ -93,8 +106,8 @@ class Room extends Component {
 
 	sendMessage = (e) => {
 		e.preventDefault();
-		const { message } = this.state;
-		if (message.trim() !== "") {
+		const { message, socket } = this.state;
+		if (message.trim() !== "" && socket) {
 			socket.emit("sendMessage", message);
 			this.setState({ message: "" });
 		}
@@ -105,14 +118,8 @@ class Room extends Component {
 	};
 
 	render() {
-		let {
-			userVideoRef,
-			partnerVideoRef,
-			button1,
-			button2,
-			message,
-			messages,
-		} = this.state;
+		let { userVideoRef, partnerVideoRef, button1, button2, messages } =
+			this.state;
 		return (
 			<>
 				<div className="booking-detail-doctor-container">
@@ -156,7 +163,7 @@ class Room extends Component {
 									</div>
 								))}
 							</div>
-							{button1 && (
+							{/* {button1 && (
 								<button
 									className="btn-join-room"
 									onClick={() => this.handleStartCall()}
@@ -171,7 +178,7 @@ class Room extends Component {
 								>
 									Tham gia
 								</button>
-							)}
+							)} */}
 						</div>
 						<div className="chat-box">
 							<input
