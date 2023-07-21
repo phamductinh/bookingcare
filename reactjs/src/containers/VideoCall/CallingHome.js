@@ -22,7 +22,6 @@ class CallingHome extends Component {
 		await this.setState({
 			code: event.target.value,
 		});
-		console.log(this.state.code);
 	};
 
 	handleJoinRoom = () => {

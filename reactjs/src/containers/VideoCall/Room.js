@@ -21,46 +21,104 @@ class Room extends Component {
 		};
 	}
 
-	componentDidMount() {
+	// componentDidMount() {
+	// 	try {
+	// 		const { code, userVideoRef } = this.state;
+	// 		const socket = io("http://localhost:8080", {
+	// 			transports: ["websocket"],
+	// 		});
+
+	// 		this.setState({ socket });
+
+	// 		const peer = new SimplePeer({
+	// 			initiator: true,
+	// 			trickle: false,
+	// 		});
+
+	// 		navigator.mediaDevices
+	// 			.getUserMedia({ video: true, audio: true })
+	// 			.then((stream) => {
+	// 				userVideoRef.current.srcObject = stream;
+	// 				peer.addStream(stream); // Add stream to SimplePeer
+	// 			})
+	// 			.catch((error) => {
+	// 				console.error("Error accessing media devices:", error);
+	// 			});
+
+	// 		peer.on("signal", (signal) => {
+	// 			this.sendSignalToPeer(signal);
+	// 		});
+
+	// 		peer.on("stream", (stream) => {
+	// 			const { partnerVideoRef } = this.state;
+	// 			partnerVideoRef.current.srcObject = stream;
+	// 		});
+
+	// 		peer.on("disconnect", () => {
+	// 			// Xử lý sự kiện ngắt kết nối
+	// 		});
+
+	// 		this.setState({ peer });
+
+	// 		socket.on("message", (message) => {
+	// 			this.setState((prevState) => ({
+	// 				messages: [...prevState.messages, message],
+	// 			}));
+	// 		});
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 	}
+	// }
+
+    componentDidMount() {
 		const { code, userVideoRef } = this.state;
-		const socket = io.connect("http://localhost:8080"); // Create Socket.io connection
+		const socket = io("http://localhost:8080", {
+			transports: ["websocket"],
+		});
 
 		this.setState({ socket });
 
-		const peer = new SimplePeer({
-			initiator: true,
-			trickle: false,
-		});
+		socket.emit("join room", code);
 
 		navigator.mediaDevices
 			.getUserMedia({ video: true, audio: true })
 			.then((stream) => {
 				userVideoRef.current.srcObject = stream;
-				peer.addStream(stream); // Add stream to SimplePeer
+
+				// Người đầu tiên vào phòng sẽ là người gọi
+				const initiator = socket.rooms[code].length === 2;
+
+				const peer = new SimplePeer({
+					initiator,
+					trickle: false,
+					stream,
+				});
+
+				peer.on("signal", (signal) => {
+					this.sendSignalToPeer(signal);
+				});
+
+				peer.on("stream", (stream) => {
+					const { partnerVideoRef } = this.state;
+					partnerVideoRef.current.srcObject = stream;
+				});
+
+				peer.on("connect", () => {
+					console.log("Connection established");
+				});
+
+				peer.on("disconnect", () => {
+					console.log("Disconnected");
+				});
+
+				this.setState({ peer });
 			})
 			.catch((error) => {
 				console.error("Error accessing media devices:", error);
 			});
 
-		peer.on("signal", (signal) => {
-			this.sendSignalToPeer(signal);
-		});
-
-		peer.on("stream", (stream) => {
-			const { partnerVideoRef } = this.state;
-			partnerVideoRef.current.srcObject = stream;
-		});
-
-		peer.on("disconnect", () => {
-			// Xử lý sự kiện ngắt kết nối
-		});
-
-		this.setState({ peer });
-
-		socket.on("message", (message) => {
-			this.setState((prevState) => ({
-				messages: [...prevState.messages, message],
-			}));
+		socket.on("signal", (data) => {
+			this.handleReceiveSignal(data);
 		});
 	}
 
@@ -73,15 +131,16 @@ class Room extends Component {
 
 	sendSignalToPeer = (signal) => {
 		const { socket, code } = this.state;
-		socket.emit("signal", { signal, room: code });
+		socket.emit("signal", { signal, roomID: code });
+		console.log("Check connect");
 	};
 
-	// handleReceiveSignal = (signal) => {
-	// 	const { socket } = this.state;
-	// 	if (socket) {
-	// 		socket.signal(signal);
-	// 	}
-	// };
+	handleReceiveSignal = (signal) => {
+		const { socket } = this.state;
+		if (socket) {
+			socket.signal(signal);
+		}
+	};
 
 	// handleStartCall = () => {
 	// 	navigator.mediaDevices
@@ -104,8 +163,7 @@ class Room extends Component {
 		});
 	};
 
-	sendMessage = (e) => {
-		e.preventDefault();
+	sendMessage = () => {
 		const { message, socket } = this.state;
 		if (message.trim() !== "" && socket) {
 			socket.emit("sendMessage", message);
