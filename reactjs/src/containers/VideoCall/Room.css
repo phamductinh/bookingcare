@@ -306,6 +306,7 @@
 
 #chatBox {
 	width: 22%;
+	padding: 10px;
 	height: 400px;
 	border: 1px solid gray;
 	overflow-y: scroll;
@@ -350,4 +351,22 @@
 	background-color: #4caf50;
 	color: white;
 	border: none;
+}
+
+.msg-name {
+	margin-bottom: 0;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.msg-message {
+	background-color: #1778f2;
+
+	color: white;
+	width: fit-content;
+	padding: 7px;
+	font-size: 18px;
+	margin-top: 5px;
+	margin-bottom: 0;
+	border-radius: 7px;
 }

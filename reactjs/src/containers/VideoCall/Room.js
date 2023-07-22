@@ -70,7 +70,7 @@ class Room extends Component {
 	// 	}
 	// }
 
-    componentDidMount() {
+	componentDidMount() {
 		const { code, userVideoRef } = this.state;
 		const socket = io("http://localhost:8080", {
 			transports: ["websocket"],
@@ -89,7 +89,7 @@ class Room extends Component {
 				const initiator = socket.rooms[code].length === 2;
 
 				const peer = new SimplePeer({
-					initiator,
+					initiator: initiator,
 					trickle: false,
 					stream,
 				});
@@ -119,6 +119,12 @@ class Room extends Component {
 
 		socket.on("signal", (data) => {
 			this.handleReceiveSignal(data);
+		});
+
+		socket.on("receive-message", (data) => {
+			this.setState((prevState) => ({
+				messages: [...prevState.messages, data],
+			}));
 		});
 	}
 
@@ -165,9 +171,20 @@ class Room extends Component {
 
 	sendMessage = () => {
 		const { message, socket } = this.state;
-		if (message.trim() !== "" && socket) {
-			socket.emit("sendMessage", message);
-			this.setState({ message: "" });
+		const messageData = {
+			name: this.props.isLoggedIn ? this.props.userInfo.fullName : "User",
+			room: this.state.code,
+			message: message,
+			time:
+				new Date(Date.now()).getHours().toString().padStart(2, "0") +
+				":" +
+				new Date(Date.now()).getMinutes().toString().padStart(2, "0"),
+		};
+		if (message.trim() !== "") {
+			socket.emit("sendMessage", messageData);
+			this.setState((prevState) => ({
+				messages: [...prevState.messages, messageData],
+			}));
 		}
 	};
 
@@ -213,11 +230,18 @@ class Room extends Component {
 								style={{ transform: "scaleX(-1)" }}
 							></video>
 
+							<div></div>
 							<div id="chatBox">
-								{messages.map((msg, index) => (
-									<div key={index}>
-										<strong>{msg.user}: </strong>
-										{msg.text}
+								{messages.map((msg) => (
+									<div>
+										<div className="msg-content">
+											<h3 className="msg-message">
+												{msg.message}
+											</h3>
+											<p className="msg-name">
+												{msg.name} ({msg.time})
+											</p>
+										</div>
 									</div>
 								))}
 							</div>
@@ -246,6 +270,9 @@ class Room extends Component {
 								onChange={(event) =>
 									this.handleOnchangeMassage(event)
 								}
+								onKeyPress={(event) => {
+									event.key === "Enter" && this.sendMessage();
+								}}
 							/>
 							<button
 								id="sendMessageButton"
@@ -276,7 +303,10 @@ class Room extends Component {
 }
 
 const mapStateToProps = (state) => {
-	return {};
+	return {
+		userInfo: state.user.userInfo,
+		isLoggedIn: state.user.isLoggedIn,
+	};
 };
 
 const mapDispatchToProps = (dispatch) => {

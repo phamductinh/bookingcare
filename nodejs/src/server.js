@@ -1,15 +1,20 @@
 import express from "express";
-import bodyParser from "body-parser";
+const app = express();
+import bodyParser, { text } from "body-parser";
 import viewEngine from "./configs/viewEngine";
 import initWebRoutes from "./routes/web";
 import fileUpload from "express-fileupload";
-import http from "http";
-import { Server } from "socket.io";
-
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
+const http = require("http");
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
+// const { ExpressPeerServer } = require("peer");
 require("dotenv").config();
+
+// const peerServer = ExpressPeerServer(server, {
+// 	debug: true,
+// });
+
+// app.use("/peerjs", peerServer);
 
 const port = process.env.PORT || 9999;
 
@@ -54,20 +59,25 @@ app.use((err, req, res, next) => {
 	res.render("error");
 });
 
+const rooms = {};
+
 io.on("connection", (socket) => {
+	console.log("user connect", socket.id);
 	socket.on("join room", (roomID) => {
 		socket.join(roomID);
-		socket.to(roomID).emit("user joined", socket.id);
+		console.log("room", roomID);
+		socket.to(roomID).emit("join-success");
 
-		socket.on("signal", (data) => {
-			io.to(data.room).emit("signal", {
-				signal: data.signal,
-				callerID: data.callerID,
-			});
+		socket.on("send-video", (roomID, data) => {
+			socket.to(roomID).emit("receive-video", data);
 		});
 
-		socket.on("sendMessage", (message) => {
-			io.emit("message", { user: "User", text: message });
+		socket.on("signal", (data) => {
+			io.to(data.roomID).emit("signal", data.data);
+		});
+
+		socket.on("sendMessage", (data) => {
+			socket.to(data.room).emit("receive-message", data);
 		});
 
 		socket.on("disconnect", () => {
