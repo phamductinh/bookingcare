@@ -75,15 +75,22 @@ io.on("connection", (socket) => {
 		} else {
 			users[roomID] = [socket.id];
 		}
+		console.log(users[roomID].length);
 		socketToRoom[socket.id] = roomID;
 
 		const usersInThisRoom = users[roomID].filter((id) => id !== socket.id);
 
 		socket.emit("all users", usersInThisRoom);
+		console.log(usersInThisRoom);
+
+		socket.on("sendMessage", (data) => {
+			socket.to(data.room).emit("receive-message", data);
+			console.log(data);
+		});
 	});
 
 	socket.on("sending signal", (payload) => {
-		io.to(payload.userToSignal).emit("user join", {
+		io.to(payload.userToSignal).emit("user joined", {
 			signal: payload.signal,
 			callerID: payload.callerID,
 		});
@@ -103,10 +110,6 @@ io.on("connection", (socket) => {
 			room = room.filter((id) => id !== socket.id);
 			users[roomID] = room;
 		}
-	});
-
-	socket.on("sendMessage", (data) => {
-		socket.to(data.room).emit("receive-message", data);
 	});
 });
 
