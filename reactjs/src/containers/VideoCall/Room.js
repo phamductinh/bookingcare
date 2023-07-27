@@ -4,25 +4,6 @@
 // import { io } from "socket.io-client";
 // import Peer from "simple-peer";
 
-// // const Video = (props) => {
-// // 	const { peer } = props;
-
-// // 	useEffect(() => {
-// // 		peer.on("stream", (stream) => {
-// // 			this.ref.current.srcObject = stream;
-// // 		});
-// // 	}, [peer]);
-
-// // 	return (
-// // 		<video
-// // 			id="remoteVideo"
-// // 			autoPlay
-// // 			ref={this.ref}
-// // 			style={{ transform: "scaleX(-1)" }}
-// // 		></video>
-// // 	);
-// // };
-
 // class Room extends Component {
 // 	constructor(props) {
 // 		super(props);
@@ -284,22 +265,17 @@
 // export default connect(mapStateToProps, mapDispatchToProps)(Room);
 
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
-
-const Container = styled.div`
-	padding: 20px;
-	display: flex;
-	height: 100vh;
-	width: 90%;
-	margin: auto;
-	flex-wrap: wrap;
-`;
+import "./Room.css";
 
 const StyledVideo = styled.video`
-	height: 40%;
+	width: 39%;
 	width: 50%;
+	height: 454px;
+	transform: scaleX(-1);
 `;
 
 const Video = (props) => {
@@ -314,24 +290,28 @@ const Video = (props) => {
 	return <StyledVideo playsInline autoPlay ref={ref} />;
 };
 
-const videoConstraints = {
-	height: window.innerHeight / 2,
-	width: window.innerWidth / 2,
-};
-
 const Room = (props) => {
 	const [peers, setPeers] = useState([]);
 	const socketRef = useRef();
 	const userVideo = useRef();
 	const peersRef = useRef([]);
-	const roomID = props.match.params.roomID;
+	const [message, setMessage] = useState("");
+	const [messages, setMessages] = useState([]);
+	const [isMicMuted, setIsMicMuted] = useState(false);
+	const [isVideoMuted, setIsVideoMuted] = useState(true);
+	const roomID = props.match.params.code;
+	const userInfo = useSelector((state) => state.user.userInfo);
+	const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
 	useEffect(() => {
-		socketRef.current = io.connect("http://localhost:8080", {
+		socketRef.current = io("http://localhost:8080", {
 			transports: ["websocket"],
 		});
+
+		console.log(socketRef.current);
+
 		navigator.mediaDevices
-			.getUserMedia({ video: videoConstraints, audio: true })
+			.getUserMedia({ video: true, audio: true })
 			.then((stream) => {
 				userVideo.current.srcObject = stream;
 				socketRef.current.emit("join room", roomID);
@@ -370,9 +350,22 @@ const Room = (props) => {
 					const item = peersRef.current.find(
 						(p) => p.peerID === payload.id
 					);
-					item.peer.signal(payload.signal);
+					if (item && item.peer) {
+						item.peer.signal(payload.signal);
+					} else {
+						console.log("Item or item.peer is not defined");
+					}
+				});
+
+				socketRef.current.on("receiveMessage", (data) => {
+					console.log("chekc data", data);
+					setMessages((prevMessages) => [...prevMessages, data]);
+					console.log(data);
 				});
 			});
+		return () => {
+			socketRef.current.disconnect();
+		};
 	}, []);
 
 	function createPeer(userToSignal, callerID, stream) {
@@ -409,13 +402,166 @@ const Room = (props) => {
 		return peer;
 	}
 
+	const toggleMic = () => {
+		setIsMicMuted((prevMuted) => !prevMuted);
+		const audioTracks = userVideo.current.srcObject.getAudioTracks();
+		audioTracks.forEach((track) => {
+			track.enabled = !isMicMuted;
+		});
+	};
+
+	const toggleVideo = () => {
+		setIsVideoMuted((prevMuted) => !prevMuted);
+		const videoTracks = userVideo.current.srcObject.getVideoTracks();
+		videoTracks.forEach((track) => {
+			track.enabled = !isVideoMuted;
+		});
+	};
+
+	const handleOnChangeMessage = (event) => {
+		setMessage(event.target.value);
+	};
+
+	const sendMessage = () => {
+		const messageData = {
+			name: isLoggedIn ? userInfo.fullName : "User",
+			room: roomID,
+			message: message,
+			time:
+				new Date(Date.now()).getHours().toString().padStart(2, "0") +
+				":" +
+				new Date(Date.now()).getMinutes().toString().padStart(2, "0"),
+		};
+
+		if (message.trim() !== "") {
+			socketRef.current.emit("sendMessage", messageData);
+			setMessages((prevMessages) => [...prevMessages, messageData]);
+		}
+	};
+
+	const goBack = () => {
+		props.history.push("/join-room");
+	};
+
 	return (
-		<Container>
-			<StyledVideo muted ref={userVideo} autoPlay playsInline />
-			{peers.map((peer, index) => {
-				return <Video key={index} peer={peer} />;
-			})}
-		</Container>
+		<>
+			<div className="booking-detail-doctor-container">
+				<div className="detail-doctor-header">
+					<div className="detail-doctor-header-left">
+						<i
+							className="fas fa-long-arrow-left"
+							onClick={goBack}
+						></i>
+						<p style={{ color: "white" }}>{roomID}</p>
+					</div>
+					<div className="detail-doctor-header-right">
+						<div className="detail-doctor-header-support">
+							<i className="far fa-question-circle"></i>
+							Hỗ trợ
+						</div>
+						<i className="fas fa-bars"></i>
+					</div>
+				</div>
+				<div className="room-container">
+					<div className="video-box">
+						<video
+							id="localVideo"
+							autoPlay
+							playsInline
+							ref={userVideo}
+							muted
+							style={{ transform: "scaleX(-1)" }}
+						></video>
+						{peers
+							? peers.map((peer, index) => {
+									return <Video key={index} peer={peer} />;
+							  })
+							: ""}
+						{/* <video
+							id="remoteVideo"
+							autoPlay
+							ref={this.ref}
+							style={{ transform: "scaleX(-1)" }}
+						></video> */}
+						<div className="mute-mic">
+							{isMicMuted ? (
+								<i
+									className="fa-solid fa-microphone"
+									onClick={toggleMic}
+								></i>
+							) : (
+								<i
+									className="fa-solid fa-microphone-slash"
+									onClick={toggleMic}
+								></i>
+							)}
+						</div>
+						<div className="mute-mic">
+							<div className="mute-video">
+								{isVideoMuted ? (
+									<i
+										className="fa-solid fa-video"
+										onClick={toggleVideo}
+									></i>
+								) : (
+									<i
+										className="fa-solid fa-video-slash"
+										onClick={toggleVideo}
+									></i>
+								)}
+							</div>
+						</div>
+					</div>
+					<div className="chat-box">
+						<div id="chatBox">
+							{messages.map((msg, index) => (
+								<div key={index}>
+									<div className="msg-content">
+										<h3 className="msg-message">
+											{msg.message}
+										</h3>
+										<p className="msg-name">
+											{msg.name} ({msg.time})
+										</p>
+									</div>
+								</div>
+							))}
+						</div>
+						<div className="video-box-send">
+							<input
+								type="text"
+								id="messageInput"
+								placeholder="Type a message"
+								onChange={handleOnChangeMessage}
+								onKeyPress={(event) => {
+									event.key === "Enter" && sendMessage();
+								}}
+							/>
+							<button
+								id="sendMessageButton"
+								onClick={sendMessage}
+							>
+								Send
+							</button>
+						</div>
+					</div>
+				</div>
+
+				{/* <div className="booking-detail-doctor-container">
+					<div className="footer2-room">
+						<div className="footer-left">
+							<p>&copy; 2022 Pham Duc Tinh</p>
+						</div>
+						<div className="footer-right">
+							<i className="fab fa-facebook-square"></i>
+							<i className="fab fa-youtube"></i>
+							<i className="fab fa-instagram"></i>
+							<i className="fab fa-twitter"></i>
+						</div>
+					</div>
+				</div> */}
+			</div>
+		</>
 	);
 };
 

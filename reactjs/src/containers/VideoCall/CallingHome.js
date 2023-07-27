@@ -80,7 +80,7 @@ class CallingHome extends Component {
 					</div>
 
 					<div className="booking-detail-doctor-container">
-						<div className="footer2-room">
+						<div className="footer2-calling">
 							<div className="footer-left">
 								<p>&copy; 2022 Pham Duc Tinh</p>
 							</div>

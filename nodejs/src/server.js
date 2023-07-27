@@ -67,7 +67,7 @@ io.on("connection", (socket) => {
 	socket.on("join room", (roomID) => {
 		if (users[roomID]) {
 			const length = users[roomID].length;
-			if (length === 3) {
+			if (length === 2) {
 				socket.emit("room full");
 				return;
 			}
@@ -75,18 +75,16 @@ io.on("connection", (socket) => {
 		} else {
 			users[roomID] = [socket.id];
 		}
-		console.log(users[roomID].length);
 		socketToRoom[socket.id] = roomID;
 
 		const usersInThisRoom = users[roomID].filter((id) => id !== socket.id);
 
 		socket.emit("all users", usersInThisRoom);
-		console.log(usersInThisRoom);
+	});
 
-		socket.on("sendMessage", (data) => {
-			socket.to(data.room).emit("receive-message", data);
-			console.log(data);
-		});
+	socket.on("sendMessage", (data) => {
+		socket.to(data.room).emit("receiveMessage", data);
+		console.log(data);
 	});
 
 	socket.on("sending signal", (payload) => {
