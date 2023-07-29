@@ -80,11 +80,11 @@ io.on("connection", (socket) => {
 		const usersInThisRoom = users[roomID].filter((id) => id !== socket.id);
 
 		socket.emit("all users", usersInThisRoom);
-	});
 
-	socket.on("sendMessage", (data) => {
-		socket.to(data.room).emit("receiveMessage", data);
-		console.log(data);
+		socket.on("sendMessage", (data) => {
+			socket.to(roomID).emit("receiveMessage", data);
+			console.log(data);
+		});
 	});
 
 	socket.on("sending signal", (payload) => {
@@ -108,6 +108,7 @@ io.on("connection", (socket) => {
 			room = room.filter((id) => id !== socket.id);
 			users[roomID] = room;
 		}
+		console.log("user disconnect", socket.id);
 	});
 });
 

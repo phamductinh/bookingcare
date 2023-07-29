@@ -285,7 +285,7 @@ const Video = (props) => {
 		props.peer.on("stream", (stream) => {
 			ref.current.srcObject = stream;
 		});
-	}, []);
+	}, [props.peer]);
 
 	return <StyledVideo playsInline autoPlay ref={ref} />;
 };
@@ -297,24 +297,29 @@ const Room = (props) => {
 	const peersRef = useRef([]);
 	const [message, setMessage] = useState("");
 	const [messages, setMessages] = useState([]);
-	const [isMicMuted, setIsMicMuted] = useState(false);
+	const [isMicMuted, setIsMicMuted] = useState(true);
 	const [isVideoMuted, setIsVideoMuted] = useState(true);
 	const roomID = props.match.params.code;
 	const userInfo = useSelector((state) => state.user.userInfo);
 	const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
 	useEffect(() => {
-		socketRef.current = io("http://localhost:8080", {
+		socketRef.current = io.connect("http://localhost:8080", {
 			transports: ["websocket"],
 		});
 
 		console.log(socketRef.current);
+		socketRef.current.on("receiveMessage", (data) => {
+			setMessages((prevMessages) => [...prevMessages, data]);
+			console.log(data);
+		});
 
 		navigator.mediaDevices
 			.getUserMedia({ video: true, audio: true })
 			.then((stream) => {
 				userVideo.current.srcObject = stream;
 				socketRef.current.emit("join room", roomID);
+
 				socketRef.current.on("all users", (users) => {
 					const peers = [];
 					users.forEach((userID) => {
@@ -353,20 +358,14 @@ const Room = (props) => {
 					if (item && item.peer) {
 						item.peer.signal(payload.signal);
 					} else {
-						console.log("Item or item.peer is not defined");
+						console.log("Failed");
 					}
-				});
-
-				socketRef.current.on("receiveMessage", (data) => {
-					console.log("chekc data", data);
-					setMessages((prevMessages) => [...prevMessages, data]);
-					console.log(data);
 				});
 			});
 		return () => {
 			socketRef.current.disconnect();
 		};
-	}, []);
+	}, [roomID]);
 
 	function createPeer(userToSignal, callerID, stream) {
 		const peer = new Peer({
@@ -422,7 +421,7 @@ const Room = (props) => {
 		setMessage(event.target.value);
 	};
 
-	const sendMessage = () => {
+	const sendMessage = async () => {
 		const messageData = {
 			name: isLoggedIn ? userInfo.fullName : "User",
 			room: roomID,
@@ -434,8 +433,9 @@ const Room = (props) => {
 		};
 
 		if (message.trim() !== "") {
-			socketRef.current.emit("sendMessage", messageData);
+			await socketRef.current.emit("sendMessage", messageData);
 			setMessages((prevMessages) => [...prevMessages, messageData]);
+			setMessage("");
 		}
 	};
 
@@ -469,7 +469,6 @@ const Room = (props) => {
 							autoPlay
 							playsInline
 							ref={userVideo}
-							muted
 							style={{ transform: "scaleX(-1)" }}
 						></video>
 						{peers
@@ -533,6 +532,7 @@ const Room = (props) => {
 								id="messageInput"
 								placeholder="Type a message"
 								onChange={handleOnChangeMessage}
+								value={message}
 								onKeyPress={(event) => {
 									event.key === "Enter" && sendMessage();
 								}}
@@ -547,7 +547,7 @@ const Room = (props) => {
 					</div>
 				</div>
 
-				{/* <div className="booking-detail-doctor-container">
+				<div className="booking-detail-doctor-container">
 					<div className="footer2-room">
 						<div className="footer-left">
 							<p>&copy; 2022 Pham Duc Tinh</p>
@@ -559,7 +559,7 @@ const Room = (props) => {
 							<i className="fab fa-twitter"></i>
 						</div>
 					</div>
-				</div> */}
+				</div>
 			</div>
 		</>
 	);
