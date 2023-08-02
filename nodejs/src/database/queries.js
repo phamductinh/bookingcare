@@ -15,7 +15,9 @@ let findAllDoctorsQuery = `SELECT doctor.id, doctor.name, doctor.introduction, d
 
 let findDoctorById = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN clinic ON clinic.id = doctor.clinicId JOIN specialty ON specialty.id = doctor.specialtyId WHERE doctor.id = ?`;
 
-let createADoctorQuery = `INSERT INTO doctor (name, introduction, clinicId, specialtyId, description, address, price, image) VALUES (?,?,?,?,?,?,?,?)`;
+let findDoctorIsTelemedicine = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN clinic ON clinic.id = doctor.clinicId JOIN specialty ON specialty.id = doctor.specialtyId WHERE doctor.isTelemedicine = 1`;
+
+let createADoctorQuery = `INSERT INTO doctor (name, introduction, clinicId, specialtyId, description, address, price, image, isTelemedicine) VALUES (?,?,?,?,?,?,?,?,?)`;
 
 let updateDoctorQuery = `UPDATE doctor SET name = ?, introduction = ?, clinicId = ?, specialtyId = ?, description = ?, address = ?, price = ? WHERE id = ?`;
 
@@ -71,7 +73,8 @@ let createRoomQuery = `INSERT INTO room (code, status) VALUES (?,?)`;
 let findRoomByCode = `SELECT * FROM room WHERE code = ?`;
 
 module.exports = {
-    findRoomByCode,
+	findDoctorIsTelemedicine,
+	findRoomByCode,
 	createRoomQuery,
 	findAllFinishedBookingQuery,
 	finishBookingQuery,

@@ -28,6 +28,15 @@ let getDoctorByIdModel = (doctorId, callback) => {
 	});
 };
 
+let getDoctorIsTelemedicineModel = (callback) => {
+	db.query(findDoctorIsTelemedicine, (error, results) => {
+		if (error) {
+			return callback(error);
+		}
+		return callback(null, results);
+	});
+};
+
 let createDoctorModel = (doctorData, callback) => {
 	let {
 		name,
@@ -38,6 +47,7 @@ let createDoctorModel = (doctorData, callback) => {
 		address,
 		price,
 		image,
+		isTelemedicine,
 	} = doctorData;
 
 	db.query(
@@ -51,6 +61,7 @@ let createDoctorModel = (doctorData, callback) => {
 			address,
 			price,
 			image,
+			isTelemedicine,
 		],
 		(err, results) => {
 			if (err) {
@@ -90,4 +101,5 @@ module.exports = {
 	createDoctorModel,
 	updateADoctorModel,
 	deleteADoctorModel,
+	getDoctorIsTelemedicineModel,
 };

@@ -35,6 +35,18 @@ let getADoctor = (req, res) => {
 	});
 };
 
+let getDoctorIsTelemedicine = (req, res) => {
+	doctorModel.getDoctorIsTelemedicineModel((error, doctor) => {
+		if (error) {
+			throw error;
+		}
+		return res.send({
+			code: 200,
+			data: doctor,
+		});
+	});
+};
+
 let createADoctor = (req, res) => {
 	let doctorData = req.body;
 	doctorModel.createDoctorModel(doctorData, (err, results) => {
@@ -87,4 +99,5 @@ module.exports = {
 	createADoctor,
 	deleteDoctor,
 	updateADoctor,
+	getDoctorIsTelemedicine,
 };

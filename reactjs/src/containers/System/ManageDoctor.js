@@ -113,6 +113,7 @@ class ManageDoctor extends Component {
 			address: "",
 			price: "",
 			image: "",
+			isTelemedicine: "",
 			isLoading: false,
 			errMsgSignUp: "",
 		});
@@ -124,7 +125,6 @@ class ManageDoctor extends Component {
 		await this.setState({
 			...copyState,
 		});
-		console.log("check state", this.state);
 	};
 
 	handleEditorChange = async ({ html, text }) => {
@@ -154,8 +154,8 @@ class ManageDoctor extends Component {
 			address: this.state.address,
 			price: this.state.price,
 			image: this.state.imageBase64,
+			isTelemedicine: this.state.isTelemedicine,
 		};
-		console.log("data", newDoctorData);
 		try {
 			this.setState({
 				errMsgSignUp: "",
@@ -174,6 +174,7 @@ class ManageDoctor extends Component {
 				address: "",
 				price: "",
 				image: "",
+				isTelemedicine: "",
 				setModalIsOpen: false,
 				isLoading: false,
 			});
@@ -243,6 +244,13 @@ class ManageDoctor extends Component {
 		});
 	}
 
+	handleCheckboxChange = async (event) => {
+		const isChecked = event.target.checked;
+		await this.setState({
+			isTelemedicine: isChecked ? 1 : 0,
+		});
+	};
+
 	render() {
 		let {
 			arrDoctors,
@@ -252,8 +260,8 @@ class ManageDoctor extends Component {
 			setModalEditUser,
 			isLoading,
 			confirmDelete,
+			isTelemedicine,
 		} = this.state;
-		console.log(arrClinics);
 		return (
 			<>
 				{this.props.isLoggedIn && <Header />}
@@ -465,6 +473,17 @@ class ManageDoctor extends Component {
 												</option>
 											))}
 									</select>
+								</div>
+								<div>
+									<input
+										type="checkbox"
+										id="isTelemedicine"
+										checked={isTelemedicine === 1}
+										onChange={this.handleCheckboxChange()}
+									/>
+									<label for="isTelemedicine">
+										Khám từ xa:
+									</label>
 								</div>
 								<MdEditor
 									style={{ height: "250px" }}
