@@ -5,6 +5,8 @@ import { getALLSpecialty } from "../../services/specialtyService";
 import "./HomePage.css";
 import { getAllDoctors } from "../../services/doctorService";
 import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
+import * as actions from "../../store/actions/";
 
 class HomePage extends Component {
 	constructor(props) {
@@ -88,8 +90,18 @@ class HomePage extends Component {
 		});
 	}
 
+	handleOpenMenu() {
+		this.setState((prevState) => ({
+			isOpenMenu: !prevState.isOpenMenu,
+		}));
+	}
+
 	handleViewDetail = (doctor) => {
 		this.props.history.push(`/detail-doctor/${doctor.id}`);
+	};
+
+	handleShowTelemedicine = (telem) => {
+		this.props.history.push(`/telemedicine/${telem.id}`);
 	};
 
 	handleNext() {
@@ -122,8 +134,14 @@ class HomePage extends Component {
 	}
 
 	render() {
-		let { arrTelems, arrSpecialty, arrDoctors, arrDoctorFilter } =
-			this.state;
+		let {
+			arrTelems,
+			arrSpecialty,
+			arrDoctors,
+			arrDoctorFilter,
+			isOpenMenu,
+		} = this.state;
+		const { processLogout, userInfor, isLoggedIn } = this.props;
 		return (
 			<div className="homepage-container">
 				<div id="header" className="header-homepage">
@@ -175,6 +193,77 @@ class HomePage extends Component {
 								<div className="flag-vn"></div>
 								<div className="flag-en"></div>
 							</div>
+							{!isLoggedIn ? (
+								<button className="btn-login-header">
+									<Link to="/login">Login</Link>
+									<div className="arrow-wrapper">
+										<div className="arrow"></div>
+									</div>
+								</button>
+							) : (
+								<div
+									className="user-avatar-header"
+									style={{
+										backgroundImage: `url(${
+											userInfor.image !== null
+												? Buffer.from(
+														userInfor.image,
+														"base64"
+												  ).toString("binary")
+												: "https://ihfeducation.ihf.info/images/no_avatar.gif"
+										})`,
+									}}
+									onClick={() => this.handleOpenMenu()}
+								></div>
+							)}
+							{isOpenMenu && (
+								<>
+									{isLoggedIn ? (
+										<div className="toggle-menu">
+											<div className="user-infor">
+												<div
+													className="user-avatar"
+													style={{
+														backgroundImage: `url(${
+															userInfor.image !==
+															null
+																? Buffer.from(
+																		userInfor.image,
+																		"base64"
+																  ).toString(
+																		"binary"
+																  )
+																: "https://ihfeducation.ihf.info/images/no_avatar.gif"
+														})`,
+													}}
+												></div>
+												<div className="user-name">
+													{userInfor.fullName
+														? userInfor.fullName
+														: "Unknown name"}
+												</div>
+											</div>
+											<div className="update-infor">
+												<Link to="/update-infor">
+													Chỉnh sửa thông tin
+												</Link>
+											</div>
+											<div className="his-booking">
+												<Link to="/history-booking">
+													Lịch sử đặt lịch
+												</Link>
+											</div>
+											<button
+												className="btn-logout"
+												onClick={processLogout}
+											>
+												<i className="fa-solid fa-right-from-bracket"></i>
+												Đăng xuất
+											</button>
+										</div>
+									) : null}
+								</>
+							)}
 						</div>
 					</div>
 				</div>
@@ -488,7 +577,7 @@ class HomePage extends Component {
 					</div>
 				</div> */}
 
-				<div className="search-container">
+				{/* <div className="search-container">
 					<div className="search-box">
 						<input
 							className="search-input"
@@ -571,7 +660,7 @@ class HomePage extends Component {
 								})}
 						</div>
 					</div>
-				</div>
+				</div> */}
 
 				<div className="telemedicine-container">
 					<div className="telem-content-up">
@@ -592,6 +681,11 @@ class HomePage extends Component {
 									return (
 										<div
 											className="telem-slide-item"
+											onClick={() =>
+												this.handleShowTelemedicine(
+													item
+												)
+											}
 											key={index}
 										>
 											<div className="telem-icon">
@@ -1131,11 +1225,14 @@ class HomePage extends Component {
 const mapStateToProps = (state) => {
 	return {
 		isLoggedIn: state.user.isLoggedIn,
+		userInfor: state.user.userInfo,
 	};
 };
 
 const mapDispatchToProps = (dispatch) => {
-	return {};
+	return {
+		processLogout: () => dispatch(actions.processLogout()),
+	};
 };
 
 export default withRouter(

@@ -13,10 +13,12 @@ import { path } from "../utils";
 
 import Home from "../routes/Home";
 import Login from "./Auth/Login";
+import SignUp from "./Auth/SignUp";
 // import Login from '../routes/Login';
 import Header from "./Header/Header";
 import System from "../routes/System";
 import HomePage from "./HomePage/HomePage";
+import DetailTelemedicine from "./System/DetailTelemedicine";
 import CustomScrollbars from "../components/CustomScrollbars";
 import { CustomToastCloseButton } from "../components/CustomToast";
 import ConfirmModal from "../components/ConfirmModal";
@@ -68,6 +70,10 @@ class App extends Component {
 										)}
 									/>
 									<Route
+										path={path.SIGNUP}
+										component={SignUp}
+									/>
+									<Route
 										path={path.SYSTEM}
 										component={userIsAuthenticated(System)}
 									/>
@@ -93,6 +99,11 @@ class App extends Component {
 										exact
 										path={"/room/:code"}
 										component={Room}
+									/>
+									<Route
+										exact
+										path={"/telemedicine/:id"}
+										component={DetailTelemedicine}
 									/>
 								</Switch>
 							</CustomScrollbars>
