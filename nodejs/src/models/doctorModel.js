@@ -6,6 +6,7 @@ import {
 	createADoctorQuery,
 	updateDoctorQuery,
 	deleteDoctorById,
+	findDoctorIsTelemedicine,
 } from "../database/queries";
 import { errMsg } from "../utils/resMsg";
 
@@ -28,8 +29,8 @@ let getDoctorByIdModel = (doctorId, callback) => {
 	});
 };
 
-let getDoctorIsTelemedicineModel = (callback) => {
-	db.query(findDoctorIsTelemedicine, (error, results) => {
+let getDoctorIsTelemedicineModel = (telemId, callback) => {
+	db.query(findDoctorIsTelemedicine, telemId, (error, results) => {
 		if (error) {
 			return callback(error);
 		}

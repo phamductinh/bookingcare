@@ -36,7 +36,11 @@ let getADoctor = (req, res) => {
 };
 
 let getDoctorIsTelemedicine = (req, res) => {
-	doctorModel.getDoctorIsTelemedicineModel((error, doctor) => {
+	let telemId = req.query.id;
+	if (!telemId) {
+		return res.status(400).send({ code: 400, msg: errMsg.missing_input });
+	}
+	doctorModel.getDoctorIsTelemedicineModel(telemId, (error, doctor) => {
 		if (error) {
 			throw error;
 		}

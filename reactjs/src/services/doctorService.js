@@ -12,6 +12,10 @@ const getDoctorById = (doctorId) => {
 	return axios.get(`/api/get-a-doctor?id=${doctorId}`);
 };
 
+const getDoctorIsTelemedicine = (telemId) => {
+	return axios.get(`/api/get-doctor-is-telemedicine?id=${telemId}`);
+};
+
 const deleteDoctor = (doctorId) => {
 	return axios.delete(`/api/delete-doctor?id=${doctorId}`);
 };
@@ -26,4 +30,5 @@ export {
 	getDoctorById,
 	deleteDoctor,
 	updateDoctor,
+	getDoctorIsTelemedicine,
 };

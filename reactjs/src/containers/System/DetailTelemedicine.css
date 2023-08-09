@@ -202,11 +202,11 @@
 	padding-left: 20px;
 	color: #45c3d2;
 }
-.doctor-infor {
+.doctor-infor-telem {
 	width: 80%;
 	padding: 15px 0;
 }
-.doctor-infor h1 {
+.doctor-infor-telem h1 {
 	font-size: 16px;
 	line-height: 1.3;
 	font-weight: 600;
@@ -214,12 +214,12 @@
 	color: #45c3d2;
 	cursor: pointer;
 }
-.doctor-infor p {
+.doctor-infor-telem p {
 	font-size: 14px;
 	margin: 5px 0;
 	color: #555;
 }
-.doctor-infor p i {
+.doctor-infor-telem p i {
 	margin-top: 10px;
 	margin-right: 5px;
 }
@@ -312,10 +312,10 @@
 		padding-left: 5px;
 		font-size: 13px;
 	}
-	.doctor-infor h1 {
+	.doctor-infor-telem h1 {
 		font-size: 15px;
 	}
-	.doctor-infor p {
+	.doctor-infor-telem p {
 		font-size: 13px;
 	}
 }
@@ -337,10 +337,10 @@
 		padding-left: 5px;
 		font-size: 13px;
 	}
-	.doctor-infor h1 {
+	.doctor-infor-telem h1 {
 		font-size: 15px;
 	}
-	.doctor-infor p {
+	.doctor-infor-telem p {
 		font-size: 13px;
 	}
 }
