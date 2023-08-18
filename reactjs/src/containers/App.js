@@ -24,6 +24,7 @@ import { CustomToastCloseButton } from "../components/CustomToast";
 import ConfirmModal from "../components/ConfirmModal";
 import DetailDoctor from "./System/Doctor/DetailDoctor";
 import Booking from "./System/Doctor/Booking";
+import BookingCall from "./System/Doctor/BookingCall";
 import CallingHome from "./VideoCall/CallingHome";
 import Room from "./VideoCall/Room";
 
@@ -89,6 +90,10 @@ class App extends Component {
 									<Route
 										path={"/booking/:id"}
 										component={Booking}
+									/>
+									<Route
+										path={"/booking-call-video/:id"}
+										component={BookingCall}
 									/>
 									<Route
 										exact

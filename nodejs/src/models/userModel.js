@@ -45,7 +45,7 @@ let createUser = (userData, callback) => {
 		role = "User",
 		phoneNumber,
 	} = userData;
-	if (!email || !password || !fullName || !address || !gender) {
+	if (!email || !password || !fullName) {
 		let error = new Error(errMsg.missing_input);
 		error.statusCode = 400;
 		return callback(error);
@@ -84,11 +84,11 @@ let createUser = (userData, callback) => {
 				return callback(error);
 			}
 
-			if (!validateAddress(address)) {
-				let error = new Error(errMsg.wr_address);
-				error.statusCode = 400;
-				return callback(error);
-			}
+			// if (!validateAddress(address)) {
+			// 	let error = new Error(errMsg.wr_address);
+			// 	error.statusCode = 400;
+			// 	return callback(error);
+			// }
 
 			db.query(
 				createAUser,
@@ -131,7 +131,7 @@ let updateAUser = (userData, callback) => {
 		userData.fullName,
 		userData.address,
 		userData.gender,
-        userData.role,
+		userData.role,
 		userData.phoneNumber,
 		userData.id,
 	];

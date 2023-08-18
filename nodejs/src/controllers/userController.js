@@ -40,8 +40,8 @@ let createUser = (req, res) => {
 	let userData = req.body;
 	userModel.createUser(userData, (err, results) => {
 		if (err) {
-			return res.status(err.statusCode).send({
-				code: err.statusCode,
+			return res.status(400).send({
+				code: 400,
 				msg: err.message,
 			});
 		}

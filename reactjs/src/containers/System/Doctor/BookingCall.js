@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 import { getDoctorById } from "../../../services/doctorService";
 import { NumericFormat } from "react-number-format";
 import { Link } from "react-router-dom";
-import "./Booking.css";
+import "./BookingCall.css";
 import { bookingAnAppointmentService } from "../../../services/bookingService";
 import { toast } from "react-toastify";
 import * as actions from "../../../store/actions/";
 
-class Booking extends Component {
+class BookingCall extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -163,6 +163,49 @@ class Booking extends Component {
 						</div>
 						<div className="booking-container">
 							<form action="">
+								<div>
+									<label
+										htmlFor=""
+										className="examination-time"
+									>
+										<input
+											type="radio"
+											name="booking-time"
+											id="booking-time"
+											checked
+										/>
+										<span>Thời lượng 60 phút</span>
+										<div>
+											<NumericFormat
+												className="price-booking-header"
+												value={detailDoctor.price}
+												displayType={"text"}
+												thousandSeparator={true}
+												suffix={"VNĐ"}
+											/>
+										</div>
+									</label>
+									<label
+										htmlFor=""
+										className="examination-time"
+									>
+										<input
+											type="radio"
+											name="booking-time"
+											id="booking-time"
+										/>
+										<span>Thời lượng 120 phút</span>
+										<div>
+											<NumericFormat
+												className="price-booking-header"
+												value={detailDoctor.price * 2}
+												displayType={"text"}
+												thousandSeparator={true}
+												suffix={"VNĐ"}
+											/>
+										</div>
+									</label>
+								</div>
 								<label htmlFor="">Chọn ngày khám:</label>
 								<div className="booking-input">
 									<i className="fa-solid fa-calendar"></i>
@@ -529,4 +572,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Booking);
+export default connect(mapStateToProps, mapDispatchToProps)(BookingCall);

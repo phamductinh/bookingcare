@@ -29,56 +29,58 @@ class Login extends Component {
 		});
 	};
 
+	validateEmail(email) {
+		let regex =
+			/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+		return regex.test(email);
+	}
+
+	validatePassword(password) {
+		let regex =
+			/^(?=.*[A-Z])(?=.*[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/])(?=.*[a-zA-Z]).{8,30}$/;
+		return regex.test(password);
+	}
+
 	handleLogin = async () => {
 		this.setState({
 			errMsg: "",
 		});
-		try {
-			let data = await handleLoginAPI(
-				this.state.email,
-				this.state.password
-			);
-			if (data && data.code !== 200) {
-				this.setState({
-					errMsg: data.msg,
-				});
-			}
-			if (data && data.code === 200) {
-				this.props.userLoginSuccess(data.user);
-			}
-		} catch (error) {
-			if (error.response) {
-				if (error.response.data) {
+		if (this.state.email === "" || this.state.password === "") {
+			this.setState({
+				errMsg: "Vui lòng nhập đầy đủ thông tin!",
+			});
+		} else if (!this.validateEmail(this.state.email)) {
+			this.setState({
+				errMsg: "Email sai định dạng!",
+			});
+		} else if (!this.validatePassword(this.state.password)) {
+			this.setState({
+				errMsg: "Mật khẩu sai định dạng!",
+			});
+		} else {
+			try {
+				let data = await handleLoginAPI(
+					this.state.email,
+					this.state.password
+				);
+				if (data && data.code !== 200) {
 					this.setState({
-						errMsg: error.response.data.msg,
+						errMsg: data.msg,
 					});
+				}
+				if (data && data.code === 200) {
+					this.props.userLoginSuccess(data.user);
+				}
+			} catch (error) {
+				if (error.response) {
+					if (error.response.data) {
+						this.setState({
+							errMsg: error.response.data.msg,
+						});
+					}
 				}
 			}
 		}
-	};
-
-	validateModalInput = () => {
-		let isValid = true;
-		let arrInput = [
-			"newEmail",
-			"newPassword",
-			"confirmPass",
-			"fullName",
-			"address",
-			"gender",
-			"phoneNumber",
-		];
-		for (let i = 0; i < arrInput.length; i++) {
-			if (!this.state[arrInput[i]]) {
-				isValid = false;
-				this.setState({
-					errMsgSignUp: "Missing input parameters !",
-				});
-				// alert("Missing " + arrInput[i]);
-				break;
-			}
-		}
-		return isValid;
 	};
 
 	render() {

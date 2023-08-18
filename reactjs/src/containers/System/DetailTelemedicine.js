@@ -5,6 +5,7 @@ import "./DetailTelemedicine.css";
 import { getDoctorIsTelemedicine } from "../../services/doctorService";
 import { toast } from "react-toastify";
 import * as actions from "../../store/actions/";
+import { NumericFormat } from "react-number-format";
 
 class DetailTelemedicine extends Component {
 	constructor(props) {
@@ -30,18 +31,26 @@ class DetailTelemedicine extends Component {
 		}
 	}
 
+	handleViewBooking = (item) => {
+		this.props.history.push(`/booking-call-video/${item.id}`);
+	};
+
 	goBack = () => {
 		this.props.history.push(`/`);
 	};
 
 	render() {
 		console.log(this.state.arrDoctors);
+		let { arrDoctors } = this.state;
 		return (
 			<>
 				<div className="detail-telemedicine-container">
 					<div className="detail-tele-header">
 						<div className="detail-tele-header-left">
-							<i className="fas fa-long-arrow-left"></i>
+							<i
+								className="fas fa-long-arrow-left"
+								onClick={this.goBack}
+							></i>
 							<h2>Tư vấn, trị liệu Tâm lý từ xa</h2>
 						</div>
 						<div className="detail-tele-header-right">
@@ -125,7 +134,7 @@ class DetailTelemedicine extends Component {
 							</select>
 						</div>
 
-						<div className="detail-tele-list-doctors">
+						{/* <div className="detail-tele-list-doctors">
 							<div className="doctor-content">
 								<div className="doctor-content-left">
 									<div className="doctor-img"></div>
@@ -206,7 +215,94 @@ class DetailTelemedicine extends Component {
 									1.500.000đ.<a href="#">Xem chi tiết</a>
 								</h3>
 							</div>
-						</div>
+						</div> */}
+
+						{arrDoctors &&
+							arrDoctors.length > 0 &&
+							arrDoctors.map((item, index) => {
+								return (
+									<>
+										<div
+											className="detail-tele-list-doctors"
+											key={index}
+										>
+											<div className="doctor-content">
+												<div className="doctor-content-left">
+													<div
+														className="doctor-img"
+														style={{
+															backgroundImage: `url(${
+																item.image !==
+																null
+																	? Buffer.from(
+																			item.image,
+																			"base64"
+																	  ).toString(
+																			"binary"
+																	  )
+																	: "https://ihfeducation.ihf.info/images/no_avatar.gif"
+															})`,
+														}}
+													></div>
+													<a href="#">Xem thêm</a>
+												</div>
+												<div className="doctor-infor-telem">
+													<h1>
+														Thạc sĩ Tâm lý học{" "}
+														{item.name}
+													</h1>
+													<div
+														dangerouslySetInnerHTML={{
+															__html: item.description,
+														}}
+													></div>
+
+													<p>
+														<i className="fas fa-map-marker-alt"></i>
+														{item.address}
+													</p>
+												</div>
+											</div>
+											<div className="doctor-schedule">
+												<h2>
+													<i className="fas fa-video"></i>
+													ĐẶT LỊCH TƯ VẤN QUA VIDEO
+												</h2>
+												<button
+													className="booking-now"
+													onClick={() =>
+														this.handleViewBooking(
+															item
+														)
+													}
+												>
+													<Link to="/booking-call-video">
+														Đặt lịch ngay
+														<i class="fa-solid fa-arrow-right"></i>
+													</Link>
+												</button>
+												<p>
+													Chọn{" "}
+													<i className="fas fa-hand-pointer"></i>
+													và đặt (Phí đặt lịch 0đ)
+												</p>
+												<h3>
+													<strong>
+														GIÁ TƯ VẤN QUA VIDEO:
+													</strong>{" "}
+													<NumericFormat
+														className="price-booking-header"
+														value={item.price}
+														displayType={"text"}
+														thousandSeparator={true}
+														suffix={"VNĐ"}
+													/>
+												</h3>
+											</div>
+										</div>
+									</>
+								);
+							})}
 
 						<div className="introduction">
 							<div

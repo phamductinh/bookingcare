@@ -243,6 +243,7 @@
 }
 .doctor-schedule i {
 	padding-right: 8px;
+    font-size: 27px;
 }
 .available-schedule {
 	position: relative;

@@ -23,6 +23,8 @@ class SignUp extends Component {
 		};
 	}
 
+	componentDidMount() {}
+
 	handleOnchangeInput = async (event, id) => {
 		let copyState = { ...this.state };
 		copyState[id] = event.target.value;
@@ -32,23 +34,7 @@ class SignUp extends Component {
 		console.log("check state", this.state);
 	};
 
-	validateModalInput = () => {
-		let isValid = true;
-		let arrInput = ["email", "password", "confirmPass", "fullName"];
-		for (let i = 0; i < arrInput.length; i++) {
-			if (!this.state[arrInput[i]]) {
-				isValid = false;
-				this.setState({
-					errMsgSignUp: "Vui lòng nhập đầy dủ thông tin!",
-				});
-				// alert("Missing " + arrInput[i]);
-				break;
-			}
-		}
-		return isValid;
-	};
-
-	handleAddNewUser = async (data) => {
+	handleAddNewUser = async (event) => {
 		this.setState({
 			errMsgSignUp: "",
 		});
@@ -58,12 +44,19 @@ class SignUp extends Component {
 			fullName: this.state.fullName,
 			role: this.state.role ? this.state.role : "User",
 		};
-		let isValid = this.validateModalInput();
+		event.preventDefault();
+		event.stopPropagation();
+
+		const form = event.currentTarget;
+		if (!form.checkValidity()) {
+			form.classList.add("was-validated");
+			return;
+		}
 		if (newUserData.password !== this.state.confirmPass) {
 			this.setState({
 				errMsgSignUp: "Mật khẩu không trùng nhau!",
 			});
-		} else if (isValid === true) {
+		} else {
 			try {
 				let response = await handleCreateUser(newUserData);
 				toast.success("Tạo tài khoản thành công!");
@@ -91,14 +84,19 @@ class SignUp extends Component {
 			<div className="signup-container">
 				<div className="signup-box">
 					<h2>Tạo tài khoản</h2>
-					<form className="signup-form">
+					<form
+						className="signup-form needs-validation"
+						onSubmit={this.handleAddNewUser}
+						noValidate
+					>
 						<div className="form-container">
 							<div className="input-group">
 								<label>Họ và tên:</label>
 								<input
 									type="text"
+									className="form-control"
 									name="fullName"
-									id="fullName"
+									id="validationCustom01"
 									autoComplete="off"
 									value={this.state.fullName}
 									onChange={(event) =>
@@ -107,13 +105,18 @@ class SignUp extends Component {
 											"fullName"
 										)
 									}
+									required
 								/>
 								<i className="fa-solid fa-user"></i>
+								<div className="invalid-feedback">
+									Vui lòng điền đầy đủ thông tin!
+								</div>
 							</div>
 							<div className="input-group">
 								<label>Email:</label>
 								<input
 									type="email"
+									className="form-control"
 									name="email"
 									id="email"
 									autoComplete="off"
@@ -121,13 +124,18 @@ class SignUp extends Component {
 									onChange={(event) =>
 										this.handleOnchangeInput(event, "email")
 									}
+									required
 								/>
 								<i className="fa-solid fa-envelope"></i>
+								<div className="invalid-feedback">
+									Vui lòng điền đầy đủ thông tin!
+								</div>
 							</div>
 							<div className="input-group">
 								<label>Mật khẩu:</label>
 								<input
 									type="password"
+									className="form-control"
 									name="password"
 									id="password"
 									autoComplete="off"
@@ -138,13 +146,18 @@ class SignUp extends Component {
 											"password"
 										)
 									}
+									required
 								/>
 								<i className="fa-solid fa-lock"></i>
+								<div className="invalid-feedback">
+									Vui lòng điền đầy đủ thông tin!
+								</div>
 							</div>
 							<div className="input-group">
 								<label>Nhập lại mật khẩu:</label>
 								<input
 									type="password"
+									className="form-control"
 									name="cf-password"
 									id="cf-password"
 									autoComplete="off"
@@ -155,8 +168,12 @@ class SignUp extends Component {
 											"confirmPass"
 										)
 									}
+									required
 								/>
 								<i className="fa-solid fa-lock"></i>
+								<div className="invalid-feedback">
+									Vui lòng điền đầy đủ thông tin!
+								</div>
 							</div>
 						</div>
 						<div className="errMsgSignUp">
@@ -164,9 +181,9 @@ class SignUp extends Component {
 						</div>
 						<div className="signup-btn">
 							<button
-								type="button"
+								type="submit"
 								className="btn-signup"
-								onClick={() => this.handleAddNewUser()}
+								// onClick={() => this.handleAddNewUser()}
 							>
 								Sign up
 							</button>

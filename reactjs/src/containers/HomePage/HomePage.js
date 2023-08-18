@@ -15,6 +15,9 @@ class HomePage extends Component {
 			arrTelems: [],
 			arrSpecialty: [],
 			arrDoctors: [],
+            specialty: "",
+			keyword: "",
+			isOpenMenu: false,
 		};
 	}
 
@@ -63,7 +66,7 @@ class HomePage extends Component {
 		});
 	};
 
-	filterDoctors() {
+	async filterDoctors() {
 		let { keyword, specialtyId } = this.state;
 		let arrDoctors = this.state.arrDoctors;
 		let filteredResults;
@@ -85,13 +88,13 @@ class HomePage extends Component {
 			filteredResults = "";
 		}
 		console.log("filter", filteredResults);
-		this.setState({
+		await this.setState({
 			arrDoctorFilter: filteredResults,
 		});
 	}
 
-	handleOpenMenu() {
-		this.setState((prevState) => ({
+	async handleOpenMenu() {
+		await this.setState((prevState) => ({
 			isOpenMenu: !prevState.isOpenMenu,
 		}));
 	}
@@ -1015,7 +1018,7 @@ class HomePage extends Component {
 									title="HỆ THỐNG ĐẶT LỊCH KHÁM TRỰC TUYẾN"
 									frameBorder="0"
 									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-									allowFullscreen
+									allowFullScreen
 								></iframe>
 							</div>
 						</div>
