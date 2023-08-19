@@ -7,6 +7,7 @@ import "./BookingCall.css";
 import { bookingAnAppointmentService } from "../../../services/bookingService";
 import { toast } from "react-toastify";
 import * as actions from "../../../store/actions/";
+import { v4 as uuidv4 } from "uuid";
 
 class BookingCall extends Component {
 	constructor(props) {
@@ -59,6 +60,8 @@ class BookingCall extends Component {
 		let year = formattedDate.getFullYear();
 
 		let formattedDateString = `${day}/${month}/${year}`;
+		let idRoom = uuidv4();
+
 		let data = {
 			userId: this.props.userInfor.id,
 			doctorId: this.props.match.params.id,
@@ -74,8 +77,10 @@ class BookingCall extends Component {
 			receiverEmail: this.props.userInfor.email,
 			doctorName: this.state.detailDoctor.name,
 			booking_date_formated: formattedDateString,
+			isTelemedicine: 1,
+			exam_time: this.state.bookingTime,
+			idRoom: idRoom,
 		};
-		console.log("data", data);
 		try {
 			this.setState({
 				errMsgSignUp: "",
@@ -109,7 +114,6 @@ class BookingCall extends Component {
 			let time = i + ":00";
 			arrTime.push(time);
 		}
-		console.log(detailDoctor);
 		return (
 			<>
 				<div className="booking-detail-doctor-container">
@@ -172,7 +176,13 @@ class BookingCall extends Component {
 											type="radio"
 											name="booking-time"
 											id="booking-time"
-											checked
+											value="60p"
+											onChange={(event) =>
+												this.handleOnchangeInput(
+													event,
+													"bookingTime"
+												)
+											}
 										/>
 										<span>Thời lượng 60 phút</span>
 										<div>
@@ -193,6 +203,13 @@ class BookingCall extends Component {
 											type="radio"
 											name="booking-time"
 											id="booking-time"
+											value="120p"
+											onChange={(event) =>
+												this.handleOnchangeInput(
+													event,
+													"bookingTime"
+												)
+											}
 										/>
 										<span>Thời lượng 120 phút</span>
 										<div>

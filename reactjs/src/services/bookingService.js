@@ -16,6 +16,10 @@ const getBookingByDate = (date) => {
 	return axios.get(`/api/get-booking-by-date?booking_date=${date}`);
 };
 
+const getTelemedicineBookingByDate = (date) => {
+	return axios.get(`/api/get-telemedicine-booking-by-date?booking_date=${date}`);
+};
+
 const confirmBooking = (bookingId) => {
 	return axios.put(`/api/confirm-booking?id=${bookingId}`);
 };
@@ -36,4 +40,5 @@ export {
 	getAllConfirmedBooking,
 	finishBooking,
 	getAllFinishedBooking,
+    getTelemedicineBookingByDate
 };

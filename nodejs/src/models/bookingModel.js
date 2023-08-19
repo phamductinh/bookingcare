@@ -9,6 +9,7 @@ import {
 	findAllConfirmedBookingQuery,
 	finishBookingQuery,
 	findAllFinishedBookingQuery,
+	getTelemedicineBookingByDateQuery,
 } from "../database/queries";
 import emailService from "../services/emailService";
 
@@ -65,6 +66,9 @@ let bookingAnAppointmentModel = (data, callback) => {
 		address,
 		reason,
 		status = "Pending",
+		isTelemedicine,
+		exam_time,
+		idRoom,
 	} = data;
 	if (!userId || !doctorId || !booking_date || !booking_time || !fullName) {
 		let error = new Error("Missing input!");
@@ -87,14 +91,26 @@ let bookingAnAppointmentModel = (data, callback) => {
 				error.statusCode = 409;
 				return callback(error);
 			}
+			if (isTelemedicine == 1) {
+				await emailService.sendTelemedicineEmail({
+					receiverEmail: data.receiverEmail,
+					fullName: data.fullName,
+					booking_date: data.booking_date_formated,
+					booking_time: data.booking_time,
+					exam_time: data.exam_time,
+					doctorName: data.doctorName,
+					idRoom: data.idRoom,
+				});
+			} else {
+				await emailService.sendSimpleEmail({
+					receiverEmail: data.receiverEmail,
+					fullName: data.fullName,
+					booking_date: data.booking_date_formated,
+					booking_time: data.booking_time,
+					doctorName: data.doctorName,
+				});
+			}
 
-			await emailService.sendSimpleEmail({
-				receiverEmail: data.receiverEmail,
-				fullName: data.fullName,
-				booking_date: data.booking_date_formated,
-				booking_time: data.booking_time,
-				doctorName: data.doctorName,
-			});
 			db.query(
 				bookingAnAppointmentQuery,
 				[
@@ -109,6 +125,9 @@ let bookingAnAppointmentModel = (data, callback) => {
 					address,
 					reason,
 					status,
+					isTelemedicine,
+					exam_time,
+					idRoom,
 				],
 				(err, results) => {
 					if (err) {
@@ -123,6 +142,14 @@ let bookingAnAppointmentModel = (data, callback) => {
 
 let getBookingByDateModel = (date, callback) => {
 	db.query(getBookingByDateQuery, date, (error, results) => {
+		if (error) {
+			return callback(error);
+		}
+		return callback(null, results);
+	});
+};
+let getTelemedicineBookingByDateModel = (date, callback) => {
+	db.query(getTelemedicineBookingByDateQuery, date, (error, results) => {
 		if (error) {
 			return callback(error);
 		}
@@ -146,4 +173,5 @@ module.exports = {
 	getAllConfirmedBookingModel,
 	finishBookingModel,
 	getAllFinishedBookingModel,
+	getTelemedicineBookingByDateModel,
 };

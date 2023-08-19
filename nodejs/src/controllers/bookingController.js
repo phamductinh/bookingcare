@@ -110,6 +110,26 @@ let getBookingByDate = (req, res) => {
 	});
 };
 
+let getTelemedicineBookingByDate = (req, res) => {
+	let date = req.query.booking_date;
+	if (!date) {
+		return res.status(400).send({ code: 400, msg: "Missing input!" });
+	}
+
+	bookingModel.getTelemedicineBookingByDateModel(date, (error, results) => {
+		if (error) {
+			console.log(error);
+			return res
+				.status(500)
+				.send({ code: 500, msg: "Internal server error" });
+		}
+		return res.send({
+			code: 200,
+			data: results,
+		});
+	});
+};
+
 let deleteBooking = (req, res) => {
 	let bookingId = req.query.id;
 	if (!bookingId) {
@@ -132,5 +152,6 @@ module.exports = {
 	deleteBooking,
     getAllConfirmedBooking,
     finishBooking,
-    getAllFinishedBooking
+    getAllFinishedBooking,
+    getTelemedicineBookingByDate
 };

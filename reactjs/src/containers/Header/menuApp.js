@@ -42,6 +42,10 @@ export const adminMenu = [
 				link: "/system/manage-booking",
 			},
 			{
+				name: "menu.admin.manage-telemedicine-booking",
+				link: "/system/manage-telemedicine-booking",
+			},
+			{
 				name: "menu.admin.manage-confirmed-booking",
 				link: "/system/manage-confirmed-booking",
 			},

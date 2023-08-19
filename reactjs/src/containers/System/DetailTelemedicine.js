@@ -114,12 +114,8 @@ class DetailTelemedicine extends Component {
 								lịch tư vấn phù hợp.
 							</p>
 						</div>
-						<p id="infor-show-more" onClick="show_more_infor()">
-							Đọc thêm
-						</p>
-						<p id="infor-show-less" onClick="show_more_infor()">
-							Ẩn bớt
-						</p>
+						<p id="infor-show-more">Đọc thêm</p>
+						<p id="infor-show-less">Ẩn bớt</p>
 					</div>
 
 					<div className="detail-tele-list-doctors-container">
@@ -221,94 +217,86 @@ class DetailTelemedicine extends Component {
 							arrDoctors.length > 0 &&
 							arrDoctors.map((item, index) => {
 								return (
-									<>
-										<div
-											className="detail-tele-list-doctors"
-											key={index}
-										>
-											<div className="doctor-content">
-												<div className="doctor-content-left">
-													<div
-														className="doctor-img"
-														style={{
-															backgroundImage: `url(${
-																item.image !==
-																null
-																	? Buffer.from(
-																			item.image,
-																			"base64"
-																	  ).toString(
-																			"binary"
-																	  )
-																	: "https://ihfeducation.ihf.info/images/no_avatar.gif"
-															})`,
-														}}
-													></div>
-													<a href="#">Xem thêm</a>
-												</div>
-												<div className="doctor-infor-telem">
-													<h1>
-														Thạc sĩ Tâm lý học{" "}
-														{item.name}
-													</h1>
-													<div
-														dangerouslySetInnerHTML={{
-															__html: item.description,
-														}}
-													></div>
-
-													<p>
-														<i className="fas fa-map-marker-alt"></i>
-														{item.address}
-													</p>
-												</div>
+									<div
+										className="detail-tele-list-doctors"
+										key={index}
+									>
+										<div className="doctor-content">
+											<div className="doctor-content-left">
+												<div
+													className="doctor-img"
+													style={{
+														backgroundImage: `url(${
+															item.image !== null
+																? Buffer.from(
+																		item.image,
+																		"base64"
+																  ).toString(
+																		"binary"
+																  )
+																: "https://ihfeducation.ihf.info/images/no_avatar.gif"
+														})`,
+													}}
+												></div>
+												<a href="#">Xem thêm</a>
 											</div>
-											<div className="doctor-schedule">
-												<h2>
-													<i className="fas fa-video"></i>
-													ĐẶT LỊCH TƯ VẤN QUA VIDEO
-												</h2>
-												<button
-													className="booking-now"
-													onClick={() =>
-														this.handleViewBooking(
-															item
-														)
-													}
-												>
-													<Link to="/booking-call-video">
-														Đặt lịch ngay
-														<i class="fa-solid fa-arrow-right"></i>
-													</Link>
-												</button>
+											<div className="doctor-infor-telem">
+												<h1>
+													Thạc sĩ Tâm lý học{" "}
+													{item.name}
+												</h1>
+												<div
+													dangerouslySetInnerHTML={{
+														__html: item.description,
+													}}
+												></div>
+
 												<p>
-													Chọn{" "}
-													<i className="fas fa-hand-pointer"></i>
-													và đặt (Phí đặt lịch 0đ)
+													<i className="fas fa-map-marker-alt"></i>
+													{item.address}
 												</p>
-												<h3>
-													<strong>
-														GIÁ TƯ VẤN QUA VIDEO:
-													</strong>{" "}
-													<NumericFormat
-														className="price-booking-header"
-														value={item.price}
-														displayType={"text"}
-														thousandSeparator={true}
-														suffix={"VNĐ"}
-													/>
-												</h3>
 											</div>
 										</div>
-									</>
+										<div className="doctor-schedule">
+											<h2>
+												<i className="fas fa-video"></i>
+												ĐẶT LỊCH TƯ VẤN QUA VIDEO
+											</h2>
+											<button
+												className="booking-now"
+												onClick={() =>
+													this.handleViewBooking(item)
+												}
+											>
+												<Link to="/booking-call-video">
+													Đặt lịch ngay
+													<i className="fa-solid fa-arrow-right"></i>
+												</Link>
+											</button>
+											<p>
+												Chọn{" "}
+												<i className="fas fa-hand-pointer"></i>
+												và đặt (Phí đặt lịch 0đ)
+											</p>
+											<h3>
+												<strong>
+													GIÁ TƯ VẤN QUA VIDEO:
+												</strong>{" "}
+												<NumericFormat
+													className="price-booking-header"
+													value={item.price}
+													displayType={"text"}
+													thousandSeparator={true}
+													suffix={"VNĐ"}
+												/>
+											</h3>
+										</div>
+									</div>
 								);
 							})}
 
 						<div className="introduction">
-							<div
-								className="bookingcare-role-btn"
-								onClick="hiden_introduction()"
-							>
+							<div className="bookingcare-role-btn">
 								<p>Vai trò của BookingCare</p>
 							</div>
 							<div

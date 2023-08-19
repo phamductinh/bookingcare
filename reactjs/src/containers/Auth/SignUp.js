@@ -34,6 +34,26 @@ class SignUp extends Component {
 		console.log("check state", this.state);
 	};
 
+	validateFullName(fullName) {
+		if (fullName.length > 100) {
+			return false;
+		}
+		let regex = /^[a-zA-Z\s]+$/;
+		return regex.test(fullName);
+	}
+
+	validateEmail(email) {
+		let regex =
+			/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+		return regex.test(email);
+	}
+
+	validatePassword(password) {
+		let regex =
+			/^(?=.*[A-Z])(?=.*[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/])(?=.*[a-zA-Z]).{8,30}$/;
+		return regex.test(password);
+	}
+
 	handleAddNewUser = async (event) => {
 		this.setState({
 			errMsgSignUp: "",
@@ -50,9 +70,19 @@ class SignUp extends Component {
 		const form = event.currentTarget;
 		if (!form.checkValidity()) {
 			form.classList.add("was-validated");
-			return;
-		}
-		if (newUserData.password !== this.state.confirmPass) {
+		} else if (!this.validateFullName(this.state.fullName)) {
+			this.setState({
+				errMsgSignUp: "Tên không được chứa kí tự đặc biệt!",
+			});
+		} else if (!this.validateEmail(this.state.email)) {
+			this.setState({
+				errMsgSignUp: "Email sai định dạng!",
+			});
+		} else if (!this.validatePassword(this.state.password)) {
+			this.setState({
+				errMsgSignUp: "Password sai định dạng!",
+			});
+		} else if (newUserData.password !== this.state.confirmPass) {
 			this.setState({
 				errMsgSignUp: "Mật khẩu không trùng nhau!",
 			});

@@ -74,8 +74,8 @@ class Booking extends Component {
 			receiverEmail: this.props.userInfor.email,
 			doctorName: this.state.detailDoctor.name,
 			booking_date_formated: formattedDateString,
+            isTelemedicine: 1
 		};
-		console.log("data", data);
 		try {
 			this.setState({
 				errMsgSignUp: "",

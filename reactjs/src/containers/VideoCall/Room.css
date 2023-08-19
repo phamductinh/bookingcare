@@ -382,31 +382,30 @@
 	border-radius: 7px;
 }
 
+.mute-mic {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
 .mute-mic i {
 	font-size: 25px;
-	margin-left: 60px;
+	margin-left: 120px;
 	margin-bottom: 15px;
-	position: absolute;
-	left: 0;
-	bottom: 0;
 	cursor: pointer;
-    color: #fff;
+	color: #fff;
 }
 
 .mute-mic .mute-video i {
 	font-size: 25px;
-	margin-left: 120px;
+	margin-left: 70px;
 	margin-bottom: 15px;
-	position: absolute;
-	left: 0;
-	bottom: 0;
 	cursor: pointer;
 }
 
-
 .mute-mic {
 	display: none;
-    transition: linear 2s;
+	transition: linear 2s;
 }
 
 .video-box:hover .mute-mic {

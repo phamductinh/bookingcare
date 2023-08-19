@@ -67,6 +67,7 @@ let initWebRoutes = (app) => {
 		bookingController.bookingAnAppointment
 	);
 	router.get("/api/get-booking-by-date", bookingController.getBookingByDate);
+	router.get("/api/get-telemedicine-booking-by-date", bookingController.getTelemedicineBookingByDate);
 	router.get(
 		"/api/get-all-confirmed-booking",
 		bookingController.getAllConfirmedBooking
