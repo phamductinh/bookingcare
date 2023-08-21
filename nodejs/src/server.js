@@ -9,6 +9,8 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 // const { ExpressPeerServer } = require("peer");
 require("dotenv").config();
+import db from "../configs/connectDB";
+import { getEmailPatientsQuery } from "../database/queries";
 
 // const peerServer = ExpressPeerServer(server, {
 // 	debug: true,
@@ -111,6 +113,24 @@ io.on("connection", (socket) => {
 		console.log("user disconnect", socket.id);
 	});
 });
+
+function sendRemindEmail() {
+	db.query(getEmailPatientsQuery, (err, results) => {
+		if (err) {
+			console.error("Lỗi khi truy vấn dữ liệu:", err);
+			return;
+		}
+		results.forEach((patient) => {
+			const patientId = patient.id;
+			const patientEmail = patient.email;
+
+			const reminderJob = schedule.scheduleJob(reminderDate, () => {
+				sendReminderEmail(appointmentDate, patientEmail);
+				reminderJob.cancel();
+			});
+		});
+	});
+}
 
 server.listen(port, () => {
 	console.log("Nodejs is running on port " + port);
