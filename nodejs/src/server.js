@@ -9,8 +9,10 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 // const { ExpressPeerServer } = require("peer");
 require("dotenv").config();
-import db from "../configs/connectDB";
-import { getEmailPatientsQuery } from "../database/queries";
+import db from "./configs/connectDB";
+import { getEmailPatientsQuery } from "./database/queries";
+const schedule = require("node-schedule");
+import emailService from "./services/emailService";
 
 // const peerServer = ExpressPeerServer(server, {
 // 	debug: true,
@@ -114,23 +116,56 @@ io.on("connection", (socket) => {
 	});
 });
 
-function sendRemindEmail() {
-	db.query(getEmailPatientsQuery, (err, results) => {
+sendRemindEmail();
+
+async function sendRemindEmail() {
+	await db.query(getEmailPatientsQuery, (err, results) => {
 		if (err) {
 			console.error("Lỗi khi truy vấn dữ liệu:", err);
 			return;
 		}
+        console.log(results)
 		results.forEach((patient) => {
 			const patientId = patient.id;
-			const patientEmail = patient.email;
+			const fullName = patient.fullName;
+			const receiverEmail = patient.patientEmail;
+			const doctorName = patient.doctorName;
+			const booking_date = patient.booking_date;
+			const booking_time = patient.booking_time;
+			const exam_time = patient.exam_time;
+			const idRoom = patient.idRoom;
+			const appointmentDate = new Date(patient.booking_date);
+			const reminderDate = new Date(
+				appointmentDate.getTime() - 24 * 60 * 60 * 1000
+			);
+
 
 			const reminderJob = schedule.scheduleJob(reminderDate, () => {
-				sendReminderEmail(appointmentDate, patientEmail);
+				emailService.sendReminderEmail(
+					receiverEmail,
+					fullName,
+					booking_date,
+					booking_time,
+					exam_time,
+					doctorName,
+					idRoom
+				);
 				reminderJob.cancel();
 			});
 		});
 	});
 }
+
+// const currentDate = new Date(); // Lấy thời gian hiện tại
+
+// currentDate.setMinutes(currentDate.getMinutes() + 1);
+
+// const receiverEmail = "phamductinh.t18@gmail.com";
+
+// const reminderJob = schedule.scheduleJob(currentDate, () => {
+// 	emailService.sendReminderEmail();
+// 	reminderJob.cancel();
+// });
 
 server.listen(port, () => {
 	console.log("Nodejs is running on port " + port);

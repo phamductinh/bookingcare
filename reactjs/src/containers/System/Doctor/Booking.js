@@ -48,6 +48,7 @@ class Booking extends Component {
 		await this.setState({
 			...copyState,
 		});
+		
 	};
 
 	handleBooking = async () => {
@@ -74,7 +75,7 @@ class Booking extends Component {
 			receiverEmail: this.props.userInfor.email,
 			doctorName: this.state.detailDoctor.name,
 			booking_date_formated: formattedDateString,
-            isTelemedicine: 1
+			isTelemedicine: 1,
 		};
 		try {
 			this.setState({
@@ -109,7 +110,7 @@ class Booking extends Component {
 			let time = i + ":00";
 			arrTime.push(time);
 		}
-		console.log(detailDoctor);
+		console.log(new Date(1686441600000));
 		return (
 			<>
 				<div className="booking-detail-doctor-container">

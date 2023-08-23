@@ -53,10 +53,16 @@ let findBookedAppointmentQuery =
 let bookingAnAppointmentQuery = `INSERT INTO booking (userId, doctorId, booking_date, booking_time,fullName, gender, phoneNumber, birthday, address, reason, status, isTelemedicine, exam_time, idRoom) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
 let getBookingByDateQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
-FROM booking 
+FROM booking
 JOIN user ON user.id = booking.userId
 JOIN doctor ON doctor.id = booking.doctorId
 WHERE status = 'Pending' AND booking_date = ?`;
+
+let getEmailPatientsQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
+FROM booking
+JOIN user ON user.id = booking.userId
+JOIN doctor ON doctor.id = booking.doctorId
+WHERE status = 'Pending' AND isTelemedicine = 1`;
 
 let getTelemedicineBookingByDateQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
 FROM booking 
@@ -79,7 +85,8 @@ let createRoomQuery = `INSERT INTO room (code, status) VALUES (?,?)`;
 let findRoomByCode = `SELECT * FROM room WHERE code = ?`;
 
 module.exports = {
-    getTelemedicineBookingByDateQuery,
+	getEmailPatientsQuery,
+	getTelemedicineBookingByDateQuery,
 	findDoctorIsTelemedicine,
 	findRoomByCode,
 	createRoomQuery,
