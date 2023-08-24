@@ -13,6 +13,7 @@ import db from "./configs/connectDB";
 import { getEmailPatientsQuery } from "./database/queries";
 const schedule = require("node-schedule");
 import emailService from "./services/emailService";
+const moment = require("moment");
 
 // const peerServer = ExpressPeerServer(server, {
 // 	debug: true,
@@ -124,34 +125,45 @@ async function sendRemindEmail() {
 			console.error("Lỗi khi truy vấn dữ liệu:", err);
 			return;
 		}
-        console.log(results)
+		console.log(results);
 		results.forEach((patient) => {
-			const patientId = patient.id;
-			const fullName = patient.fullName;
-			const receiverEmail = patient.patientEmail;
-			const doctorName = patient.doctorName;
-			const booking_date = patient.booking_date;
-			const booking_time = patient.booking_time;
-			const exam_time = patient.exam_time;
-			const idRoom = patient.idRoom;
-			const appointmentDate = new Date(patient.booking_date);
-			const reminderDate = new Date(
+			let patientId = patient.id;
+			let fullName = patient.fullName;
+			let receiverEmail = patient.patientEmail;
+			let doctorName = patient.doctorName;
+			let booking_time = patient.booking_time;
+			let exam_time = patient.exam_time;
+			let idRoom = patient.idRoom;
+			let appointmentDate = new Date(parseInt(patient.booking_date));
+			let reminderDate = new Date(
 				appointmentDate.getTime() - 24 * 60 * 60 * 1000
 			);
+			// reminderDate.setUTCHours(17, 8);
+			let day = appointmentDate.getDate();
+			let month = appointmentDate.getMonth() + 1;
+			let year = appointmentDate.getFullYear();
 
+			let booking_date = `${day}/${month}/${year}`;
 
-			const reminderJob = schedule.scheduleJob(reminderDate, () => {
-				emailService.sendReminderEmail(
-					receiverEmail,
-					fullName,
-					booking_date,
-					booking_time,
-					exam_time,
-					doctorName,
-					idRoom
+			console.log(reminderDate);
+
+			(async () => {
+				const reminderJob = schedule.scheduleJob(
+					reminderDate,
+					async () => {
+						await emailService.sendReminderEmail({
+							receiverEmail,
+							fullName,
+							booking_date,
+							booking_time,
+							exam_time,
+							doctorName,
+							idRoom,
+						});
+						reminderJob.cancel();
+					}
 				);
-				reminderJob.cancel();
-			});
+			})();
 		});
 	});
 }

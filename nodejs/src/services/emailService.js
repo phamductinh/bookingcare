@@ -36,7 +36,7 @@ let sendReminderEmail = async (dataSend) => {
 	let info = await transporter.sendMail({
 		from: '"Phạm Đức Tịnh 👻" <phamductinh.t18@gmail.com>', // sender address
 		to: dataSend.receiverEmail, // list of receivers
-		subject: "Thông tin đặt lịch khám bệnh", // Subject line
+		subject: "Nhắc hẹn", // Subject line
 		html: getBodyReminderEmail(dataSend),
 	});
 };
