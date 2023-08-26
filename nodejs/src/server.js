@@ -9,17 +9,7 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 // const { ExpressPeerServer } = require("peer");
 require("dotenv").config();
-import db from "./configs/connectDB";
-import { getEmailPatientsQuery } from "./database/queries";
-const schedule = require("node-schedule");
-import emailService from "./services/emailService";
-const moment = require("moment");
-
-// const peerServer = ExpressPeerServer(server, {
-// 	debug: true,
-// });
-
-// app.use("/peerjs", peerServer);
+import { sendRemindEmail } from "./sendEmail";
 
 const users = {};
 const socketToRoom = {};
@@ -119,56 +109,7 @@ io.on("connection", (socket) => {
 
 sendRemindEmail();
 
-async function sendRemindEmail() {
-	await db.query(getEmailPatientsQuery, (err, results) => {
-		if (err) {
-			console.error("Lỗi khi truy vấn dữ liệu:", err);
-			return;
-		}
-		console.log(results);
-		results.forEach((patient) => {
-			let patientId = patient.id;
-			let fullName = patient.fullName;
-			let receiverEmail = patient.patientEmail;
-			let doctorName = patient.doctorName;
-			let booking_time = patient.booking_time;
-			let exam_time = patient.exam_time;
-			let idRoom = patient.idRoom;
-			let appointmentDate = new Date(parseInt(patient.booking_date));
-			let reminderDate = new Date(
-				appointmentDate.getTime() - 24 * 60 * 60 * 1000
-			);
-			// reminderDate.setUTCHours(17, 8);
-			let day = appointmentDate.getDate();
-			let month = appointmentDate.getMonth() + 1;
-			let year = appointmentDate.getFullYear();
-
-			let booking_date = `${day}/${month}/${year}`;
-
-			console.log(reminderDate);
-
-			(async () => {
-				const reminderJob = schedule.scheduleJob(
-					reminderDate,
-					async () => {
-						await emailService.sendReminderEmail({
-							receiverEmail,
-							fullName,
-							booking_date,
-							booking_time,
-							exam_time,
-							doctorName,
-							idRoom,
-						});
-						reminderJob.cancel();
-					}
-				);
-			})();
-		});
-	});
-}
-
-// const currentDate = new Date(); // Lấy thời gian hiện tại
+// const currentDate = new Date();
 
 // currentDate.setMinutes(currentDate.getMinutes() + 1);
 

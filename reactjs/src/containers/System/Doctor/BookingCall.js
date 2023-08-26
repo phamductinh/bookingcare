@@ -83,27 +83,27 @@ class BookingCall extends Component {
 			exam_time: this.state.bookingTime,
 			idRoom: idRoom,
 		};
-		// try {
-		// 	this.setState({
-		// 		errMsgSignUp: "",
-		// 		isLoading: true,
-		// 	});
-		// 	let response = await bookingAnAppointmentService(data);
-		// 	console.log("check response", response);
-		// 	toast.success("Booking successfully !");
-		// 	this.setState({
-		// 		isLoading: false,
-		// 	});
-		// } catch (error) {
-		// 	console.log(error);
-		// 	if (error.response) {
-		// 		if (error.response.data) {
-		// 			this.setState({
-		// 				errMsgSignUp: error.response.data.msg,
-		// 			});
-		// 		}
-		// 	}
-		// }
+		try {
+			this.setState({
+				errMsgSignUp: "",
+				isLoading: true,
+			});
+			let response = await bookingAnAppointmentService(data);
+			console.log("check response", response);
+			toast.success("Booking successfully !");
+			this.setState({
+				isLoading: false,
+			});
+		} catch (error) {
+			console.log(error);
+			if (error.response) {
+				if (error.response.data) {
+					this.setState({
+						errMsgSignUp: error.response.data.msg,
+					});
+				}
+			}
+		}
 	};
 
 	render() {
