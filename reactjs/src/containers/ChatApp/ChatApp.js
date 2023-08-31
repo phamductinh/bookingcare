@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { auth, FBProvider } from "../../firebase/config";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import { Link } from "react-router-dom";
 import "./ChatApp.css";
 
@@ -13,17 +13,21 @@ class ChatApp extends Component {
 		};
 	}
 
-	componentDidMount() {}
+	componentDidMount() {
+		const uns = onAuthStateChanged(auth, (user) => {
+			console.log({ user });
+		});
+	}
 
 	async handleLoginWithFB() {
 		await signInWithPopup(auth, FBProvider);
 	}
 
-	async handleOpenChatBox() {
+	handleOpenChatBox = async () => {
 		await this.setState((prevState) => ({
 			isShowChat: !prevState.isShowChat,
 		}));
-	}
+	};
 
 	render() {
 		let { isShowChat } = this.state;
