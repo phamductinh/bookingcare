@@ -3,18 +3,14 @@ import { connect } from "react-redux";
 import { auth, FBProvider, db } from "../../firebase/config";
 import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import {
-	doc,
-	setDoc,
-	getFirestore,
-	getDoc,
-	onSnapshot,
+	getDocs,
 	collection,
 	addDoc,
 	orderBy,
 	query,
+	onSnapshot,
 	serverTimestamp,
 } from "firebase/firestore";
-import { Link } from "react-router-dom";
 import "./ChatApp.css";
 
 class ChatApp extends Component {
@@ -23,26 +19,32 @@ class ChatApp extends Component {
 		this.state = {
 			isShowChat: false,
 			user: "",
-            messages: [],
-            newMessage: ""
+			messages: [],
+			newMessage: "",
 		};
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
 		const uns = onAuthStateChanged(auth, (user) => {
 			this.setState({
 				user: user,
 			});
 		});
 
-		const q = query(collection(db, "messages", orderBy("timestamp")));
-		const unsubscribe = onSnapshot(q, (snapshot) => {
-			this.setState(
-				snapshot.docs.map((doc) => ({
-					id: doc.id,
-					data: doc.data(),
-				}))
-			);
+		const q = query(collection(db, "messages"), orderBy("timestamp"));
+		const unsubscribe = onSnapshot(q, (querySnapshot) => {
+			const messages = [];
+			querySnapshot.forEach((doc) => {
+				messages.push(doc.data());
+			});
+
+			this.setState({
+				messages: messages,
+			});
+		});
+
+		this.setState({
+			unsubscribe: unsubscribe,
 		});
 
 		return unsubscribe;
@@ -50,7 +52,10 @@ class ChatApp extends Component {
 
 	async handleLoginWithFB() {
 		const data = await signInWithPopup(auth, FBProvider);
-		console.log("data", data);
+	}
+
+	async handleSignOut() {
+		auth.signOut();
 	}
 
 	handleOpenChatBox = async () => {
@@ -62,40 +67,113 @@ class ChatApp extends Component {
 	sendMessage = async () => {
 		await addDoc(collection(db, "messages"), {
 			uid: this.state.user.uid,
-			photoURL: this.state.photoURL,
-			displayName: this.state.displayName,
+			photoURL: this.state.user.photoURL,
+			displayName: this.state.user.displayName,
 			text: this.state.newMessage,
 			timestamp: serverTimestamp(),
 		});
+		await this.setState({
+			newMessage: "",
+		});
 	};
 
+	handleOnchangeMessage = (event) => {
+		this.setState({
+			newMessage: event.target.value,
+		});
+	};
+
+	componentWillUnmount() {
+		if (this.state.unsubscribe) {
+			this.state.unsubscribe();
+		}
+	}
+
 	render() {
-		let { isShowChat, user } = this.state;
-		console.log(user);
+		let { isShowChat, user, messages } = this.state;
+		let currentUser = auth.currentUser;
 		return (
 			<>
 				<div>
 					<button
-						class="btn-messenger"
+						className="btn-messenger"
 						onClick={() => this.handleOpenChatBox()}
 					>
-						<i class="fa-brands fa-facebook-messenger"></i>
+						<i className="fa-brands fa-facebook-messenger"></i>
 					</button>
 					{isShowChat && (
-						<div class="messenger-box">
-							<span class="messenger-title">Chat with Admin</span>
+						<div className="messenger-box">
+							<div className="messenger-header">
+								<span className="messenger-title">
+									Chat with Admin
+								</span>
+								{user ? (
+									<button
+										className="btn-messenger-logout"
+										onClick={() => this.handleSignOut()}
+									>
+										End
+									</button>
+								) : (
+									""
+								)}
+							</div>
 							{user ? (
 								<div>
-									<div class="comments"></div>
+									<div className="comments">
+										{messages.map((msg, index) => (
+											<div
+												key={index}
+												className={`message-content ${
+													msg.uid === currentUser.uid
+														? "sent"
+														: "received"
+												}`}
+											>
+												<p className="message-name">
+													{msg.displayName}
+												</p>
+												<div
+													className={`message-under ${
+														msg.uid ===
+														currentUser.uid
+															? "message-send"
+															: ""
+													}`}
+												>
+													<div
+														className="message-avt"
+														style={{
+															backgroundImage: `url(${msg.photoURL})`,
+														}}
+													></div>
+													<h3 className="message-message">
+														{msg.text}
+													</h3>
+												</div>
+											</div>
+										))}
+									</div>
 
-									<div class="text-box">
-										<div class="box-container">
-											<textarea placeholder="Chat"></textarea>
-											<div class="formatting">
+									<div className="text-box">
+										<div className="box-container">
+											<textarea
+												placeholder="Chat"
+												value={this.state.newMessage}
+												onChange={(event) =>
+													this.handleOnchangeMessage(
+														event
+													)
+												}
+											></textarea>
+											<div className="formatting">
 												<button
-													type="submit"
-													class="send"
+													type="button"
+													className="send"
 													title="Send"
+													onClick={() =>
+														this.sendMessage()
+													}
 												>
 													<svg
 														fill="none"
@@ -105,16 +183,16 @@ class ChatApp extends Component {
 														xmlns="http://www.w3.org/2000/svg"
 													>
 														<path
-															stroke-linejoin="round"
-															stroke-linecap="round"
-															stroke-width="2.5"
+															strokeLinejoin="round"
+															strokeLinecap="round"
+															strokeWidth="2.5"
 															stroke="#ffffff"
 															d="M12 5L12 20"
 														></path>
 														<path
-															stroke-linejoin="round"
-															stroke-linecap="round"
-															stroke-width="2.5"
+															strokeLinejoin="round"
+															strokeLinecap="round"
+															strokeWidth="2.5"
 															stroke="#ffffff"
 															d="M7 9L11.2929 4.70711C11.6262 4.37377 11.7929 4.20711 12 4.20711C12.2071 4.20711 12.3738 4.37377 12.7071 4.70711L17 9"
 														></path>
@@ -126,12 +204,12 @@ class ChatApp extends Component {
 								</div>
 							) : (
 								<div>
-									<p class="chat-text">
+									<p className="chat-text">
 										Xin chào. Chúng tôi có thể giúp gì cho
 										bạn?
 									</p>
 									<button
-										class="btn-start-chat"
+										className="btn-start-chat"
 										onClick={() => this.handleLoginWithFB()}
 									>
 										Bắt đầu chat

@@ -17,8 +17,9 @@
 }
 
 .messenger-title {
-	width: 100%;
+	width: 80%;
 	height: 50px;
+	padding-bottom: 10px;
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -35,13 +36,6 @@
 	height: 1px;
 	position: absolute;
 	bottom: -1px;
-}
-
-.comments {
-	padding: 10px;
-	width: 94%;
-	height: 200px;
-	overflow-y: hidden;
 }
 
 .comment-react {
@@ -293,4 +287,86 @@
 .fa-facebook-messenger {
 	color: #fff;
 	font-size: 40px;
+}
+
+.messenger-header {
+	display: flex;
+}
+
+.btn-messenger-logout {
+	width: 60px;
+	height: 35px;
+	border: none;
+	border-radius: 10px;
+	font-weight: bold;
+}
+
+.btn-messenger-logout:hover {
+	background-color: #88888a;
+}
+
+.message-name {
+	margin: 0;
+	padding: 0;
+	font-size: 11px;
+	font-weight: 500;
+}
+
+.message-message {
+	background-color: #1778f2;
+	color: white;
+	width: fit-content;
+	padding: 6px;
+	font-size: 15px;
+	margin-bottom: 0;
+	border-radius: 7px;
+	overflow-wrap: break-word;
+	max-width: 200px;
+}
+
+.message-content {
+	width: 100%;
+	max-width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin: 5px 0;
+}
+
+.comments {
+	padding: 7px;
+	width: 100%;
+	height: 220px;
+	overflow-y: scroll;
+}
+.comments::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.sent {
+	align-items: flex-end;
+}
+
+.received {
+	align-items: flex-start;
+}
+
+.message-send {
+	flex-direction: row-reverse;
+}
+
+.message-avt {
+	width: 30px;
+	height: 30px;
+	margin: auto 5px;
+	border-radius: 50%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.message-under {
+	display: flex;
 }
