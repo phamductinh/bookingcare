@@ -312,16 +312,23 @@
 	font-weight: 500;
 }
 
-.message-message {
-	background-color: #1778f2;
-	color: white;
+.message-text {
 	width: fit-content;
 	padding: 6px;
 	font-size: 15px;
 	margin-bottom: 0;
 	border-radius: 7px;
 	overflow-wrap: break-word;
-	max-width: 200px;
+	max-width: 150px;
+}
+
+.message-text-sent {
+	background-color: #b6b6b8;
+}
+
+.message-text-received {
+	background-color: #1778f2;
+	color: white;
 }
 
 .message-content {
@@ -353,7 +360,7 @@
 	align-items: flex-start;
 }
 
-.message-send {
+.message-sent {
 	flex-direction: row-reverse;
 }
 

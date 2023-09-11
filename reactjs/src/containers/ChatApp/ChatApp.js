@@ -137,7 +137,7 @@ class ChatApp extends Component {
 													className={`message-under ${
 														msg.uid ===
 														currentUser.uid
-															? "message-send"
+															? "message-sent"
 															: ""
 													}`}
 												>
@@ -147,7 +147,14 @@ class ChatApp extends Component {
 															backgroundImage: `url(${msg.photoURL})`,
 														}}
 													></div>
-													<h3 className="message-message">
+													<h3
+														className={`message-text ${
+															msg.uid ===
+															currentUser.uid
+																? "message-text-received"
+																: "message-text-sent"
+														}`}
+													>
 														{msg.text}
 													</h3>
 												</div>
