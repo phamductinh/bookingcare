@@ -55,4 +55,15 @@ export const adminMenu = [
 			},
 		],
 	},
+
+	{
+		//quản lý chat
+		name: "menu.admin.manage-chats",
+		menus: [
+			{
+				name: "menu.admin.manage-chats",
+				link: "/system/manage-chats",
+			},
+		],
+	},
 ];

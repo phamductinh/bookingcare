@@ -8,10 +8,14 @@ import {
 	addDoc,
 	orderBy,
 	query,
+	doc,
 	onSnapshot,
 	serverTimestamp,
+	setDoc,
+	arrayUnion,
 } from "firebase/firestore";
 import "./ChatApp.css";
+import moment from "moment";
 
 class ChatApp extends Component {
 	constructor(props) {
@@ -51,7 +55,46 @@ class ChatApp extends Component {
 	}
 
 	async handleLoginWithFB() {
-		const data = await signInWithPopup(auth, FBProvider);
+		const data = await signInWithPopup(auth, FBProvider)
+			.then((result) => {
+				const user = result.user;
+				this.setState({
+					user: result.user,
+				});
+				console.log("Người dùng đã đăng nhập:", user);
+				const userDocRef = doc(db, "users", user.uid);
+
+				setDoc(userDocRef, {
+					displayName: user.displayName,
+					email: user.email,
+					photoURL: user.photoURL,
+					uid: user.uid,
+				})
+					.then(() => {
+						console.log(
+							"Thông tin người dùng đã được lưu vào Firestore"
+						);
+					})
+					.catch((error) => {
+						console.error(
+							"Lỗi khi lưu thông tin người dùng vào Firestore:",
+							error
+						);
+					});
+
+				const group1Ref = doc(db, "chat", user.uid);
+
+				const group1Data = {
+					userUid: user.uid,
+					messages: [],
+				};
+
+				setDoc(group1Ref, group1Data);
+			})
+			.catch((error) => {
+				// Xảy ra lỗi khi đăng nhập
+				console.error("Lỗi khi đăng nhập bằng Google:", error);
+			});
 	}
 
 	async handleSignOut() {
@@ -65,13 +108,40 @@ class ChatApp extends Component {
 	};
 
 	sendMessage = async () => {
-		await addDoc(collection(db, "messages"), {
-			uid: this.state.user.uid,
-			photoURL: this.state.user.photoURL,
-			displayName: this.state.user.displayName,
-			text: this.state.newMessage,
-			timestamp: serverTimestamp(),
-		});
+		const group1Ref = doc(db, "chat", this.state.user.uid);
+
+		// await addDoc(collection(group1Ref, "messages"), {
+		// 	uid: this.state.user.uid,
+		// 	photoURL: this.state.user.photoURL,
+		// 	displayName: this.state.user.displayName,
+		// 	text: this.state.newMessage,
+		// 	timestamp: serverTimestamp(),
+		// });
+
+		const formattedDate = moment().format("YYYY-MM-DD HH:mm:ss");
+
+		await setDoc(
+			group1Ref,
+			{
+				messages: arrayUnion({
+					uid: this.state.user.uid,
+					photoURL: this.state.user.photoURL,
+					displayName: this.state.user.displayName,
+					text: this.state.newMessage,
+					timestamp: formattedDate,
+				}),
+			},
+			{ merge: true }
+		)
+			.then(() => {
+				console.log(
+					"Đã thêm tin nhắn vào danh sách tin nhắn của group"
+				);
+			})
+			.catch((error) => {
+				console.error("Lỗi khi thêm tin nhắn vào group:", error);
+			});
+
 		await this.setState({
 			newMessage: "",
 		});
