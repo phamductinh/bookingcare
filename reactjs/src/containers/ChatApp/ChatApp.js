@@ -13,6 +13,7 @@ import {
 	serverTimestamp,
 	setDoc,
 	arrayUnion,
+	where,
 } from "firebase/firestore";
 import "./ChatApp.css";
 import moment from "moment";
@@ -29,76 +30,62 @@ class ChatApp extends Component {
 	}
 
 	async componentDidMount() {
-		const uns = onAuthStateChanged(auth, (user) => {
-			this.setState({
+		const uns = onAuthStateChanged(auth, async (user) => {
+			await this.setState({
 				user: user,
 			});
 		});
 
-		const q = query(collection(db, "messages"), orderBy("timestamp"));
-		const unsubscribe = onSnapshot(q, (querySnapshot) => {
-			const messages = [];
-			querySnapshot.forEach((doc) => {
-				messages.push(doc.data());
+		let currentUser = await auth.currentUser;
+
+		if (currentUser) {
+			const q = query(
+				collection(db, "messages"),
+				where("roomId", "==", currentUser.uid),
+				orderBy("timestamp")
+			);
+			const unsubscribe = await onSnapshot(q, async (querySnapshot) => {
+				const messages = [];
+				querySnapshot.forEach((doc) => {
+					messages.push(doc.data());
+				});
+
+				await this.setState({
+					messages: messages,
+				});
 			});
 
-			this.setState({
-				messages: messages,
+			await this.setState({
+				unsubscribe: unsubscribe,
 			});
-		});
 
-		this.setState({
-			unsubscribe: unsubscribe,
-		});
-
-		return unsubscribe;
+			return unsubscribe;
+		}
 	}
 
 	async handleLoginWithFB() {
 		const data = await signInWithPopup(auth, FBProvider)
-			.then((result) => {
+			.then(async (result) => {
 				const user = result.user;
-				this.setState({
+				await this.setState({
 					user: result.user,
 				});
-				console.log("Người dùng đã đăng nhập:", user);
-				const userDocRef = doc(db, "users", user.uid);
 
-				setDoc(userDocRef, {
+				const userRef = doc(db, "users", user.uid);
+				await setDoc(userRef, {
 					displayName: user.displayName,
 					email: user.email,
 					photoURL: user.photoURL,
 					uid: user.uid,
-				})
-					.then(() => {
-						console.log(
-							"Thông tin người dùng đã được lưu vào Firestore"
-						);
-					})
-					.catch((error) => {
-						console.error(
-							"Lỗi khi lưu thông tin người dùng vào Firestore:",
-							error
-						);
-					});
-
-				const group1Ref = doc(db, "chat", user.uid);
-
-				const group1Data = {
-					userUid: user.uid,
-					messages: [],
-				};
-
-				setDoc(group1Ref, group1Data);
+				});
 			})
 			.catch((error) => {
-				// Xảy ra lỗi khi đăng nhập
 				console.error("Lỗi khi đăng nhập bằng Google:", error);
 			});
 	}
 
 	async handleSignOut() {
-		auth.signOut();
+		await auth.signOut();
 	}
 
 	handleOpenChatBox = async () => {
@@ -108,54 +95,31 @@ class ChatApp extends Component {
 	};
 
 	sendMessage = async () => {
-		const group1Ref = doc(db, "chat", this.state.user.uid);
-
-		// await addDoc(collection(group1Ref, "messages"), {
-		// 	uid: this.state.user.uid,
-		// 	photoURL: this.state.user.photoURL,
-		// 	displayName: this.state.user.displayName,
-		// 	text: this.state.newMessage,
-		// 	timestamp: serverTimestamp(),
-		// });
-
-		const formattedDate = moment().format("YYYY-MM-DD HH:mm:ss");
-
-		await setDoc(
-			group1Ref,
-			{
-				messages: arrayUnion({
-					uid: this.state.user.uid,
-					photoURL: this.state.user.photoURL,
-					displayName: this.state.user.displayName,
-					text: this.state.newMessage,
-					timestamp: formattedDate,
-				}),
-			},
-			{ merge: true }
-		)
-			.then(() => {
-				console.log(
-					"Đã thêm tin nhắn vào danh sách tin nhắn của group"
-				);
-			})
-			.catch((error) => {
-				console.error("Lỗi khi thêm tin nhắn vào group:", error);
-			});
+		await addDoc(collection(db, "messages"), {
+			roomId: this.state.user.uid,
+			uid: this.state.user.uid,
+			photoURL: this.state.user.photoURL,
+			displayName: this.state.user.displayName,
+			text: this.state.newMessage,
+			timestamp: serverTimestamp(),
+		});
 
 		await this.setState({
 			newMessage: "",
 		});
 	};
 
-	handleOnchangeMessage = (event) => {
-		this.setState({
+	handleOnchangeMessage = async (event) => {
+		await this.setState({
 			newMessage: event.target.value,
 		});
 	};
 
 	componentWillUnmount() {
-		if (this.state.unsubscribe) {
-			this.state.unsubscribe();
+		if (this._isMounted) {
+			if (this.state.unsubscribe) {
+				this.state.unsubscribe();
+			}
 		}
 	}
 

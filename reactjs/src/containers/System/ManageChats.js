@@ -14,70 +14,164 @@ import {
 	serverTimestamp,
 	setDoc,
 	where,
+	getDoc,
+	documentId,
 } from "firebase/firestore";
 
 class ManageChats extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = {
+			users: [],
+			messages: [],
+			documentId: null,
+		};
 	}
 
 	async componentDidMount() {
-		const usersCollectionRef = collection(db, "users");
+		const messagesQuerySnapshot = await getDocs(collection(db, "messages"));
 
-		// Tạo một truy vấn để lấy tất cả người dùng có uid tương tự với documentId trong collection "messages"
-		const messagesCollectionRef = collection(db, "chat");
-		const messagesQuerySnapshot = await getDocs(messagesCollectionRef);
-
-		const uids = []; // Danh sách các uid từ collection "messages"
+		const uids = [];
 		messagesQuerySnapshot.forEach((messageDoc) => {
-			const uid = messageDoc.id;
+			const uid = messageDoc.data().uid;
 			uids.push(uid);
 		});
 
-		// Lấy danh sách người dùng có uid tương tự với danh sách uid từ collection "messages"
 		const queryUsersByUid = query(
-			usersCollectionRef,
+			collection(db, "users"),
 			where("uid", "in", uids)
 		);
 
 		const usersArray = [];
 
-		getDocs(queryUsersByUid)
-			.then((querySnapshot) => {
+		await getDocs(queryUsersByUid)
+			.then(async (querySnapshot) => {
 				querySnapshot.forEach((userDoc) => {
 					const userData = userDoc.data();
 					usersArray.push(userData);
-					console.log("Thông tin người dùng:", usersArray);
+				});
+				await this.setState({
+					users: usersArray,
 				});
 			})
 			.catch((error) => {
 				console.error("Lỗi khi lấy danh sách người dùng:", error);
 			});
+
+		await this.listenToMessages(db, this.state.documentId);
+	}
+
+	async componentWillUnmount() {
+		if (this.state.unsubscribe) {
+			await this.state.unsubscribe();
+		}
+	}
+
+	async listenToMessages(db, documentId) {
+		if (!documentId) {
+			console.log("miss id");
+			return;
+		}
+
+		const q = query(
+			collection(db, "messages"),
+			where("roomId", "==", documentId)
+		);
+
+		const unsubscribe = await onSnapshot(q, async (querySnapshot) => {
+			const messages = [];
+			querySnapshot.forEach((documentSnapshot) => {
+				const documentData = documentSnapshot.data();
+				if (documentData.messages) {
+					messages.push(...documentData.messages);
+				}
+			});
+
+			await this.setState({ messages });
+			console.log(this.state.messages);
+		});
+
+		await this.setState({
+			unsubscribe: unsubscribe,
+		});
+
+		return unsubscribe;
+	}
+
+	async handleShowMessages(item) {
+		await this.setState({
+			documentId: item.uid,
+		});
+
+		if (this.state.unsubscribe) {
+			await this.state.unsubscribe();
+		}
+
+		await this.listenToMessages(db, this.state.documentId);
 	}
 
 	render() {
+		let { users, messages } = this.state;
+		let currentUser = auth.currentUser;
 		return (
 			<>
 				<div className="manage-chat-container">
 					<div className="sidebar">
 						<h2>Users</h2>
 						<div className="users-list">
-							<div className="user-message">
-								<div className="user-message-img"></div>
-								<div className="user-message-name">
-									Nguyen Van A
+							{users.map((item, index) => (
+								<div
+									className="user-message"
+									key={index}
+									onClick={() =>
+										this.handleShowMessages(item)
+									}
+								>
+									<div
+										className="user-message-img"
+										style={{
+											backgroundImage: `url(${item.photoURL})`,
+										}}
+									></div>
+									<div className="user-message-name">
+										{item.displayName}
+									</div>
 								</div>
-							</div>
-							<li>Group 2</li>
-							<li>Group 3</li>
+							))}
 						</div>
 					</div>
 					<div className="chat-container">
-						<ul className="message-list">
-							<li className="message received">Hello!</li>
-							<li className="message sent">Hi there!</li>
-						</ul>
+						{messages.map((item, index) => (
+							<div
+								className={`msg-content ${
+									item.uid === currentUser.uid
+										? "msg-sent"
+										: "msg-received"
+								}`}
+							>
+								<div className="msg-name">
+									{item.displayName}
+								</div>
+								<div className="msg-under">
+									<div
+										className="msg-avt"
+										style={{
+											backgroundImage: `url(${item.photoURL})`,
+										}}
+									></div>
+									<div
+										className={`msg-text ${
+											item.uid === currentUser.uid
+												? "msg-text-received"
+												: "msg-text-sent"
+										}`}
+									>
+										{item.text}
+									</div>
+								</div>
+							</div>
+						))}
+
 						<div className="input-container">
 							<input
 								type="text"

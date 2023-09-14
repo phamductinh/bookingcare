@@ -21,23 +21,61 @@
 	overflow-y: scroll;
 }
 
-.message {
-	background-color: #fff;
-	border-radius: 5px;
-	padding: 10px;
-	margin: 10px;
-	max-width: 60%;
-	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+.msg-content {
+	width: 100%;
+	max-width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin: 5px 0;
 }
 
-.message.sent {
-	background-color: #0084ff;
-	color: #fff;
-	align-self: flex-end;
+.message.msg-sent {
+	align-items: flex-end;
 }
 
-.message.received {
-	background-color: #e2e2e2;
+.message.msg-received {
+	align-items: flex-start;
+}
+
+.msg-name {
+	margin: 0;
+	padding: 0;
+	font-size: 15px;
+	font-weight: 500;
+}
+
+.msg-under {
+	display: flex;
+}
+
+.msg-avt {
+	width: 30px;
+	height: 30px;
+	margin: auto 5px;
+	border-radius: 50%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.msg-text {
+	width: fit-content;
+	padding: 6px;
+	font-size: 15px;
+	margin-bottom: 0;
+	border-radius: 7px;
+	overflow-wrap: break-word;
+	max-width: 300px;
+}
+
+.msg-text-sent {
+	background-color: #b6b6b8;
+}
+
+.msg-text-received {
+	background-color: #1778f2;
+	color: white;
 }
 
 .message-list {
@@ -78,14 +116,19 @@
 	border: 1px solid #e2e2e2;
 	padding: 10px;
 	display: flex;
-    border-radius: 5px;
+	border-radius: 5px;
+	margin: 10px auto;
+	cursor: pointer;
+}
+
+.user-message:hover {
+	background-color: #696868;
 }
 
 .user-message-img {
 	width: 30px;
 	height: 30px;
 	border-radius: 50%;
-	background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6obzlKr0_tF08mqwDMBJDi4q044cthlwVSQ&usqp=CAU");
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: contain;
