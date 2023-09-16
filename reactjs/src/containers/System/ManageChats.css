@@ -1,5 +1,5 @@
 .manage-chat-container {
-	height: 100vh;
+	height: 94vh;
 	display: flex;
 	padding: 0;
 	margin: 0;
@@ -13,12 +13,24 @@
 	box-shadow: 1px 0px 5px rgba(0, 0, 0, 0.2);
 }
 
+.users-list {
+	margin-top: 20px;
+}
+
+.active-user {
+	background-color: #7a7a7c;
+}
+
 .chat-container {
 	width: 80%;
-	flex-grow: 1;
+	height: 88%;
 	padding: 20px;
 	background-color: #f4f4f4;
 	overflow-y: scroll;
+}
+
+#chat-container {
+	scroll-behavior: smooth;
 }
 
 .msg-content {
@@ -26,15 +38,15 @@
 	max-width: 100%;
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
 	margin: 5px 0;
+	align-items: flex-start;
 }
 
-.message.msg-sent {
-	align-items: flex-end;
+.msg-sent {
+	align-items: flex-end !important;
 }
 
-.message.msg-received {
+.msg-received {
 	align-items: flex-start;
 }
 
@@ -45,8 +57,18 @@
 	font-weight: 500;
 }
 
+.msg-sent-under {
+	flex-direction: row-reverse;
+}
+
 .msg-under {
 	display: flex;
+}
+
+.msg-time-sent {
+	line-height: 35px;
+	font-size: 12px;
+	padding: 0 10px;
 }
 
 .msg-avt {
@@ -78,11 +100,6 @@
 	color: white;
 }
 
-.message-list {
-	list-style: none;
-	padding: 0;
-}
-
 .input-container {
 	position: fixed;
 	bottom: 20px;
@@ -90,9 +107,9 @@
 }
 
 .message-input {
-	width: 60%;
+	width: 65%;
 	padding: 10px;
-	border: none;
+	border: 1px solid #696868;
 	outline: none;
 	border-radius: 5px;
 	margin-right: 10px;
@@ -106,10 +123,6 @@
 	border-radius: 5px;
 	padding: 10px;
 	cursor: pointer;
-}
-
-.users-list {
-	list-style-type: none;
 }
 
 .user-message {

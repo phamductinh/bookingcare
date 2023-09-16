@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { auth, FBProvider, db } from "../../firebase/config";
 import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import {
-	getDocs,
 	collection,
 	addDoc,
 	orderBy,
@@ -12,11 +11,9 @@ import {
 	onSnapshot,
 	serverTimestamp,
 	setDoc,
-	arrayUnion,
 	where,
 } from "firebase/firestore";
 import "./ChatApp.css";
-import moment from "moment";
 
 class ChatApp extends Component {
 	constructor(props) {
@@ -27,6 +24,19 @@ class ChatApp extends Component {
 			messages: [],
 			newMessage: "",
 		};
+	}
+
+	scrollToBottom = () => {
+		const msg = document.getElementById("msg-container");
+		if (msg) {
+			msg.scrollTop = msg.scrollHeight;
+		}
+	};
+
+	componentDidUpdate(prevProps, prevState) {
+		if (prevState.messages.length !== this.state.messages.length) {
+			this.scrollToBottom();
+		}
 	}
 
 	async componentDidMount() {
@@ -54,6 +64,8 @@ class ChatApp extends Component {
 					messages: messages,
 				});
 			});
+
+			this.scrollToBottom();
 
 			await this.setState({
 				unsubscribe: unsubscribe,
@@ -89,6 +101,7 @@ class ChatApp extends Component {
 	}
 
 	handleOpenChatBox = async () => {
+		this.componentDidMount();
 		await this.setState((prevState) => ({
 			isShowChat: !prevState.isShowChat,
 		}));
@@ -104,6 +117,8 @@ class ChatApp extends Component {
 			timestamp: serverTimestamp(),
 		});
 
+		this.scrollToBottom();
+
 		await this.setState({
 			newMessage: "",
 		});
@@ -115,11 +130,9 @@ class ChatApp extends Component {
 		});
 	};
 
-	componentWillUnmount() {
-		if (this._isMounted) {
-			if (this.state.unsubscribe) {
-				this.state.unsubscribe();
-			}
+	async componentWillUnmount() {
+		if (this.state.unsubscribe) {
+			await this.state.unsubscribe();
 		}
 	}
 
@@ -154,7 +167,10 @@ class ChatApp extends Component {
 							</div>
 							{user ? (
 								<div>
-									<div className="comments">
+									<div
+										className="comments"
+										id="msg-container"
+									>
 										{messages.map((msg, index) => (
 											<div
 												key={index}
