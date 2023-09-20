@@ -142,7 +142,7 @@ class ManageChats extends Component {
 			timestamp: serverTimestamp(),
 		});
 
-        this.scrollToBottom();
+		this.scrollToBottom();
 
 		await this.setState({
 			newMessage: "",
@@ -190,102 +190,124 @@ class ManageChats extends Component {
 			<>
 				{this.props.isLoggedIn && <Header />}
 				{!user ? (
-					<button onClick={() => this.handleLoginWithFB()}>
-						Login
-					</button>
+					<>
+						<div className="title text-center">Manage Chats</div>
+						<button
+							className="btn-login-gg"
+							onClick={() => this.handleLoginWithFB()}
+						>
+							Login
+						</button>
+					</>
 				) : (
-					<div className="manage-chat-container">
-						<div className="sidebar">
-							<h2>{currentUser.displayName}</h2>
-							<div className="users-list">
-								{users.map((item, index) => (
-									<div
-										className={`user-message ${
-											isActive === index
-												? "active-user"
-												: ""
-										}`}
-										key={index}
-										onClick={() =>
-											this.handleShowMessages(item, index)
-										}
-									>
+					<>
+						<div className="manage-chat-header">
+							<div
+								className="img-admin-header"
+								style={{
+									backgroundImage: `url(${currentUser.photoURL})`,
+								}}
+							></div>
+							<div className="admin-name-header">{currentUser.displayName}</div>
+							<button className="btn-logout-header">
+								Sign out
+							</button>
+						</div>
+						<div className="manage-chat-container">
+							<div className="sidebar">
+								<div className="users-list">
+									{users.map((item, index) => (
 										<div
-											className="user-message-img"
-											style={{
-												backgroundImage: `url(${item.photoURL})`,
-											}}
-										></div>
-										<div className="user-message-name">
+											className={`user-message ${
+												isActive === index
+													? "active-user"
+													: ""
+											}`}
+											key={index}
+											onClick={() =>
+												this.handleShowMessages(
+													item,
+													index
+												)
+											}
+										>
+											<div
+												className="user-message-img"
+												style={{
+													backgroundImage: `url(${item.photoURL})`,
+												}}
+											></div>
+											<div className="user-message-name">
+												{item.displayName}
+											</div>
+										</div>
+									))}
+								</div>
+							</div>
+							<div className="chat-container" id="chat-container">
+								{messages.map((item, index) => (
+									<div
+										key={index}
+										className={`msg-content ${
+											item.uid === currentUser.uid
+												? "msg-sent"
+												: "msg-received"
+										}`}
+									>
+										<div className="msg-name">
 											{item.displayName}
+										</div>
+										<div
+											className={`msg-under ${
+												item.uid === currentUser.uid
+													? "msg-sent-under"
+													: ""
+											}`}
+										>
+											<div
+												className="msg-avt"
+												style={{
+													backgroundImage: `url(${item.photoURL})`,
+												}}
+											></div>
+											<div
+												className={`msg-text ${
+													item.uid === currentUser.uid
+														? "msg-text-received"
+														: "msg-text-sent"
+												}`}
+											>
+												{item.text}
+											</div>
+											<div className="msg-time-sent">
+												{this.formatDate(
+													item.timestamp?.seconds
+												)}
+											</div>
 										</div>
 									</div>
 								))}
-							</div>
-						</div>
-						<div className="chat-container" id="chat-container">
-							{messages.map((item, index) => (
-								<div
-									key={index}
-									className={`msg-content ${
-										item.uid === currentUser.uid
-											? "msg-sent"
-											: "msg-received"
-									}`}
-								>
-									<div className="msg-name">
-										{item.displayName}
-									</div>
-									<div
-										className={`msg-under ${
-											item.uid === currentUser.uid
-												? "msg-sent-under"
-												: ""
-										}`}
-									>
-										<div
-											className="msg-avt"
-											style={{
-												backgroundImage: `url(${item.photoURL})`,
-											}}
-										></div>
-										<div
-											className={`msg-text ${
-												item.uid === currentUser.uid
-													? "msg-text-received"
-													: "msg-text-sent"
-											}`}
-										>
-											{item.text}
-										</div>
-										<div className="msg-time-sent">
-											{this.formatDate(
-												item.timestamp?.seconds
-											)}
-										</div>
-									</div>
-								</div>
-							))}
 
-							<div className="input-container">
-								<input
-									type="text"
-									className="message-input"
-									placeholder="Type your message..."
-									value={this.state.newMessage}
-									onChange={(event) =>
-										this.handleOnchangeMessage(event)
-									}
-								/>
-								<button
-									className="send-button"
-									onClick={() => this.sendMessage()}
-								>
-									Send
-								</button>
+								<div className="input-container">
+									<input
+										type="text"
+										className="message-input"
+										placeholder="Type your message..."
+										value={this.state.newMessage}
+										onChange={(event) =>
+											this.handleOnchangeMessage(event)
+										}
+									/>
+									<button
+										className="send-button"
+										onClick={() => this.sendMessage()}
+									>
+										Send
+									</button>
+								</div>
 							</div>
 						</div>
-					</div>
+					</>
 				)}
 			</>
 		);

@@ -7,12 +7,14 @@ import "./Booking.css";
 import { bookingAnAppointmentService } from "../../../services/bookingService";
 import { toast } from "react-toastify";
 import * as actions from "../../../store/actions/";
+import LoadingSpinner from "../../../components/Common/Loading";
 
 class Booking extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			detailDoctor: "",
+            isLoading: false
 		};
 	}
 
@@ -90,6 +92,9 @@ class Booking extends Component {
 			});
 		} catch (error) {
 			console.log(error);
+            this.setState({
+				isLoading: false,
+			});
 			if (error.response) {
 				if (error.response.data) {
 					this.setState({
@@ -101,7 +106,7 @@ class Booking extends Component {
 	};
 
 	render() {
-		let { detailDoctor } = this.state;
+		let { detailDoctor, isLoading } = this.state;
 		let currentDate = new Date().toISOString().split("T")[0];
 		let arrTime = [];
 		let startTime = 7;
@@ -510,6 +515,8 @@ class Booking extends Component {
 								<i className="fab fa-twitter"></i>
 							</div>
 						</div>
+
+                        {isLoading && <LoadingSpinner />}
 					</div>
 				</div>
 			</>
