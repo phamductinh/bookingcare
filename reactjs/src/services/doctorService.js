@@ -16,6 +16,12 @@ const getDoctorIsTelemedicine = (telemId) => {
 	return axios.get(`/api/get-doctor-is-telemedicine?id=${telemId}`);
 };
 
+const getDoctorByKeyword = (keyword, specialtyId) => {
+	return axios.get(
+		`/api/get-doctor-by-keyword?keyword=${keyword}&specialtyId=${specialtyId}`
+	);
+};
+
 const deleteDoctor = (doctorId) => {
 	return axios.delete(`/api/delete-doctor?id=${doctorId}`);
 };
@@ -31,4 +37,5 @@ export {
 	deleteDoctor,
 	updateDoctor,
 	getDoctorIsTelemedicine,
+	getDoctorByKeyword,
 };

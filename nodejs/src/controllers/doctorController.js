@@ -18,6 +18,28 @@ const getAllDoctors = (req, res) => {
 	});
 };
 
+let getDoctorByKeyword = (req, res) => {
+	const keyword = req.query.keyword;
+	const specialtyId = parseInt(req.query.specialtyId);
+	let findDoctorByKeyword = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN clinic ON clinic.id = doctor.clinicId JOIN specialty ON specialty.id = doctor.specialtyId `;
+
+	if (keyword) {
+		findDoctorByKeyword += ` AND doctor.name LIKE '%${keyword}%'`;
+	}
+	if (!isNaN(specialtyId)) {
+		findDoctorByKeyword += ` AND doctor.specialtyId = '${specialtyId}'`;
+	}
+	db.query(findDoctorByKeyword, (error, results) => {
+		if (error) {
+			throw error;
+		}
+		return res.send({
+			code: 200,
+			data: results,
+		});
+	});
+};
+
 let getADoctor = (req, res) => {
 	let doctorId = req.query.id;
 	if (!doctorId) {
@@ -104,4 +126,5 @@ module.exports = {
 	deleteDoctor,
 	updateADoctor,
 	getDoctorIsTelemedicine,
+	getDoctorByKeyword,
 };

@@ -3,7 +3,10 @@ import { connect } from "react-redux";
 import { getALLTelemedicine } from "../../services/telemedicineService";
 import { getALLSpecialty } from "../../services/specialtyService";
 import "./HomePage.css";
-import { getAllDoctors } from "../../services/doctorService";
+import {
+	getAllDoctors,
+	getDoctorByKeyword,
+} from "../../services/doctorService";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import * as actions from "../../store/actions/";
@@ -69,29 +72,12 @@ class HomePage extends Component {
 
 	async filterDoctors() {
 		let { keyword, specialtyId } = this.state;
-		let arrDoctors = this.state.arrDoctors;
-		let filteredResults;
-		if (keyword && specialtyId) {
-			filteredResults = arrDoctors.filter(
-				(doctor) =>
-					doctor.name.toLowerCase().includes(keyword.toLowerCase()) &&
-					doctor.specialtyId === specialtyId
-			);
-		} else if (keyword) {
-			filteredResults = arrDoctors.filter((doctor) =>
-				doctor.name.toLowerCase().includes(keyword.toLowerCase())
-			);
-		} else if (specialtyId) {
-			filteredResults = arrDoctors.filter(
-				(doctor) => doctor.specialtyId === specialtyId
-			);
-		} else {
-			filteredResults = "";
+		let res = await getDoctorByKeyword(keyword, specialtyId);
+		if (res && res.code === 200) {
+			this.setState({
+				arrDoctorFilter: res.data,
+			});
 		}
-		console.log("filter", filteredResults);
-		await this.setState({
-			arrDoctorFilter: filteredResults,
-		});
 	}
 
 	async handleOpenMenu() {
@@ -583,90 +569,93 @@ class HomePage extends Component {
 					</div>
 				</div> */}
 
-					{/* <div className="search-container">
-					<div className="search-box">
-						<input
-							className="search-input"
-							type="text"
-							autoComplete="off"
-							placeholder="Nhập tên bác sĩ"
-							onChange={(event) =>
-								this.handleOnchangeKeyword(event)
-							}
-						/>
-						<select
-							name="specialty"
-							id="specialty-select"
-							value={this.state.specialty}
-							onChange={(event) =>
-								this.handleOnchangeSelect(event, "specialty")
-							}
-							defaultValue={""}
-						>
-							<option value="" disabled defaultValue>
-								Chọn chuyên khoa
-							</option>
-							{arrSpecialty &&
-								arrSpecialty.length > 0 &&
-								arrSpecialty.map((item, index) => (
-									<option key={index} value={item.id}>
-										{item.name}
-									</option>
-								))}
-						</select>
-						<button
-							className="btn-search-doctor"
-							onClick={() => this.filterDoctors()}
-						>
-							<i className="fa-solid fa-magnifying-glass"></i>
-						</button>
-					</div>
-					<div className="search-results">
-						<div className="search-results-list">
-							{arrDoctorFilter &&
-								arrDoctorFilter.length > 0 &&
-								arrDoctorFilter.map((item, index) => {
-									return (
-										<div
-											className="result-content"
-											key={index}
-											onClick={() =>
-												this.handleViewDetail(item)
-											}
-										>
+					<div className="search-container">
+						<div className="search-box">
+							<input
+								className="search-input"
+								type="text"
+								autoComplete="off"
+								placeholder="Nhập tên bác sĩ"
+								onChange={(event) =>
+									this.handleOnchangeKeyword(event)
+								}
+							/>
+							<select
+								name="specialty"
+								id="specialty-select"
+								// value={this.state.specialty}
+								onChange={(event) =>
+									this.handleOnchangeSelect(
+										event,
+										"specialty"
+									)
+								}
+								defaultValue={""}
+							>
+								<option value={""} disabled defaultValue>
+									Chọn chuyên khoa
+								</option>
+								{arrSpecialty &&
+									arrSpecialty.length > 0 &&
+									arrSpecialty.map((item, index) => (
+										<option key={index} value={item.id}>
+											{item.name}
+										</option>
+									))}
+							</select>
+							<button
+								className="btn-search-doctor"
+								onClick={() => this.filterDoctors()}
+							>
+								<i className="fa-solid fa-magnifying-glass"></i>
+							</button>
+						</div>
+						<div className="search-results">
+							<div className="search-results-list">
+								{arrDoctorFilter &&
+									arrDoctorFilter.length > 0 &&
+									arrDoctorFilter.map((item, index) => {
+										return (
 											<div
-												className="result-img"
-												style={{
-													backgroundImage: `url(${
-														item.image !== null
-															? Buffer.from(
-																	item.image,
-																	"base64"
-															  ).toString(
-																	"binary"
-															  )
-															: "https://ihfeducation.ihf.info/images/no_avatar.gif"
-													})`,
-												}}
-											></div>
-											<div className="result-infor">
-												<div className="result-name">
-													{item.name
-														? item.name
-														: "Unknown name"}
-												</div>
-												<div className="result-specialty">
-													{item.specialty
-														? item.specialty
-														: ""}
+												className="result-content"
+												key={index}
+												onClick={() =>
+													this.handleViewDetail(item)
+												}
+											>
+												<div
+													className="result-img"
+													style={{
+														backgroundImage: `url(${
+															item.image !== null
+																? Buffer.from(
+																		item.image,
+																		"base64"
+																  ).toString(
+																		"binary"
+																  )
+																: "https://ihfeducation.ihf.info/images/no_avatar.gif"
+														})`,
+													}}
+												></div>
+												<div className="result-infor">
+													<div className="result-name">
+														{item.name
+															? item.name
+															: "Unknown name"}
+													</div>
+													<div className="result-specialty">
+														{item.specialty
+															? item.specialty
+															: ""}
+													</div>
 												</div>
 											</div>
-										</div>
-									);
-								})}
+										);
+									})}
+							</div>
 						</div>
 					</div>
-				</div> */}
 
 					<div className="telemedicine-container">
 						<div className="telem-content-up">

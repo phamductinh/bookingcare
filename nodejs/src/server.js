@@ -109,17 +109,6 @@ io.on("connection", (socket) => {
 
 sendRemindEmail();
 
-// const currentDate = new Date();
-
-// currentDate.setMinutes(currentDate.getMinutes() + 1);
-
-// const receiverEmail = "phamductinh.t18@gmail.com";
-
-// const reminderJob = schedule.scheduleJob(currentDate, () => {
-// 	emailService.sendReminderEmail();
-// 	reminderJob.cancel();
-// });
-
 server.listen(port, () => {
 	console.log("Nodejs is running on port " + port);
 });

@@ -10,7 +10,6 @@ let sendRemindEmail = async () => {
 			console.error("Lỗi khi truy vấn dữ liệu:", err);
 			return;
 		}
-		console.log(results);
 		results.forEach((patient) => {
 			let patientId = patient.id;
 			let fullName = patient.fullName;
@@ -29,8 +28,6 @@ let sendRemindEmail = async () => {
 			let year = appointmentDate.getFullYear();
 
 			let booking_date = `${day}/${month}/${year}`;
-
-			console.log(reminderDate);
 
 			(async () => {
 				const reminderJob = schedule.scheduleJob(

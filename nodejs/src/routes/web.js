@@ -23,6 +23,7 @@ let initWebRoutes = (app) => {
 
 	router.get("/api/get-all-doctors", doctorController.getAllDoctors);
 	router.get("/api/get-a-doctor", doctorController.getADoctor);
+	router.get("/api/get-doctor-by-keyword", doctorController.getDoctorByKeyword);
 	router.get(
 		"/api/get-doctor-is-telemedicine",
 		doctorController.getDoctorIsTelemedicine
