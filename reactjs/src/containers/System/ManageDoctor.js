@@ -43,6 +43,10 @@ class ManageDoctor extends Component {
 		await this.getAllDoctorsReact();
 		await this.getAllClinicsReact();
 		await this.getAllSpecialtyReact();
+		let token = localStorage.getItem("token");
+		this.setState({
+			token: token,
+		});
 	}
 
 	getAllDoctorsReact = async () => {
@@ -161,7 +165,10 @@ class ManageDoctor extends Component {
 				errMsgSignUp: "",
 				isLoading: true,
 			});
-			let response = await handleCreateDoctor(newDoctorData);
+			let response = await handleCreateDoctor(
+				newDoctorData,
+				this.state.token
+			);
 			await this.getAllDoctorsReact();
 			console.log("check response", response);
 			toast.success("Add doctor successfully !");
@@ -216,8 +223,7 @@ class ManageDoctor extends Component {
 				id: this.state.userId,
 			};
 
-			let token = localStorage.getItem("token");
-			let res = await updateDoctor(token, userData);
+			let res = await updateDoctor(this.state.token, userData);
 			if (res && res.code === 200) {
 				this.setState({
 					setModalEditUser: false,

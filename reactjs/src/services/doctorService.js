@@ -22,12 +22,20 @@ const getDoctorByKeyword = (keyword, specialtyId) => {
 	);
 };
 
-const deleteDoctor = (doctorId) => {
-	return axios.delete(`/api/delete-doctor?id=${doctorId}`);
+const deleteDoctor = (token, doctorId) => {
+	return axios.delete(`/api/delete-doctor?id=${doctorId}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
 };
 
-const updateDoctor = (doctorData) => {
-	return axios.put("/api/update-doctor", doctorData);
+const updateDoctor = (token, doctorData) => {
+	return axios.put("/api/update-doctor", doctorData, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
 };
 
 export {

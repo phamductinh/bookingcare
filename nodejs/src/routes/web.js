@@ -7,7 +7,7 @@ import doctorController from "../controllers/doctorController";
 import clinicController from "../controllers/clinicController";
 import bookingController from "../controllers/bookingController";
 import videoCallController from "../controllers/videoCallController";
-import { verifyJWT } from "../middlewares/verifyJWT";
+import { verifyJWT, authApi } from "../middlewares/verifyJWT";
 
 let router = express.Router();
 
@@ -23,14 +23,17 @@ let initWebRoutes = (app) => {
 
 	router.get("/api/get-all-doctors", doctorController.getAllDoctors);
 	router.get("/api/get-a-doctor", doctorController.getADoctor);
-	router.get("/api/get-doctor-by-keyword", doctorController.getDoctorByKeyword);
+	router.get(
+		"/api/get-doctor-by-keyword",
+		doctorController.getDoctorByKeyword
+	);
 	router.get(
 		"/api/get-doctor-is-telemedicine",
 		doctorController.getDoctorIsTelemedicine
 	);
-	router.post("/api/create-doctor", doctorController.createADoctor);
-	router.put("/api/update-doctor", doctorController.updateADoctor);
-	router.delete("/api/delete-doctor", doctorController.deleteDoctor);
+	router.post("/api/create-doctor", authApi, doctorController.createADoctor);
+	router.put("/api/update-doctor", authApi, doctorController.updateADoctor);
+	router.delete("/api/delete-doctor", authApi, doctorController.deleteDoctor);
 
 	router.get(
 		"/api/get-all-telemedicine",
@@ -68,7 +71,10 @@ let initWebRoutes = (app) => {
 		bookingController.bookingAnAppointment
 	);
 	router.get("/api/get-booking-by-date", bookingController.getBookingByDate);
-	router.get("/api/get-telemedicine-booking-by-date", bookingController.getTelemedicineBookingByDate);
+	router.get(
+		"/api/get-telemedicine-booking-by-date",
+		bookingController.getTelemedicineBookingByDate
+	);
 	router.get(
 		"/api/get-all-confirmed-booking",
 		bookingController.getAllConfirmedBooking

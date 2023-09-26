@@ -67,3 +67,28 @@ export const adminMenu = [
 		],
 	},
 ];
+
+export const doctorMenu = [
+	{
+		//quản lý bac si
+		name: "menu.doctor.doctor",
+		menus: [
+			{
+				name: "menu.admin.manage-booking",
+				link: "/system/manage-booking",
+			},
+			{
+				name: "menu.admin.manage-telemedicine-booking",
+				link: "/system/manage-telemedicine-booking",
+			},
+			{
+				name: "menu.admin.manage-confirmed-booking",
+				link: "/system/manage-confirmed-booking",
+			},
+			{
+				name: "menu.admin.manage-finished-booking",
+				link: "/system/manage-finished-booking",
+			},
+		],
+	},
+];

@@ -6,6 +6,7 @@ const verifyJWT = (req, res, next) => {
 	let authHeader = req.headers.authorization;
 	if (authHeader) {
 		let token = authHeader.split(" ")[1];
+		console.log(token);
 		jwt.verify(token, secretKey, (err, result) => {
 			if (err) {
 				return res.sendStatus(403);
@@ -21,15 +22,19 @@ const verifyJWT = (req, res, next) => {
 	}
 };
 
-function authApi(req, res, next) {
-	const token = req.header("Authorization") || req.query.token;
+const authApi = (req, res, next) => {
+	const authHeader = req.headers.authorization;
 
-	if (!token) {
+	if (!authHeader) {
 		return res.status(401).json({ message: "Chưa xác thực" });
 	}
+	let token = authHeader.split(" ")[1];
+	console.log(token);
 
 	try {
 		const decoded = jwt.verify(token, secretKey);
+
+        console.log(decoded)
 
 		req.user = decoded;
 
@@ -41,7 +46,7 @@ function authApi(req, res, next) {
 	} catch (error) {
 		return res.status(401).json({ message: "Token không hợp lệ" });
 	}
-}
+};
 
 module.exports = {
 	verifyJWT,

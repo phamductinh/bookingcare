@@ -70,6 +70,7 @@ class Login extends Component {
 				}
 				if (data && data.code === 200) {
 					this.props.userLoginSuccess(data.user);
+					localStorage.setItem("token", data.token);
 				}
 			} catch (error) {
 				if (error.response) {
