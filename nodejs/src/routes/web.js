@@ -7,7 +7,7 @@ import doctorController from "../controllers/doctorController";
 import clinicController from "../controllers/clinicController";
 import bookingController from "../controllers/bookingController";
 import videoCallController from "../controllers/videoCallController";
-import { verifyJWT, authApi } from "../middlewares/verifyJWT";
+import { verifyJWT, authApi, authApiDoctor } from "../middlewares/verifyJWT";
 
 let router = express.Router();
 
@@ -83,9 +83,21 @@ let initWebRoutes = (app) => {
 		"/api/get-all-finished-booking",
 		bookingController.getAllFinishedBooking
 	);
-	router.put("/api/confirm-booking", bookingController.confirmBooking);
-	router.put("/api/finish-booking", bookingController.finishBooking);
-	router.delete("/api/delete-booking", bookingController.deleteBooking);
+	router.put(
+		"/api/confirm-booking",
+		authApiDoctor,
+		bookingController.confirmBooking
+	);
+	router.put(
+		"/api/finish-booking",
+		authApiDoctor,
+		bookingController.finishBooking
+	);
+	router.delete(
+		"/api/delete-booking",
+		authApi,
+		bookingController.deleteBooking
+	);
 
 	router.get("/api/get-room", videoCallController.getRoom);
 	router.post("/api/create-room", videoCallController.createRoom);
