@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="./css/specialty.css" />
+		<link rel="shortcut icon" href="../home/image/logo/bookingcare.png" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+			integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
+		<title>Cơ Xương Khớp</title>
+	</head>
+	<body>
+		<div class="specialty-container">
+			<div class="spec-header">
+				<div class="spec-header-left">
+					<i
+						class="fas fa-long-arrow-left"
+						onclick="window.open('../home/home.html','_self')"
+					></i>
+					<h2>Cơ Xương Khớp</h2>
+				</div>
+				<div class="spec-header-right">
+					<div class="spec-header-support">
+						<i class="far fa-question-circle"></i>
+						Hỗ trợ
+					</div>
+					<i class="fas fa-bars"></i>
+				</div>
+			</div>
+
+			<div class="specialty-infor-container">
+				<div class="specialty-infor" id="specialty-infor">
+					<h1>Cơ Xương Khớp</h1>
+					<h2>Bác sĩ Cơ Xương Khớp giỏi</h2>
+					<p>
+						Danh sách các bác sĩ uy tín đầu ngành Cơ Xương Khớp tại
+						Việt Nam:
+					</p>
+					<ul>
+						<li>
+							Các chuyên gia có quá trình đào tạo bài bản, nhiều
+							kinh nghiệm.
+						</li>
+						<li>
+							Các giáo sư, phó giáo sư đang trực tiếp nghiên cứu
+							và giảng dạy tại Đại học Y khoa Hà Nội.
+						</li>
+						<li>
+							Các bác sĩ đã, đang công tác tại các bệnh viện hàng
+							đầu Khoa Cơ Xương Khớp - Bệnh viện Bạch Mai, Bệnh
+							viện Hữu nghị Việt Đức,Bệnh Viện E.
+						</li>
+						<li>
+							Là thành viên hoặc lãnh đạo các tổ chức chuyên môn
+							như: Hiệp hội Cơ Xương Khớp, Hội Thấp khớp học,...
+						</li>
+						<li>
+							Được nhà nước công nhận các danh hiệu Thầy thuốc
+							Nhân dân, Thầy thuốc Ưu tú, Bác sĩ Cao cấp,...
+						</li>
+					</ul>
+					<h2>Bệnh Cơ Xương Khớp</h2>
+					<ul>
+						<li>Gout</li>
+						<li>
+							Thoái hóa khớp: khớp gối, cột sống thắt lưng, cột
+							sống cổ
+						</li>
+						<li>Viêm khớp dạng thấp, Viêm đa khớp, Viêm gân</li>
+						<li>
+							Tràn dịch khớp gối, Tràn dịch khớp háng, Tràn dịch
+							khớp khủy, Tràn dịch khớp vai
+						</li>
+						<li>Loãng xương, đau nhức xương</li>
+						<li>Viêm xương, gai xương</li>
+						<li>Viêm cơ, Teo cơ, chứng đau mỏi cơ</li>
+						<li>Các chấn thương về cơ, xương, khớp</li>
+					</ul>
+				</div>
+				<p id="infor-show-more" onclick="show_more_infor()">Đọc thêm</p>
+				<p id="infor-show-less" onclick="show_more_infor()">Ẩn bớt</p>
+			</div>
+
+			<div class="spec-list-doctors-container">
+				<div class="spec-province-filter">
+					<select class="spec-province" id="spec-province">
+						<option value="nationwide">Toàn quốc</option>
+						<option value="hanoi">Hà Nội</option>
+						<option value="hcm">Hồ Chí Minh</option>
+					</select>
+				</div>
+
+				<div class="spec-list-doctors">
+					<div class="doctor-content">
+						<div class="doctor-content-left">
+							<div
+								class="doctor-img"
+								style="
+									background-image: url('./image/doctors/avatar1.jpg');
+								"
+							></div>
+							<a href="#">Xem thêm</a>
+						</div>
+						<div class="doctor-infor">
+							<h1>Thạc sĩ Tâm lý học Nguyễn Thị Thúy Hằng</h1>
+							<p>
+								Trưởng phòng, Chuyên viên Tham vấn học đường
+								trường Marie Curie
+							</p>
+							<p>
+								Quản lý, Chuyên viên Tham vấn học đường trường
+								THCS Nguyễn Trường Tộ
+							</p>
+							<p>
+								Nhiều năm kinh nghiệm làm việc chuyên sâu trong
+								lĩnh vực đánh giá, tham vấn tâm lý cho trẻ em,
+								vị thành niên và tham vấn gia đình
+							</p>
+							<p><i class="fas fa-map-marker-alt"></i>Hà Nội</p>
+						</div>
+					</div>
+					<div class="doctor-schedule">
+						<select class="date-chooser" id="date-chooser">
+							<option value="2812">Hôm nay - 28/12</option>
+							<option value="2912">Thứ 5 - 29/12</option>
+							<option value="3012">Thứ 6 - 30/12</option>
+						</select>
+						<h2><i class="fas fa-calendar-alt"></i>LỊCH KHÁM</h2>
+						<div class="available-schedule">
+							<a>07:00 - 07:30</a>
+							<a>07:30 - 08:00</a>
+							<a>08:00 - 08:30</a>
+							<a>08:30 - 09:00</a>
+							<a>09:00 - 09:30</a>
+							<a>09:30 - 10:00</a>
+						</div>
+						<div class="choose-and-book">
+							<p>
+								Chọn <i class="fas fa-hand-pointer"></i>và đặt
+								(Phí đặt lịch 0đ)
+							</p>
+						</div>
+						<div class="exam-address">
+							<h3>ĐỊA CHỈ KHÁM</h3>
+							<p>Bệnh viện Đa khoa Hồng Phát</p>
+							<p>Số 219 Lê Duẩn - Hai Bà Trưng - Hà Nội</p>
+						</div>
+						<div class="exam-price">
+							<h3>
+								<strong>GIÁ KHÁM:</strong> 500.000đ.<a
+									>Xem chi tiết</a
+								>
+							</h3>
+						</div>
+						<div class="insurance">
+							<h3>
+								<strong>LOẠI BẢO HIỂM ÁP DỤNG.</strong
+								><a>Xem chi tiết</a>
+							</h3>
+						</div>
+					</div>
+				</div>
+                
+				<div class="spec-list-doctors">
+					<div class="doctor-content">
+						<div class="doctor-content-left">
+							<div
+								class="doctor-img"
+								style="
+									background-image: url('./image/doctors/avatar1.jpg');
+								"
+							></div>
+							<a href="#">Xem thêm</a>
+						</div>
+						<div class="doctor-infor">
+							<h1>Thạc sĩ Tâm lý học Nguyễn Thị Thúy Hằng</h1>
+							<p>
+								Trưởng phòng, Chuyên viên Tham vấn học đường
+								trường Marie Curie
+							</p>
+							<p>
+								Quản lý, Chuyên viên Tham vấn học đường trường
+								THCS Nguyễn Trường Tộ
+							</p>
+							<p>
+								Nhiều năm kinh nghiệm làm việc chuyên sâu trong
+								lĩnh vực đánh giá, tham vấn tâm lý cho trẻ em,
+								vị thành niên và tham vấn gia đình
+							</p>
+							<p><i class="fas fa-map-marker-alt"></i>Hà Nội</p>
+						</div>
+					</div>
+					<div class="doctor-schedule">
+						<select class="date-chooser" id="date-chooser">
+							<option value="2812">Hôm nay - 28/12</option>
+							<option value="2912">Thứ 5 - 29/12</option>
+							<option value="3012">Thứ 6 - 30/12</option>
+						</select>
+						<h2><i class="fas fa-calendar-alt"></i>LỊCH KHÁM</h2>
+						<div class="available-schedule">
+							<a>07:00 - 07:30</a>
+							<a>07:30 - 08:00</a>
+							<a>08:00 - 08:30</a>
+							<a>08:30 - 09:00</a>
+							<a>09:00 - 09:30</a>
+							<a>09:30 - 10:00</a>
+						</div>
+						<div class="choose-and-book">
+							<p>
+								Chọn <i class="fas fa-hand-pointer"></i>và đặt
+								(Phí đặt lịch 0đ)
+							</p>
+						</div>
+						<div class="exam-address">
+							<h3>ĐỊA CHỈ KHÁM</h3>
+							<p>Bệnh viện Đa khoa Hồng Phát</p>
+							<p>Số 219 Lê Duẩn - Hai Bà Trưng - Hà Nội</p>
+						</div>
+						<div class="exam-price">
+							<h3>
+								<strong>GIÁ KHÁM:</strong> 500.000đ.<a
+									>Xem chi tiết</a
+								>
+							</h3>
+						</div>
+						<div class="insurance">
+							<h3>
+								<strong>LOẠI BẢO HIỂM ÁP DỤNG.</strong
+								><a>Xem chi tiết</a>
+							</h3>
+						</div>
+					</div>
+				</div>
+
+				<div class="introduction">
+					<div
+						class="bookingcare-role-btn"
+						onclick="hiden_introduction()"
+					>
+						<p>Vai trò của BookingCare</p>
+					</div>
+					<div id="hiden-introduction" class="hiden-introduction">
+						<p>
+							Giúp khách hàng chọn đúng chuyên gia Tâm lý giỏi và
+							đặt lịch nhanh chóng.
+						</p>
+						<ul>
+							<li>Hệ thống chuyên gia tâm lý giỏi, uy tín</li>
+							<li>
+								Thông tin về chuyên gia tâm lý đã được xác thực
+								rõ ràng, chính xác
+							</li>
+							<li>
+								Sắp xếp khám đúng chuyên gia tâm lý mà khách
+								hàng đã chọn đặt lịch
+							</li>
+							<li>Bảo vệ quyền lợi của khách hàng khi tư vấn</li>
+							<li>Miễn phí đặt lịch</li>
+						</ul>
+						<p>Hỗ trợ trước, trong và sau khi tư vấn</p>
+						<p>
+							<span>Trước tư vấn</span>
+						</p>
+						<ul>
+							<li>Nhắc lịch, dặn dò chuẩn bị trước tư vấn</li>
+							<li>
+								Hướng dẫn đi lại, quy trình làm thủ tục tư vấn
+							</li>
+						</ul>
+						<p>
+							<span>Trong khi tư vấn</span>
+						</p>
+						<ul>
+							<li>
+								Hỗ trợ giải quyết các vướng mắc trong khi tư vấn
+							</li>
+							<li>Hỗ trợ khách hàng những yêu cầu nảy sinh</li>
+						</ul>
+						<p>
+							<span>Sau khi tư vấn</span>
+						</p>
+						<ul>
+							<li>Ghi nhận ý kiến của khách hàng sau tư vấn</li>
+							<li>Bảo vệ quyền lợi của khách hàng sau tư vấn</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="more-questions">
+					<p>
+						Cần tìm hiểu thêm?<a href="#"
+							>Xem câu hỏi thường gặp.</a
+						>
+					</p>
+				</div>
+
+				<div class="footer1">
+					<div class="company-infor">
+						<div class="company-logo"></div>
+						<div class="company-address">
+							<h2>Công ty Cổ phần Công nghệ BookingCare</h2>
+							<p>
+								<i class="fas fa-map-marker-alt"></i>28 Thành
+								Thái, Dịch Vọng, Cầu Giấy, Hà Nội
+							</p>
+							<p>
+								<i class="fas fa-check"></i>ĐKKD số: 0106790291.
+								Sở KHĐT Hà Nội cấp ngày 16/03/2015
+							</p>
+						</div>
+						<div class="registered">
+							<div class="registered-1"></div>
+							<div class="registered-2"></div>
+						</div>
+					</div>
+					<div class="list-features">
+						<ul>
+							<li><a href="#">Liên hệ hợp tác</a></li>
+							<li>
+								<a href="#">Gói chuyển đổi số doanh nghiệp</a>
+							</li>
+							<li><a href="#">Tuyển dụng</a></li>
+							<li><a href="#">Câu hỏi thường gặp</a></li>
+							<li><a href="#">Điều khoản sử dụng</a></li>
+							<li><a href="#">Chính sách Bảo mật</a></li>
+						</ul>
+					</div>
+					<div class="more-infor">
+						<div class="headquarter">
+							<h2>Trụ sở tại Hà Nội</h2>
+							<p>28 Thành Thái, Dịch Vọng, Cầu Giấy, Hà Nội</p>
+						</div>
+						<div class="office">
+							<h2>Văn phòng tại TP Hồ Chí Minh</h2>
+							<p>Số 01, Hồ Bá Kiện, Phường 15, Quận 10</p>
+						</div>
+						<div class="footer-support">
+							<h2>Hỗ trợ khách hàng</h2>
+							<p>support@bookingcare.vn (7h - 18h)</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="footer2">
+					<div class="footer-left">
+						<p>&copy; 2022 Pham Duc Tinh</p>
+					</div>
+					<div class="footer-right">
+						<i class="fab fa-facebook-square"></i>
+						<i class="fab fa-youtube"></i>
+						<i class="fab fa-instagram"></i>
+						<i class="fab fa-twitter"></i>
+					</div>
+				</div>
+			</div>
+            
+		</div>
+		<script src="./js/specialty.js"></script>
+	</body>
+</html>

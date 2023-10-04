@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="./css/manage_user.css" />
+		<link rel="shortcut icon" href="/home/image/logo/bookingcare.png" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+			integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
+		<title>Manage users</title>
+	</head>
+	<body>
+		<div class="container">
+			<div class="manage-user-header">
+				<div class="navbar">
+					<ul>
+						<li><a href="#">Manage users</a></li>
+					</ul>
+				</div>
+				<div class="log-out" id="logout">
+					<i onclick="logout()" class="fas fa-sign-out-alt"></i>
+				</div>
+			</div>
+			<div class="manage-user-container">
+				<h1>Manage users</h1>
+
+				<button id="add-new">Thêm mới</button>
+
+				<div id="add-new-modal" class="modal">
+					<!-- Modal content -->
+					<div class="modal-content">
+						<span class="close">&times;</span>
+						<p>Thêm mới người dùng</p>
+						<input class="email" type="email" placeholder="Email" />
+						<input
+							class="password"
+							type="password"
+							placeholder="Password"
+						/>
+						<input
+							class="confirm-password"
+							type="password"
+							placeholder="Confirm Password"
+						/>
+						<input
+							class="fullname"
+							type="text"
+							placeholder="Full name"
+						/>
+						<input
+							class="address"
+							type="text"
+							placeholder="Address"
+						/>
+						<button class="btn-add-new">Add</button>
+						<button class="btn-cancel">Cancel</button>
+					</div>
+				</div>
+
+				<table>
+					<tr>
+						<th>Email</th>
+						<th>Name</th>
+						<th>Address</th>
+						<th>Actions</th>
+					</tr>
+					<tr>
+						<td width="30%">abc@gmail.com</td>
+						<td width="30%">abc</td>
+						<td width="25%">Ha Noi</td>
+						<td width="15%">
+							<button class="btn-edit">
+								<i class="fas fa-edit"></i>
+							</button>
+							<button class="btn-delete">
+								<i class="fas fa-trash"></i>
+							</button>
+						</td>
+					</tr>
+					<tr>
+						<td width="30%">abc@gmail.com</td>
+						<td width="30%">abc</td>
+						<td width="25%">Ha Noi</td>
+						<td width="15%">
+							<button class="btn-edit">
+								<i class="fas fa-edit"></i>
+							</button>
+							<button class="btn-delete">
+								<i class="fas fa-trash"></i>
+							</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<script src="./js/manage-user.js"></script>
+		<script src="/login/js/login.js"></script>
+	</body>
+</html>

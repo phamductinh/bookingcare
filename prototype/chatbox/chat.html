@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Messenger-Like Interface</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+				display: flex;
+				height: 100vh;
+			}
+
+			.sidebar {
+				width: 20%;
+				background-color: #333;
+				color: #fff;
+				padding: 20px;
+				box-shadow: 1px 0px 5px rgba(0, 0, 0, 0.2);
+			}
+
+			.chat-container {
+				flex-grow: 1;
+				padding: 20px;
+				background-color: #f4f4f4;
+				overflow-y: scroll;
+			}
+
+			.message {
+				background-color: #fff;
+				border-radius: 5px;
+				padding: 10px;
+				margin: 10px;
+				max-width: 60%;
+				box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+			}
+
+			.message.sent {
+				background-color: #0084ff;
+				color: #fff;
+				align-self: flex-end;
+			}
+
+			.message.received {
+				background-color: #e2e2e2;
+			}
+
+			.message-list {
+				list-style: none;
+				padding: 0;
+			}
+
+			.message-input {
+				width: 80%;
+				padding: 10px;
+				border: none;
+				border-radius: 5px;
+				margin-right: 10px;
+			}
+
+			.send-button {
+				width: 10%;
+				background-color: #0084ff;
+				color: #fff;
+				border: none;
+				border-radius: 5px;
+				padding: 10px;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="sidebar">
+			<h2>Groups</h2>
+			<ul>
+				<li>Group 1</li>
+				<li>Group 2</li>
+				<li>Group 3</li>
+				<!-- Add more groups here -->
+			</ul>
+		</div>
+		<div class="chat-container">
+			<ul class="message-list">
+				<li class="message received">Hello!</li>
+				<li class="message sent">Hi there!</li>
+				<!-- Add more messages here -->
+			</ul>
+			<div class="input-container">
+				<input
+					type="text"
+					class="message-input"
+					placeholder="Type your message..."
+				/>
+				<button class="send-button">Send</button>
+			</div>
+		</div>
+	</body>
+</html>
