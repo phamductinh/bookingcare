@@ -2,19 +2,24 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getDoctorById } from "../../../services/doctorService";
 import { NumericFormat } from "react-number-format";
-import { Link } from "react-router-dom";
 import "./Booking.css";
-import { bookingAnAppointmentService } from "../../../services/bookingService";
+import {
+	bookingAnAppointmentService,
+	getBookingByDate,
+} from "../../../services/bookingService";
 import { toast } from "react-toastify";
 import * as actions from "../../../store/actions/";
 import LoadingSpinner from "../../../components/Common/Loading";
+import moment from "moment";
 
 class Booking extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			detailDoctor: "",
-            isLoading: false
+			isLoading: false,
+			bookedTimes: [],
+			selectedButton: null,
 		};
 	}
 
@@ -50,7 +55,67 @@ class Booking extends Component {
 		await this.setState({
 			...copyState,
 		});
-		
+	};
+
+	handleOnchangeDate = async (event) => {
+		let date = event.target.value;
+		// const hours = [
+		// 	"7:00",
+		// 	"8:00",
+		// 	"9:00",
+		// 	"10:00",
+		// 	"11:00",
+		// 	"13:00",
+		// 	"14:00",
+		// 	"15:00",
+		// 	"16:00",
+		// 	"17:00",
+		// ];
+
+		let hours = [];
+		let startTime = 7;
+		let endTime = 17;
+		for (let i = startTime; i <= endTime; i++) {
+			let time = i + ":00";
+			hours.push(time);
+		}
+
+		let currentDate = new Date();
+		currentDate.setHours(0, 0, 0, 0);
+		let dateChoosed = new Date(date);
+		dateChoosed.setHours(0, 0, 0, 0);
+
+		let formatDate = new Date(date).getTime();
+
+		this.setState({
+			hours: hours,
+			date: date,
+		});
+		let res = await getBookingByDate(formatDate);
+		if (res && res.code === 200) {
+			const bookingTimes = res.data.map((item) => item.booking_time);
+			if (currentDate.getTime() === dateChoosed.getTime()) {
+				const currentHour = new Date().getHours();
+				for (let i = 0; i < hours.length; i++) {
+					const [hour] = hours[i].split(":");
+					if (parseInt(hour, 10) <= currentHour + 1) {
+						bookingTimes.push(hours[i]);
+					}
+				}
+			}
+			this.setState({
+				bookedTimes: bookingTimes,
+			});
+		}
+	};
+
+	handleButtonClick = async (e, item) => {
+		e.preventDefault();
+		if (this.state.selectedButton !== item) {
+			await this.setState({ selectedButton: item });
+		} else {
+			await this.setState({ selectedButton: null });
+		}
 	};
 
 	handleBooking = async () => {
@@ -79,43 +144,45 @@ class Booking extends Component {
 			booking_date_formated: formattedDateString,
 			isTelemedicine: 1,
 		};
-		try {
+		const isEmptyField = Object.values(data).some((value) => !value);
+
+		if (isEmptyField) {
 			this.setState({
-				errMsgSignUp: "",
-				isLoading: true,
+				errMsgSignUp: "Vui lòng điền đầy đủ thông tin!",
 			});
-			let response = await bookingAnAppointmentService(data);
-			console.log("check response", response);
-			toast.success("Booking successfully !");
-			this.setState({
-				isLoading: false,
-			});
-		} catch (error) {
-			console.log(error);
-            this.setState({
-				isLoading: false,
-			});
-			if (error.response) {
-				if (error.response.data) {
-					this.setState({
-						errMsgSignUp: error.response.data.msg,
-					});
+		} else {
+			try {
+				this.setState({
+					errMsgSignUp: "",
+					isLoading: true,
+				});
+				let response = await bookingAnAppointmentService(data);
+				console.log("check response", response);
+				toast.success("Booking successfully !");
+				this.setState({
+					isLoading: false,
+				});
+			} catch (error) {
+				console.log(error);
+				this.setState({
+					isLoading: false,
+				});
+				if (error.response) {
+					if (error.response.data) {
+						this.setState({
+							errMsgSignUp: error.response.data.msg,
+						});
+					}
 				}
 			}
 		}
 	};
 
 	render() {
-		let { detailDoctor, isLoading } = this.state;
-		let currentDate = new Date().toISOString().split("T")[0];
-		let arrTime = [];
-		let startTime = 7;
-		let endTime = 17;
-		for (let i = startTime; i <= endTime; i++) {
-			let time = i + ":00";
-			arrTime.push(time);
-		}
-		console.log(new Date(1686441600000));
+		let { detailDoctor, isLoading, hours, bookedTimes, selectedButton } =
+			this.state;
+		let currentDate = moment().format("YYYY-MM-DD");
+
 		return (
 			<>
 				<div className="booking-detail-doctor-container">
@@ -176,36 +243,48 @@ class Booking extends Component {
 										type="date"
 										min={currentDate}
 										onChange={(event) =>
-											this.handleOnchangeInput(
+											this.handleOnchangeDate(
 												event,
 												"date"
 											)
 										}
 									/>
 								</div>
-								<label htmlFor="">Chọn giờ khám:</label>
-								<div className="booking-input">
-									<i className="fa-solid fa-clock"></i>
-									<select
-										value={this.state.hour}
-										onChange={(event) =>
-											this.handleOnchangeInput(
-												event,
-												"time"
-											)
-										}
-										defaultValue={""}
-									>
-										<option value="" disabled defaultValue>
-											Chọn giờ khám
-										</option>
-										{arrTime.map((hour, index) => (
-											<option key={index} value={hour}>
-												{hour}
-											</option>
-										))}
-									</select>
-								</div>
+								{hours && (
+									<>
+										<label htmlFor="">Chọn giờ khám:</label>
+										<div className="time-content-btns">
+											{hours.map((item, index) => {
+												const isDisabled =
+													bookedTimes.includes(item);
+												return (
+													<button
+														key={index}
+														className={`btn-time ${
+															isDisabled
+																? "btn-disabled"
+																: ""
+														} ${
+															selectedButton ===
+															item
+																? "btn-selected"
+																: ""
+														}`}
+														disabled={isDisabled}
+														onClick={(e) =>
+															this.handleButtonClick(
+																e,
+																item
+															)
+														}
+													>
+														{item}
+													</button>
+												);
+											})}
+										</div>
+									</>
+								)}
 								<div className="booking-input">
 									<i className="fa-solid fa-user"></i>
 									<input
@@ -516,7 +595,7 @@ class Booking extends Component {
 							</div>
 						</div>
 
-                        {isLoading && <LoadingSpinner />}
+						{isLoading && <LoadingSpinner />}
 					</div>
 				</div>
 			</>
