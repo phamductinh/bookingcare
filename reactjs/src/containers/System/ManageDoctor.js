@@ -43,7 +43,7 @@ class ManageDoctor extends Component {
 		await this.getAllDoctorsReact();
 		await this.getAllClinicsReact();
 		await this.getAllSpecialtyReact();
-		let token = localStorage.getItem("token");
+		let token = await localStorage.getItem("token");
 		this.setState({
 			token: token,
 		});

@@ -19,6 +19,22 @@ const getAllUsers = (token) => {
 	});
 };
 
+const getTotalRowUser = (token) => {
+	return axios.get("/api/get-total-row-user", {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+};
+
+const getPaginationUsers = (token, page) => {
+	return axios.get(`/api/get-pagination-users?page=${page}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+};
+
 const deleteUser = (token, userId) => {
 	return axios.delete(`/api/delete-user?id=${userId}`, {
 		headers: {
@@ -35,4 +51,12 @@ const editUser = (token, userData) => {
 	});
 };
 
-export { handleLoginAPI, handleCreateUser, getAllUsers, deleteUser, editUser };
+export {
+	handleLoginAPI,
+	handleCreateUser,
+	getAllUsers,
+	deleteUser,
+	editUser,
+	getPaginationUsers,
+	getTotalRowUser,
+};

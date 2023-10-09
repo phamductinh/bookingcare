@@ -1,3 +1,11 @@
+.lds-spinner-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+	width: 100vw;
+	height: 100vh;
+    background-color:  rgba(204, 203, 203, 0.5);
+}
 .lds-spinner {
 	color: official;
 	display: inline-block;

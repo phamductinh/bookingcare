@@ -19,7 +19,7 @@ class Header extends Component {
 		let menu = [];
 		if (userInfo && !_.isEmpty(userInfo)) {
 			let role = userInfo.role;
-			if (role === "Admin") {
+			if (role === "Admin" || role === "Owner") {
 				menu = adminMenu;
 			}
 			if (role === "Doctor") {

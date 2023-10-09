@@ -74,7 +74,7 @@ class Booking extends Component {
 
 		let hours = [];
 		let startTime = 7;
-		let endTime = 17;
+		let endTime = 16;
 		for (let i = startTime; i <= endTime; i++) {
 			let time = i + ":00";
 			hours.push(time);
@@ -131,7 +131,7 @@ class Booking extends Component {
 			userId: this.props.userInfor.id,
 			doctorId: this.props.match.params.id,
 			booking_date: formatedDate,
-			booking_time: this.state.time,
+			booking_time: this.state.selectedButton,
 			fullName: this.state.fullName,
 			gender: this.state.gender,
 			phoneNumber: this.state.phoneNumber,
@@ -163,7 +163,6 @@ class Booking extends Component {
 					isLoading: false,
 				});
 			} catch (error) {
-				console.log(error);
 				this.setState({
 					isLoading: false,
 				});

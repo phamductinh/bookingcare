@@ -30,7 +30,8 @@ class ManageTelemedicineBooking extends Component {
 			this.setState({
 				isLoading: true,
 			});
-			let res = await deleteBooking(this.state.bookingId);
+			let token = await localStorage.getItem("token");
+			let res = await deleteBooking(token, this.state.bookingId);
 			if (res && res.code === 200) {
 				toast.success("Delete successfully !");
 				await getBookingByDate(this.state.formatedDate);
@@ -41,13 +42,17 @@ class ManageTelemedicineBooking extends Component {
 			}
 		} catch (error) {
 			console.log(error);
+			this.setState({
+				confirmDelete: false,
+			});
 			toast.error("Something wrong !");
 		}
 	};
 
 	handleConfirmBooking = async (item) => {
 		try {
-			let res = await confirmBooking(item.id);
+			let token = await localStorage.getItem("token");
+			let res = await confirmBooking(token, item.id);
 			if (res && res.code === 200) {
 				toast.success("Confirm successfully !");
 				await getBookingByDate(this.state.formatedDate);

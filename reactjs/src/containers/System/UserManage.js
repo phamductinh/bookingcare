@@ -2,16 +2,17 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./UserManage.css";
 import {
-	getAllUsers,
+	getPaginationUsers,
 	handleCreateUser,
 	deleteUser,
 	editUser,
+	getTotalRowUser,
 } from "../../services/userService";
-import UserModal from "../Modal/UserModal";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Header/Header";
 import LoadingSpinner from "../../components/Common/Loading";
+import Pagination from "../../components/Common/Pagination";
 
 class UserManage extends Component {
 	constructor(props) {
@@ -33,28 +34,43 @@ class UserManage extends Component {
 			setModalEditUser: false,
 			isLoading: false,
 			confirmDelete: false,
+			newPage: 1,
 		};
 	}
 
 	async componentDidMount() {
 		await this.getAllUsersReact();
+		await this.getTotalRowUser();
 	}
 
 	getAllUsersReact = async () => {
 		this.setState({
 			isLoading: true,
 		});
-		let token = localStorage.getItem("token");
-		let res = await getAllUsers(token);
+		let token = await localStorage.getItem("token");
+		let res = await getPaginationUsers(token, this.state.newPage);
+		console.log(res);
 		if (res && res.code === 200) {
 			this.setState({
 				arrUsers: res.data,
 				isLoading: false,
 			});
 		} else {
-			console.log("Error!");
 			this.setState({
 				isLoading: false,
+			});
+		}
+	};
+
+	getTotalRowUser = async () => {
+		let token = await localStorage.getItem("token");
+		let res = await getTotalRowUser(token);
+		if (res && res.code === 200) {
+			console.log(res.data);
+			let row = Math.ceil(res.data.totalRow / 5);
+			console.log(row);
+			this.setState({
+				totalRow: row,
 			});
 		}
 	};
@@ -178,7 +194,7 @@ class UserManage extends Component {
 
 	handleDeleteUser = async () => {
 		try {
-			let token = localStorage.getItem("token");
+			let token = await localStorage.getItem("token");
 			let res = await deleteUser(token, this.state.userId);
 			if (res && res.code === 200) {
 				await this.getAllUsersReact();
@@ -188,7 +204,9 @@ class UserManage extends Component {
 				});
 			}
 		} catch (error) {
-			console.log(error);
+			this.setState({
+				confirmDelete: false,
+			});
 			toast.error("Something wrong !");
 		}
 	};
@@ -204,7 +222,7 @@ class UserManage extends Component {
 				id: this.state.userId,
 			};
 
-			let token = localStorage.getItem("token");
+			let token = await localStorage.getItem("token");
 			let res = await editUser(token, userData);
 			if (res && res.code === 200) {
 				this.setState({
@@ -231,6 +249,13 @@ class UserManage extends Component {
 			confirmDelete: false,
 		});
 	}
+
+	handlePageChange = async (newPage) => {
+		this.setState({
+			newPage: newPage,
+		});
+		await this.getAllUsersReact();
+	};
 
 	render() {
 		let {
@@ -311,6 +336,12 @@ class UserManage extends Component {
 									);
 								})}
 						</table>
+					</div>
+					<div className="pagination-container">
+						<Pagination
+							totalPages={this.state.totalRow}
+							onPageChange={this.handlePageChange}
+						/>
 					</div>
 
 					{setModalIsOpen ? (

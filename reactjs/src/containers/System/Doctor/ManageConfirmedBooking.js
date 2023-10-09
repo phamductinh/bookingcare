@@ -34,7 +34,8 @@ class ManageConfirmedBooking extends Component {
 
 	handleConfirmBooking = async () => {
 		try {
-			let res = await finishBooking(this.state.bookingId);
+			let token = await localStorage.getItem("token");
+			let res = await finishBooking(token, this.state.bookingId);
 			if (res && res.code === 200) {
 				toast.success("Update successfully !");
 				this.setState({

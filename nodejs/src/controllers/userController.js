@@ -19,6 +19,41 @@ const getAllUsers = (req, res) => {
 	});
 };
 
+const getTotalRowUser = (req, res) => {
+	userModel.getTotalRowUserModel((error, results) => {
+		if (error) {
+			return res.status(500).send({
+				code: 500,
+				msg: errMsg.failed,
+			});
+		} else {
+			return res.status(200).send({
+				code: 200,
+				data: results[0],
+			});
+		}
+	});
+};
+
+const getPaginationUsers = (req, res) => {
+	let page = req.query.page ? req.query.page : 1;
+	let limit = 5;
+	let start = (page - 1) * limit;
+	userModel.getPaginationUsersModel(start, limit, (error, results) => {
+		if (error) {
+			return res.status(500).send({
+				code: 500,
+				msg: "Failed!",
+			});
+		} else {
+			return res.status(200).send({
+				code: 200,
+				data: results,
+			});
+		}
+	});
+};
+
 let getUser = (req, res) => {
 	let userId = req.query.id;
 	if (!userId) {
@@ -101,4 +136,6 @@ module.exports = {
 	createUser,
 	deleteUser,
 	updateUser,
+	getPaginationUsers,
+	getTotalRowUser,
 };

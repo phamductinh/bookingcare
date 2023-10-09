@@ -17,19 +17,33 @@ const getBookingByDate = (date) => {
 };
 
 const getTelemedicineBookingByDate = (date) => {
-	return axios.get(`/api/get-telemedicine-booking-by-date?booking_date=${date}`);
+	return axios.get(
+		`/api/get-telemedicine-booking-by-date?booking_date=${date}`
+	);
 };
 
-const confirmBooking = (bookingId) => {
-	return axios.put(`/api/confirm-booking?id=${bookingId}`);
+const confirmBooking = (token, bookingId) => {
+	return axios.put(`/api/confirm-booking?id=${bookingId}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
 };
 
-const finishBooking = (bookingId) => {
-	return axios.put(`/api/finish-booking?id=${bookingId}`);
+const finishBooking = (token, bookingId) => {
+	return axios.put(`/api/finish-booking?id=${bookingId}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
 };
 
-const deleteBooking = (bookingId) => {
-	return axios.delete(`/api/delete-booking?id=${bookingId}`);
+const deleteBooking = (token, bookingId) => {
+	return axios.delete(`/api/delete-booking?id=${bookingId}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
 };
 
 export {
@@ -40,5 +54,5 @@ export {
 	getAllConfirmedBooking,
 	finishBooking,
 	getAllFinishedBooking,
-    getTelemedicineBookingByDate
+	getTelemedicineBookingByDate,
 };

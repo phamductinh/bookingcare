@@ -13,12 +13,35 @@ import {
 	createAUser,
 	updateUserQuery,
 	deleteUserById,
+	totalRowUser,
 } from "../database/queries";
 import { errMsg } from "../utils/resMsg";
 
 let getAllUsers = (callback) => {
 	db.query(findAllUsers, (error, results) => {
 		if (error) {
+			callback(error, null);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
+let getTotalRowUserModel = (callback) => {
+	db.query(totalRowUser, (error, results) => {
+		if (error) {
+			callback(error, null);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
+let getPaginationUsersModel = (start, limit, callback) => {
+	let sql = `SELECT * FROM user ORDER BY id ASC LIMIT ${start} , ${limit}`;
+	db.query(sql, (error, results) => {
+		if (error) {
+			console.log(error);
 			callback(error, null);
 		} else {
 			callback(null, results);
@@ -158,4 +181,6 @@ module.exports = {
 	createUser,
 	updateAUser,
 	deleteAUser,
+	getPaginationUsersModel,
+	getTotalRowUserModel,
 };

@@ -84,7 +84,12 @@ let createRoomQuery = `INSERT INTO room (code, status) VALUES (?,?)`;
 
 let findRoomByCode = `SELECT * FROM room WHERE code = ?`;
 
+let totalRowUser = `SELECT COUNT(*) as totalRow FROM user`
+let totalRowDoctor = `SELECT COUNT(*) as totalRow FROM doctor`
+let totalRowSpecialty = `SELECT COUNT(*) as totalRow FROM specialty`
+
 module.exports = {
+    totalRowUser,
 	getEmailPatientsQuery,
 	getTelemedicineBookingByDateQuery,
 	findDoctorIsTelemedicine,
