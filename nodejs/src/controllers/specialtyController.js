@@ -17,6 +17,45 @@ const getAllSpecialty = (req, res) => {
 	});
 };
 
+const getTotalRowSpecialty = (req, res) => {
+	specialtyModel.getTotalRowSpecialtyModel((error, results) => {
+		if (error) {
+			return res.status(500).send({
+				code: 500,
+				msg: errMsg.failed,
+			});
+		} else {
+			return res.status(200).send({
+				code: 200,
+				data: results[0],
+			});
+		}
+	});
+};
+
+const getPaginationSpecialty = (req, res) => {
+	let page = req.query.page ? req.query.page : 1;
+	let limit = 4;
+	let start = (page - 1) * limit;
+	specialtyModel.getPaginationSpecialtyModel(
+		start,
+		limit,
+		(error, results) => {
+			if (error) {
+				return res.status(500).send({
+					code: 500,
+					msg: "Failed!",
+				});
+			} else {
+				return res.status(200).send({
+					code: 200,
+					data: results,
+				});
+			}
+		}
+	);
+};
+
 let createSpecialty = (req, res) => {
 	let data = req.body;
 	specialtyModel.createNewSpecialtyModel(data, (err, results) => {
@@ -71,4 +110,6 @@ module.exports = {
 	getAllSpecialty,
 	deleteSpecialty,
 	updateSpecialty,
+	getTotalRowSpecialty,
+	getPaginationSpecialty,
 };

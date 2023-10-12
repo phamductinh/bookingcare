@@ -1,5 +1,4 @@
 import db from "../configs/connectDB";
-import bcrypt from "bcryptjs";
 import {
 	findAllDoctorsQuery,
 	findDoctorById,
@@ -7,11 +6,33 @@ import {
 	updateDoctorQuery,
 	deleteDoctorById,
 	findDoctorIsTelemedicine,
+	totalRowDoctor,
 } from "../database/queries";
 import { errMsg } from "../utils/resMsg";
 
 let getAllDoctorsModel = (callback) => {
 	db.query(findAllDoctorsQuery, (error, results) => {
+		if (error) {
+			callback(error, null);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
+let getTotalRowDoctorModel = (callback) => {
+	db.query(totalRowDoctor, (error, results) => {
+		if (error) {
+			callback(error, null);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
+let getPaginationDoctorsModel = (start, limit, callback) => {
+	let sql = `SELECT * FROM doctor ORDER BY id ASC LIMIT ${start} , ${limit}`;
+	db.query(sql, (error, results) => {
 		if (error) {
 			callback(error, null);
 		} else {
@@ -103,4 +124,6 @@ module.exports = {
 	updateADoctorModel,
 	deleteADoctorModel,
 	getDoctorIsTelemedicineModel,
+	getTotalRowDoctorModel,
+	getPaginationDoctorsModel,
 };

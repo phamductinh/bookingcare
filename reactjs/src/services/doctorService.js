@@ -38,6 +38,14 @@ const updateDoctor = (token, doctorData) => {
 	});
 };
 
+const getTotalRowDoctor = () => {
+	return axios.get("/api/get-total-row-doctor");
+};
+
+const getPaginationDoctors = (page) => {
+	return axios.get(`/api/get-pagination-doctors?page=${page}`);
+};
+
 export {
 	handleCreateDoctor,
 	getAllDoctors,
@@ -46,4 +54,6 @@ export {
 	updateDoctor,
 	getDoctorIsTelemedicine,
 	getDoctorByKeyword,
+	getTotalRowDoctor,
+	getPaginationDoctors,
 };

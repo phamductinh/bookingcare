@@ -16,9 +16,19 @@ const updateSpecialty = (data) => {
 	return axios.put(`/api/update-specialty`, data);
 };
 
+const getTotalRowSpecialty = () => {
+	return axios.get("/api/get-total-row-specialty");
+};
+
+const getPaginationSpecialty = (page) => {
+	return axios.get(`/api/get-pagination-specialty?page=${page}`);
+};
+
 export {
 	handleCreateSpecialty,
 	getALLSpecialty,
 	deleteSpecialty,
 	updateSpecialty,
+	getTotalRowSpecialty,
+	getPaginationSpecialty,
 };

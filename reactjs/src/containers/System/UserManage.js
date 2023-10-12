@@ -66,9 +66,7 @@ class UserManage extends Component {
 		let token = await localStorage.getItem("token");
 		let res = await getTotalRowUser(token);
 		if (res && res.code === 200) {
-			console.log(res.data);
 			let row = Math.ceil(res.data.totalRow / 5);
-			console.log(row);
 			this.setState({
 				totalRow: row,
 			});
@@ -251,7 +249,7 @@ class UserManage extends Component {
 	}
 
 	handlePageChange = async (newPage) => {
-		this.setState({
+		await this.setState({
 			newPage: newPage,
 		});
 		await this.getAllUsersReact();

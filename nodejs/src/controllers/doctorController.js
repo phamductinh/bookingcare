@@ -18,6 +18,41 @@ const getAllDoctors = (req, res) => {
 	});
 };
 
+const getTotalRowDoctor = (req, res) => {
+	doctorModel.getTotalRowDoctorModel((error, results) => {
+		if (error) {
+			return res.status(500).send({
+				code: 500,
+				msg: errMsg.failed,
+			});
+		} else {
+			return res.status(200).send({
+				code: 200,
+				data: results[0],
+			});
+		}
+	});
+};
+
+const getPaginationDoctors = (req, res) => {
+	let page = req.query.page ? req.query.page : 1;
+	let limit = 4;
+	let start = (page - 1) * limit;
+	doctorModel.getPaginationDoctorsModel(start, limit, (error, results) => {
+		if (error) {
+			return res.status(500).send({
+				code: 500,
+				msg: "Failed!",
+			});
+		} else {
+			return res.status(200).send({
+				code: 200,
+				data: results,
+			});
+		}
+	});
+};
+
 let getDoctorByKeyword = (req, res) => {
 	const keyword = req.query.keyword;
 	const specialtyId = parseInt(req.query.specialtyId);
@@ -127,4 +162,6 @@ module.exports = {
 	updateADoctor,
 	getDoctorIsTelemedicine,
 	getDoctorByKeyword,
+	getTotalRowDoctor,
+	getPaginationDoctors,
 };

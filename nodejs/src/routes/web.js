@@ -37,6 +37,16 @@ let initWebRoutes = (app) => {
 	router.delete("/api/delete-user", authApiOwner, userController.deleteUser);
 
 	router.get("/api/get-all-doctors", doctorController.getAllDoctors);
+	router.get(
+		"/api/get-pagination-doctors",
+
+		doctorController.getPaginationDoctors
+	);
+	router.get(
+		"/api/get-total-row-doctor",
+
+		doctorController.getTotalRowDoctor
+	);
 	router.get("/api/get-a-doctor", doctorController.getADoctor);
 	router.get(
 		"/api/get-doctor-by-keyword",
@@ -93,6 +103,16 @@ let initWebRoutes = (app) => {
 		"/api/update-specialty",
 		authApi,
 		specialtyController.updateSpecialty
+	);
+    router.get(
+		"/api/get-pagination-specialty",
+
+		specialtyController.getPaginationSpecialty
+	);
+	router.get(
+		"/api/get-total-row-specialty",
+
+		specialtyController.getTotalRowSpecialty
 	);
 
 	router.get("/api/get-all-clinics", clinicController.getAllClinics);

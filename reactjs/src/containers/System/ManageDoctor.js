@@ -7,6 +7,8 @@ import {
 	deleteDoctor,
 	updateDoctor,
 	getDoctorById,
+	getPaginationDoctors,
+	getTotalRowDoctor,
 } from "../../services/doctorService";
 import { getALLSpecialty } from "../../services/specialtyService";
 import { getAllClinics } from "../../services/clinicService";
@@ -18,6 +20,7 @@ import { CommonUtils } from "../../utils";
 import MdEditor from "react-markdown-editor-lite";
 import MarkdownIt from "markdown-it";
 import "react-markdown-editor-lite/lib/index.css";
+import Pagination from "../../components/Common/Pagination";
 const mdParser = new MarkdownIt();
 
 class ManageDoctor extends Component {
@@ -36,6 +39,7 @@ class ManageDoctor extends Component {
 			setModalEditUser: false,
 			isLoading: false,
 			confirmDelete: false,
+			newPage: 1,
 		};
 	}
 
@@ -43,6 +47,7 @@ class ManageDoctor extends Component {
 		await this.getAllDoctorsReact();
 		await this.getAllClinicsReact();
 		await this.getAllSpecialtyReact();
+		await this.getTotalRowDoctorReact();
 		let token = await localStorage.getItem("token");
 		this.setState({
 			token: token,
@@ -53,7 +58,8 @@ class ManageDoctor extends Component {
 		this.setState({
 			isLoading: true,
 		});
-		let res = await getAllDoctors();
+		let res = await getPaginationDoctors(this.state.newPage);
+		console.log(res);
 		if (res && res.code === 200) {
 			this.setState({
 				arrDoctors: res.data,
@@ -61,6 +67,17 @@ class ManageDoctor extends Component {
 			});
 		}
 	};
+
+	getTotalRowDoctorReact = async () => {
+		let res = await getTotalRowDoctor();
+		if (res && res.code === 200) {
+			let row = Math.ceil(res.data.totalRow / 5);
+			this.setState({
+				totalRow: row,
+			});
+		}
+	};
+
 	getAllSpecialtyReact = async () => {
 		this.setState({
 			isLoading: true,
@@ -257,6 +274,13 @@ class ManageDoctor extends Component {
 		});
 	};
 
+	handlePageChange = async (newPage) => {
+		await this.setState({
+			newPage: newPage,
+		});
+		await this.getAllDoctorsReact();
+	};
+
 	render() {
 		let {
 			arrDoctors,
@@ -354,6 +378,13 @@ class ManageDoctor extends Component {
 									);
 								})}
 						</table>
+					</div>
+
+					<div className="pagination-container">
+						<Pagination
+							totalPages={this.state.totalRow}
+							onPageChange={this.handlePageChange}
+						/>
 					</div>
 
 					{setModalIsOpen ? (

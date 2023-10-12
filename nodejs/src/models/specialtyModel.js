@@ -2,7 +2,8 @@ import db from "../configs/connectDB";
 import {
 	findAllSpecialtyQuery,
 	createNewSpecialtyQuery,
-    deleteSpecialtyById
+	deleteSpecialtyById,
+	totalRowSpecialty,
 } from "../database/queries";
 
 let getAllSpecialtyModel = (callback) => {
@@ -44,9 +45,32 @@ let deleteSpecialtyModel = (id, callback) => {
 	return db.query(deleteSpecialtyById, [id], callback);
 };
 
+let getTotalRowSpecialtyModel = (callback) => {
+	db.query(totalRowSpecialty, (error, results) => {
+		if (error) {
+			callback(error, null);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
+let getPaginationPecialtyModel = (start, limit, callback) => {
+	let sql = `SELECT * FROM specialty ORDER BY id ASC LIMIT ${start} , ${limit}`;
+	db.query(sql, (error, results) => {
+		if (error) {
+			callback(error, null);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
 module.exports = {
 	getAllSpecialtyModel,
 	createNewSpecialtyModel,
-    deleteSpecialtyModel,
-    updateSpecialtyModel
+	deleteSpecialtyModel,
+	updateSpecialtyModel,
+	getTotalRowSpecialtyModel,
+	getPaginationPecialtyModel,
 };
