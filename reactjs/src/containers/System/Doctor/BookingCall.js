@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getDoctorById } from "../../../services/doctorService";
 import { NumericFormat } from "react-number-format";
-import { Link } from "react-router-dom";
 import "./BookingCall.css";
 import { bookingAnAppointmentService } from "../../../services/bookingService";
 import { toast } from "react-toastify";
@@ -55,11 +54,10 @@ class BookingCall extends Component {
 		let formatedDate = new Date(this.state.date).getTime();
 		let formattedDate = new Date(formatedDate);
 
-        
 		let day = formattedDate.getDate();
 		let month = formattedDate.getMonth() + 1;
 		let year = formattedDate.getFullYear();
-        
+
 		let formattedDateString = `${day}/${month}/${year}`;
 		let idRoom = uuidv4();
 		console.log(formatedDate);
@@ -490,7 +488,7 @@ class BookingCall extends Component {
 						<div className="more-questions">
 							<p>
 								Cần tìm hiểu thêm?
-								<a href="#">Xem câu hỏi thường gặp.</a>
+								<a href="#/">Xem câu hỏi thường gặp.</a>
 							</p>
 						</div>
 
@@ -520,24 +518,24 @@ class BookingCall extends Component {
 							<div className="list-features">
 								<ul>
 									<li>
-										<a href="#">Liên hệ hợp tác</a>
+										<a href="#/">Liên hệ hợp tác</a>
 									</li>
 									<li>
-										<a href="#">
+										<a href="#/">
 											Gói chuyển đổi số doanh nghiệp
 										</a>
 									</li>
 									<li>
-										<a href="#">Tuyển dụng</a>
+										<a href="#/">Tuyển dụng</a>
 									</li>
 									<li>
-										<a href="#">Câu hỏi thường gặp</a>
+										<a href="#/">Câu hỏi thường gặp</a>
 									</li>
 									<li>
-										<a href="#">Điều khoản sử dụng</a>
+										<a href="#/">Điều khoản sử dụng</a>
 									</li>
 									<li>
-										<a href="#">Chính sách Bảo mật</a>
+										<a href="#/">Chính sách Bảo mật</a>
 									</li>
 								</ul>
 							</div>

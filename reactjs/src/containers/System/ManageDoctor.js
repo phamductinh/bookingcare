@@ -2,11 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./ManageDoctor.css";
 import {
-	getAllDoctors,
 	handleCreateDoctor,
 	deleteDoctor,
 	updateDoctor,
-	getDoctorById,
 	getPaginationDoctors,
 	getTotalRowDoctor,
 } from "../../services/doctorService";
@@ -307,76 +305,78 @@ class ManageDoctor extends Component {
 					</div>
 					<div className="users-table mt-3 mx-3">
 						<table id="customers">
-							<tr>
-								<th width="5%" className="text-center">
-									Id
-								</th>
-								<th width="20%" className="text-center">
-									Image
-								</th>
-								<th width="20%" className="text-center">
-									Name
-								</th>
-								<th width="20%" className="text-center">
-									Introduction
-								</th>
-								<th width="15%" className="text-center">
-									Address
-								</th>
-								<th width="10%" className="text-center">
-									Price
-								</th>
-								<th width="10%" className="text-center">
-									Actions
-								</th>
-							</tr>
+							<tbody>
+								<tr>
+									<th width="5%" className="text-center">
+										Id
+									</th>
+									<th width="20%" className="text-center">
+										Image
+									</th>
+									<th width="20%" className="text-center">
+										Name
+									</th>
+									<th width="20%" className="text-center">
+										Introduction
+									</th>
+									<th width="15%" className="text-center">
+										Address
+									</th>
+									<th width="10%" className="text-center">
+										Price
+									</th>
+									<th width="10%" className="text-center">
+										Actions
+									</th>
+								</tr>
 
-							{arrDoctors &&
-								arrDoctors.map((item, index) => {
-									let imageBase64 = new Buffer(
-										item.image,
-										"base64"
-									).toString("binary");
-									return (
-										<tr key={index}>
-											<td>{item.id}</td>
-											<td>
-												<div
-													className="doctor-img-table"
-													style={{
-														backgroundImage: `url(${imageBase64})`,
-													}}
-												></div>
-											</td>
-											<td>{item.name}</td>
-											<td>{item.introduction}</td>
-											<td>{item.address}</td>
-											<td>{item.price}</td>
-											<td className="text-center">
-												<button
-													className="btn-edit"
-													onClick={() =>
-														this.handleOpenModalEdit(
-															item
-														)
-													}
-												>
-													<i className="fas fa-pencil-alt"></i>
-												</button>
-												<button
-													className="btn-delete"
-													onClick={() =>
-														this.handleConfirmDelete(
-															item
-														)
-													}
-												>
-													<i className="fas fa-trash"></i>
-												</button>
-											</td>
-										</tr>
-									);
-								})}
+								{arrDoctors &&
+									arrDoctors.map((item, index) => {
+										let imageBase64 = new Buffer(
+											item.image,
+											"base64"
+										).toString("binary");
+										return (
+											<tr key={index}>
+												<td>{item.id}</td>
+												<td>
+													<div
+														className="doctor-img-table"
+														style={{
+															backgroundImage: `url(${imageBase64})`,
+														}}
+													></div>
+												</td>
+												<td>{item.name}</td>
+												<td>{item.introduction}</td>
+												<td>{item.address}</td>
+												<td>{item.price}</td>
+												<td className="text-center">
+													<button
+														className="btn-edit"
+														onClick={() =>
+															this.handleOpenModalEdit(
+																item
+															)
+														}
+													>
+														<i className="fas fa-pencil-alt"></i>
+													</button>
+													<button
+														className="btn-delete"
+														onClick={() =>
+															this.handleConfirmDelete(
+																item
+															)
+														}
+													>
+														<i className="fas fa-trash"></i>
+													</button>
+												</td>
+											</tr>
+										);
+									})}
+							</tbody>
 						</table>
 					</div>
 

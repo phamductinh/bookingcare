@@ -49,7 +49,6 @@ class UserManage extends Component {
 		});
 		let token = await localStorage.getItem("token");
 		let res = await getPaginationUsers(token, this.state.newPage);
-		console.log(res);
 		if (res && res.code === 200) {
 			this.setState({
 				arrUsers: res.data,
@@ -230,7 +229,6 @@ class UserManage extends Component {
 				toast.success("Update successfully !");
 			}
 		} catch (error) {
-			console.log(error);
 			toast.error("Something wrong !");
 		}
 	};
@@ -278,61 +276,69 @@ class UserManage extends Component {
 					</div>
 					<div className="users-table mt-3 mx-3">
 						<table id="customers">
-							<tr>
-								<th width="20%" className="text-center">
-									Email
-								</th>
-								<th width="20%" className="text-center">
-									Fullname
-								</th>
-								<th width="20%" className="text-center">
-									Address
-								</th>
-								<th width="14%" className="text-center">
-									Gender
-								</th>
-								<th width="14%" className="text-center">
-									Role
-								</th>
-								<th width="12%" className="text-center">
-									Actions
-								</th>
-							</tr>
+							<tbody>
+								<tr>
+									<th width="5%" className="text-center">
+										id
+									</th>
+									<th width="20%" className="text-center">
+										Email
+									</th>
+									<th width="20%" className="text-center">
+										Fullname
+									</th>
+									<th width="15%" className="text-center">
+										Address
+									</th>
+									<th width="14%" className="text-center">
+										Gender
+									</th>
+									<th width="14%" className="text-center">
+										Role
+									</th>
+									<th width="12%" className="text-center">
+										Actions
+									</th>
+								</tr>
 
-							{arrUsers &&
-								arrUsers.map((item, index) => {
-									return (
-										<tr key={index}>
-											<td>{item.email}</td>
-											<td>{item.fullName}</td>
-											<td>{item.address}</td>
-											<td>{item.gender}</td>
-											<td>{item.role}</td>
-											<td className="text-center">
-												<button
-													className="btn-edit"
-													onClick={() =>
-														this.handleOpenModalEdit(
-															item
-														)
-													}
-												>
-													<i className="fas fa-pencil-alt"></i>
-												</button>
-												<button
-													className="btn-delete"
-													onClick={() =>
-														this.handleConfirmDelete(
-															item
-														)
-													}
-												>
-													<i className="fas fa-trash"></i>
-												</button>
-											</td>
-										</tr>
-									);
-								})}
+								{arrUsers &&
+									arrUsers.map((item, index) => {
+										return (
+											<tr key={index}>
+												<td className="text-center">
+													{item.id}
+												</td>
+												<td>{item.email}</td>
+												<td>{item.fullName}</td>
+												<td>{item.address}</td>
+												<td>{item.gender}</td>
+												<td>{item.role}</td>
+												<td className="text-center">
+													<button
+														className="btn-edit"
+														onClick={() =>
+															this.handleOpenModalEdit(
+																item
+															)
+														}
+													>
+														<i className="fas fa-pencil-alt"></i>
+													</button>
+													<button
+														className="btn-delete"
+														onClick={() =>
+															this.handleConfirmDelete(
+																item
+															)
+														}
+													>
+														<i className="fas fa-trash"></i>
+													</button>
+												</td>
+											</tr>
+										);
+									})}
+							</tbody>
 						</table>
 					</div>
 					<div className="pagination-container">

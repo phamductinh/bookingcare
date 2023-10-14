@@ -4,6 +4,7 @@ import {
 	createTelemedicineQuery,
 	deleteTelemedicineById,
 	updateTelemedicineQuery,
+	totalRowTelemedicine,
 } from "../database/queries";
 
 let getAllTelemedicine = (callback) => {
@@ -54,10 +55,33 @@ let updateTelemedicineModel = (data, callback) => {
 	});
 };
 
+let getTotalRowTelemedicineModel = (callback) => {
+	db.query(totalRowTelemedicine, (error, results) => {
+		if (error) {
+			callback(error, null);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
+let getPaginationTelemedicineModel = (start, limit, callback) => {
+	let sql = `SELECT * FROM telemedicine ORDER BY id ASC LIMIT ${start} , ${limit}`;
+	db.query(sql, (error, results) => {
+		if (error) {
+			callback(error, null);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
 module.exports = {
 	createNewTelemedicine,
 	getAllTelemedicine,
 	deleteTelemedicineModel,
 	updateTelemedicineModel,
-    getTelemedicineByIdModel
+	getTelemedicineByIdModel,
+	getTotalRowTelemedicineModel,
+	getPaginationTelemedicineModel,
 };

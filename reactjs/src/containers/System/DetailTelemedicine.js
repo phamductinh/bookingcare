@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import "./DetailTelemedicine.css";
 import { getDoctorIsTelemedicine } from "../../services/doctorService";
-import { toast } from "react-toastify";
 import * as actions from "../../store/actions/";
 import { NumericFormat } from "react-number-format";
 
@@ -134,7 +133,7 @@ class DetailTelemedicine extends Component {
 							<div className="doctor-content">
 								<div className="doctor-content-left">
 									<div className="doctor-img"></div>
-									<a href="#">Xem thêm</a>
+									<a href="#/">Xem thêm</a>
 								</div>
 								<div className="doctor-infor-telem">
 									<h1>
@@ -177,27 +176,27 @@ class DetailTelemedicine extends Component {
 									QUA VIDEO
 								</h2>
 								<div className="available-schedule">
-									<a href="#">
+									<a href="#/">
 										<i className="fas fa-video"></i>07:00 -
 										07:30
 									</a>
-									<a href="#">
+									<a href="#/">
 										<i className="fas fa-video"></i>07:30 -
 										08:00
 									</a>
-									<a href="#">
+									<a href="#/">
 										<i className="fas fa-video"></i>08:00 -
 										08:30
 									</a>
-									<a href="#">
+									<a href="#/">
 										<i className="fas fa-video"></i>08:30 -
 										09:00
 									</a>
-									<a href="#">
+									<a href="#/">
 										<i className="fas fa-video"></i>09:00 -
 										09:30
 									</a>
-									<a href="#">
+									<a href="#/">
 										<i className="fas fa-video"></i>09:30 -
 										10:00
 									</a>
@@ -208,7 +207,7 @@ class DetailTelemedicine extends Component {
 								</p>
 								<h3>
 									<strong>GIÁ TƯ VẤN QUA VIDEO:</strong>{" "}
-									1.500.000đ.<a href="#">Xem chi tiết</a>
+									1.500.000đ.<a href="#/">Xem chi tiết</a>
 								</h3>
 							</div>
 						</div> */}
@@ -238,7 +237,7 @@ class DetailTelemedicine extends Component {
 														})`,
 													}}
 												></div>
-												<a href="#">Xem thêm</a>
+												<a href="#/">Xem thêm</a>
 											</div>
 											<div className="doctor-infor-telem">
 												<h1>
@@ -369,7 +368,7 @@ class DetailTelemedicine extends Component {
 						<div className="more-questions">
 							<p>
 								Cần tìm hiểu thêm?
-								<a href="#">Xem câu hỏi thường gặp.</a>
+								<a href="#/">Xem câu hỏi thường gặp.</a>
 							</p>
 						</div>
 
@@ -399,24 +398,24 @@ class DetailTelemedicine extends Component {
 							<div className="list-features">
 								<ul>
 									<li>
-										<a href="#">Liên hệ hợp tác</a>
+										<a href="#/">Liên hệ hợp tác</a>
 									</li>
 									<li>
-										<a href="#">
+										<a href="#/">
 											Gói chuyển đổi số doanh nghiệp
 										</a>
 									</li>
 									<li>
-										<a href="#">Tuyển dụng</a>
+										<a href="#/">Tuyển dụng</a>
 									</li>
 									<li>
-										<a href="#">Câu hỏi thường gặp</a>
+										<a href="#/">Câu hỏi thường gặp</a>
 									</li>
 									<li>
-										<a href="#">Điều khoản sử dụng</a>
+										<a href="#/">Điều khoản sử dụng</a>
 									</li>
 									<li>
-										<a href="#">Chính sách Bảo mật</a>
+										<a href="#/">Chính sách Bảo mật</a>
 									</li>
 								</ul>
 							</div>

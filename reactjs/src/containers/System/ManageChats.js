@@ -36,7 +36,7 @@ class ManageChats extends Component {
 	};
 
 	async componentDidMount() {
-		const uns = onAuthStateChanged(auth, async (user) => {
+		onAuthStateChanged(auth, async (user) => {
 			await this.setState({
 				user: user,
 			});
@@ -150,7 +150,7 @@ class ManageChats extends Component {
 	};
 
 	async handleLoginWithFB() {
-		const data = await signInWithPopup(auth, FBProvider)
+		await signInWithPopup(auth, FBProvider)
 			.then(async (result) => {
 				const user = result.user;
 				await this.setState({
@@ -168,6 +168,10 @@ class ManageChats extends Component {
 			.catch((error) => {
 				console.error("Lỗi khi đăng nhập bằng Google:", error);
 			});
+	}
+
+	async handleSignOut() {
+		await auth.signOut();
 	}
 
 	formatDate(sc) {
@@ -208,8 +212,13 @@ class ManageChats extends Component {
 									backgroundImage: `url(${currentUser.photoURL})`,
 								}}
 							></div>
-							<div className="admin-name-header">{currentUser.displayName}</div>
-							<button className="btn-logout-header">
+							<div className="admin-name-header">
+								{currentUser.displayName}
+							</div>
+							<button
+								className="btn-logout-header"
+								onClick={() => this.handleSignOut()}
+							>
 								Sign out
 							</button>
 						</div>

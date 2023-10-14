@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
-import { handleLoginAPI, handleCreateUser } from "../../services/userService";
+import { handleLoginAPI } from "../../services/userService";
 import * as actions from "../../store/actions/";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import "./Login.css";

@@ -21,6 +21,16 @@ const Pagination = ({ totalPages, onPageChange }) => {
 		onPageChange(newPage);
 	};
 
+	const handleFirstPageClick = () => {
+		setCurrentPage(1);
+		onPageChange(1);
+	};
+
+	const handleLastPageClick = () => {
+		setCurrentPage(totalPages);
+		onPageChange(totalPages);
+	};
+
 	const renderPageNumbers = () => {
 		const pageNumbers = [];
 		const visiblePages = 2;
@@ -37,7 +47,7 @@ const Pagination = ({ totalPages, onPageChange }) => {
 					>
 						<a
 							className="page-link"
-							href="#"
+							href="#/"
 							onClick={() => handlePageClick(i)}
 						>
 							{i}
@@ -56,6 +66,34 @@ const Pagination = ({ totalPages, onPageChange }) => {
 			}
 		}
 
+		if (currentPage > visiblePages + 1) {
+			pageNumbers.unshift(
+				<li key="first" className="page-item">
+					<a
+						className="page-link"
+						href="#/"
+						onClick={handleFirstPageClick}
+					>
+						1
+					</a>
+				</li>
+			);
+		}
+
+		if (currentPage < totalPages - visiblePages) {
+			pageNumbers.push(
+				<li key="last" className="page-item">
+					<a
+						className="page-link"
+						href="#/"
+						onClick={handleLastPageClick}
+					>
+						{totalPages}
+					</a>
+				</li>
+			);
+		}
+
 		return pageNumbers;
 	};
 
@@ -65,11 +103,22 @@ const Pagination = ({ totalPages, onPageChange }) => {
 				<li className="page-item">
 					<a
 						className="page-link"
-						href="#"
+						href="#/"
+						aria-label="First"
+						onClick={handleFirstPageClick}
+					>
+						<span aria-hidden="true">{"<<"}</span>
+						<span className="sr-only">First</span>
+					</a>
+				</li>
+				<li className="page-item">
+					<a
+						className="page-link"
+						href="#/"
 						aria-label="Previous"
 						onClick={handlePreviousClick}
 					>
-						<span aria-hidden="true">&laquo;</span>
+						<span aria-hidden="true">{"<"}</span>
 						<span className="sr-only">Previous</span>
 					</a>
 				</li>
@@ -77,12 +126,23 @@ const Pagination = ({ totalPages, onPageChange }) => {
 				<li className="page-item">
 					<a
 						className="page-link"
-						href="#"
+						href="#/"
 						aria-label="Next"
 						onClick={handleNextClick}
 					>
-						<span aria-hidden="true">&raquo;</span>
+						<span aria-hidden="true">{">"}</span>
 						<span className="sr-only">Next</span>
+					</a>
+				</li>
+				<li className="page-item">
+					<a
+						className="page-link"
+						href="#/"
+						aria-label="Last"
+						onClick={handleLastPageClick}
+					>
+						<span aria-hidden="true">{">>"}</span>
+						<span className="sr-only">Last</span>
 					</a>
 				</li>
 			</ul>

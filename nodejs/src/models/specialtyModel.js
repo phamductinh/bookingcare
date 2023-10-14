@@ -55,7 +55,7 @@ let getTotalRowSpecialtyModel = (callback) => {
 	});
 };
 
-let getPaginationPecialtyModel = (start, limit, callback) => {
+let getPaginationSpecialtyModel = (start, limit, callback) => {
 	let sql = `SELECT * FROM specialty ORDER BY id ASC LIMIT ${start} , ${limit}`;
 	db.query(sql, (error, results) => {
 		if (error) {
@@ -72,5 +72,5 @@ module.exports = {
 	deleteSpecialtyModel,
 	updateSpecialtyModel,
 	getTotalRowSpecialtyModel,
-	getPaginationPecialtyModel,
+	getPaginationSpecialtyModel,
 };

@@ -20,10 +20,20 @@ const updateTelemedicine = (data) => {
 	return axios.put(`/api/update-telemedicine`, data);
 };
 
+const getTotalRowTelemedicine = () => {
+	return axios.get("/api/get-total-row-telemedicine");
+};
+
+const getPaginationTelemedicine = (page) => {
+	return axios.get(`/api/get-pagination-telemedicine?page=${page}`);
+};
+
 export {
 	handleCreateTelemedicine,
 	getALLTelemedicine,
 	deleteTelemedicine,
 	updateTelemedicine,
 	getTelemedicine,
+	getTotalRowTelemedicine,
+	getPaginationTelemedicine,
 };

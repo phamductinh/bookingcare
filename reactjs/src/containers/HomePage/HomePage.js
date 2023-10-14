@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getALLTelemedicine } from "../../services/telemedicineService";
 import { getALLSpecialty } from "../../services/specialtyService";
 import "./HomePage.css";
 import {
@@ -11,6 +10,9 @@ import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import * as actions from "../../store/actions/";
 import ChatApp from "../ChatApp/ChatApp";
+import Telemedicine from "./Telemedicine";
+import Specialty from "./Specialty";
+import Facility from "./Facility";
 
 class HomePage extends Component {
 	constructor(props) {
@@ -26,19 +28,9 @@ class HomePage extends Component {
 	}
 
 	async componentDidMount() {
-		await this.getALLTelemedicineReact();
-		await this.getALLSpecialtyReact();
 		await this.getALLDoctorReact();
+		await this.getALLSpecialtyReact();
 	}
-
-	getALLTelemedicineReact = async () => {
-		let res = await getALLTelemedicine();
-		if (res && res.code === 200) {
-			this.setState({
-				arrTelems: res.data,
-			});
-		}
-	};
 
 	getALLDoctorReact = async () => {
 		let res = await getAllDoctors();
@@ -72,13 +64,43 @@ class HomePage extends Component {
 
 	async filterDoctors() {
 		let { keyword, specialtyId } = this.state;
-		let res = await getDoctorByKeyword(keyword, specialtyId);
-		if (res && res.code === 200) {
+		if (!keyword && !specialtyId) {
 			this.setState({
-				arrDoctorFilter: res.data,
+				arrDoctorFilter: "",
 			});
+		} else {
+			let res = await getDoctorByKeyword(keyword, specialtyId);
+			if (res && res.code === 200) {
+				this.setState({
+					arrDoctorFilter: res.data,
+				});
+			} else {
+				this.setState({
+					arrDoctorFilter: "",
+				});
+			}
 		}
 	}
+
+	handleOnchangeInput = async (event) => {
+		let keyword = event.target.value;
+		if (keyword) {
+			let res = await getDoctorByKeyword(keyword);
+			if (res && res.code === 200) {
+				this.setState({
+					doctorResults: res.data,
+				});
+			} else {
+				this.setState({
+					doctorResults: "",
+				});
+			}
+		} else {
+			this.setState({
+				doctorResults: "",
+			});
+		}
+	};
 
 	async handleOpenMenu() {
 		await this.setState((prevState) => ({
@@ -89,28 +111,6 @@ class HomePage extends Component {
 	handleViewDetail = (doctor) => {
 		this.props.history.push(`/detail-doctor/${doctor.id}`);
 	};
-
-	handleShowTelemedicine = (telem) => {
-		this.props.history.push(`/telemedicine/${telem.id}`);
-	};
-
-	handleNext() {
-		let lists = document.querySelectorAll(".telem-slide-item");
-		document.getElementById("telem-slide").appendChild(lists[0]);
-	}
-	handlePrev() {
-		let lists = document.querySelectorAll(".telem-slide-item");
-		document.getElementById("telem-slide").prepend(lists[lists.length - 1]);
-	}
-
-	handleNextSpecialty() {
-		let lists = document.querySelectorAll(".spec-slide-item");
-		document.getElementById("spec-slide").appendChild(lists[0]);
-	}
-	handlePrevSpecialty() {
-		let lists = document.querySelectorAll(".spec-slide-item");
-		document.getElementById("spec-slide").prepend(lists[lists.length - 1]);
-	}
 
 	handleNextDoctor() {
 		let lists = document.querySelectorAll(".doctor-slide-item");
@@ -125,11 +125,11 @@ class HomePage extends Component {
 
 	render() {
 		let {
-			arrTelems,
 			arrSpecialty,
 			arrDoctors,
 			arrDoctorFilter,
 			isOpenMenu,
+			doctorResults,
 		} = this.state;
 		const { processLogout, userInfor, isLoggedIn } = this.props;
 		return (
@@ -274,8 +274,28 @@ class HomePage extends Component {
 										<i className="fas fa-search"></i>
 										<input
 											type="search"
-											placeholder="Tìm chuyên khoa"
+											placeholder="Tìm bác sĩ"
+											onChange={(event) =>
+												this.handleOnchangeInput(event)
+											}
 										/>
+										<ul className="doctor-result">
+											{doctorResults
+												? doctorResults.map((item) => (
+														<li
+															className="doctor-result-li"
+															key={item.id}
+															onClick={() =>
+																this.handleViewDetail(
+																	item
+																)
+															}
+														>
+															{item.name}
+														</li>
+												  ))
+												: ""}
+										</ul>
 									</div>
 									<div className="download">
 										<div className="android"></div>
@@ -384,7 +404,7 @@ class HomePage extends Component {
 											phần mềm quản trị
 										</li>
 									</div>
-									<a href="#">Xem chi tiết</a>
+									<a href="#/">Xem chi tiết</a>
 								</div>
 							</div>
 						</div>
@@ -406,7 +426,7 @@ class HomePage extends Component {
 										<li>Đơn giản, tiện lợi, chính xác</li>
 										<li>Bộ Y tế Việt Nam cấp chứng nhận</li>
 									</div>
-									<a href="#">Xem chi tiết</a>
+									<a href="#/">Xem chi tiết</a>
 								</div>
 							</div>
 						</div>
@@ -431,7 +451,7 @@ class HomePage extends Component {
 											ngay Voucher 50.000đ/lần xét nghiệm
 										</li>
 									</div>
-									<a href="#">Xem chi tiết</a>
+									<a href="#/">Xem chi tiết</a>
 								</div>
 							</div>
 						</div>
@@ -456,7 +476,7 @@ class HomePage extends Component {
 											tháng 12
 										</li>
 									</div>
-									<a href="#">Xem chi tiết</a>
+									<a href="#/">Xem chi tiết</a>
 								</div>
 							</div>
 						</div>
@@ -482,7 +502,7 @@ class HomePage extends Component {
 											13h00 - 16h00
 										</li>
 									</div>
-									<a href="#">Xem chi tiết</a>
+									<a href="#/">Xem chi tiết</a>
 								</div>
 							</div>
 						</div>
@@ -507,7 +527,7 @@ class HomePage extends Component {
 											âm,... trong tháng 12 này
 										</li>
 									</div>
-									<a href="#">Xem chi tiết</a>
+									<a href="#/">Xem chi tiết</a>
 								</div>
 							</div>
 						</div>
@@ -532,7 +552,7 @@ class HomePage extends Component {
 											thuật khúc xạ
 										</li>
 									</div>
-									<a href="#">Xem chi tiết</a>
+									<a href="#/">Xem chi tiết</a>
 								</div>
 							</div>
 						</div>
@@ -554,7 +574,7 @@ class HomePage extends Component {
 										<li>Phương pháp Test nhanh & PCR</li>
 										<li>Theo quy chuẩn Bộ Y tế</li>
 									</div>
-									<a href="#">Xem chi tiết</a>
+									<a href="#/">Xem chi tiết</a>
 								</div>
 							</div>
 						</div>
@@ -592,7 +612,7 @@ class HomePage extends Component {
 								}
 								defaultValue={""}
 							>
-								<option value={""} disabled defaultValue>
+								<option value={""} defaultValue>
 									Chọn chuyên khoa
 								</option>
 								{arrSpecialty &&
@@ -657,214 +677,11 @@ class HomePage extends Component {
 						</div>
 					</div>
 
-					<div className="telemedicine-container">
-						<div className="telem-content-up">
-							<div className="telem-title">
-								Bác sĩ từ xa qua Video
-							</div>
-							<button className="telem-btn">Xem thêm</button>
-						</div>
-						<div className="telem-slide-container">
-							<div id="telem-slide">
-								{arrTelems &&
-									arrTelems.length > 0 &&
-									arrTelems.map((item, index) => {
-										let telemImage = new Buffer(
-											item.image,
-											"base64"
-										).toString("binary");
-										return (
-											<div
-												className="telem-slide-item"
-												onClick={() =>
-													this.handleShowTelemedicine(
-														item
-													)
-												}
-												key={index}
-											>
-												<div className="telem-icon">
-													<i className="fas fa-video"></i>
-												</div>
-												<div
-													className="telem-slide-img"
-													style={{
-														backgroundImage: `url(${telemImage})`,
-													}}
-												></div>
-												<div className="telem-content">
-													{item.name}
-												</div>
-											</div>
-										);
-									})}
-							</div>
-						</div>
-						<div className="telem-buttons">
-							<button
-								className="telem-prev"
-								id="telem-prev"
-								onClick={() => this.handlePrev()}
-							></button>
-							<button
-								className="telem-next"
-								id="telem-next"
-								onClick={() => this.handleNext()}
-							></button>
-						</div>
-					</div>
+					<Telemedicine />
 
-					<div className="specialty-container">
-						<div className="spec-content-up">
-							<div className="spec-title">
-								Chuyên khoa phổ biến
-							</div>
-							<button className="spec-btn">Xem thêm</button>
-						</div>
-						<div className="spec-slide-container">
-							<div id="spec-slide">
-								{arrSpecialty &&
-									arrSpecialty.length > 0 &&
-									arrSpecialty.map((item, index) => {
-										let specialtyImage = new Buffer(
-											item.image,
-											"base64"
-										).toString("binary");
-										return (
-											<div
-												className="spec-slide-item"
-												key={index}
-											>
-												<div
-													className="spec-slide-img"
-													style={{
-														backgroundImage: `url(${specialtyImage})`,
-													}}
-												></div>
-												<div className="spec-content">
-													{item.name}
-												</div>
-											</div>
-										);
-									})}
-							</div>
-						</div>
-						<div className="telem-buttons">
-							<button
-								className="telem-prev"
-								id="telem-prev"
-								onClick={() => this.handlePrevSpecialty()}
-							></button>
-							<button
-								className="telem-next"
-								id="telem-next"
-								onClick={() => this.handleNextSpecialty()}
-							></button>
-						</div>
-					</div>
+					<Specialty />
 
-					<div className="facility-container">
-						<div className="faci-content-up">
-							<div className="faci-title">Cơ sở y tế nổi bật</div>
-							<button className="faci-btn">Xem thêm</button>
-						</div>
-						<div className="faci-slide-container">
-							<div id="faci-slide">
-								<div className="faci-slide-item">
-									<div
-										className="faci-slide-img"
-										style={{
-											backgroundImage:
-												"url(./image/facilities/bv-viet-duc.jpg)",
-										}}
-									></div>
-									<div className="faci-content">
-										Bệnh viện Hữu nghị Việt Đức
-									</div>
-								</div>
-								<div className="faci-slide-item">
-									<div
-										className="faci-slide-img"
-										style={{
-											backgroundImage:
-												"url(./image/facilities/benh-vien-cho-ray-h1.jpg)",
-										}}
-									></div>
-									<div className="faci-content">
-										Bệnh viện Chợ Rẫy
-									</div>
-								</div>
-								<div className="faci-slide-item">
-									<div
-										className="faci-slide-img"
-										style={{
-											backgroundImage:
-												"url(./image/facilities/pk-dhyd1.jpg)",
-										}}
-									></div>
-									<div className="faci-content">
-										Phòng khám Bệnh viện Đại học Y Dược 1
-									</div>
-								</div>
-								<div className="faci-slide-item">
-									<div
-										className="faci-slide-img"
-										style={{
-											backgroundImage:
-												"url(./image/facilities/bvk.jpg)",
-										}}
-									></div>
-									<div className="faci-content">
-										Bệnh viện K - Cơ sở Phan Chu Trinh
-									</div>
-								</div>
-								<div className="faci-slide-item">
-									<div
-										className="faci-slide-img"
-										style={{
-											backgroundImage:
-												"url(./image/facilities/bv-hung-viet.jpg)",
-										}}
-									></div>
-									<div className="faci-content">
-										Bệnh viện Ung bướu Hưng Việt
-									</div>
-								</div>
-								<div className="faci-slide-item">
-									<div
-										className="faci-slide-img"
-										style={{
-											backgroundImage:
-												"url(./image/facilities/medlatecthanhxuan.jpg)",
-										}}
-									></div>
-									<div className="faci-content">
-										Hệ thống y tế MEDLATEC
-									</div>
-								</div>
-								<div className="faci-slide-item">
-									<div
-										className="faci-slide-img"
-										style={{
-											backgroundImage:
-												"url(./image/facilities/diag.png)",
-										}}
-									></div>
-									<div className="faci-content">
-										Trung tâm xét nghiệm Diag Laboratories
-									</div>
-								</div>
-							</div>
-						</div>
-						<div className="faci-buttons">
-							<button className="faci-prev" id="faci-prev">
-								<i className="fas fa-long-arrow-left"></i>
-							</button>
-							<button className="faci-next" id="faci-next">
-								<i className="fas fa-long-arrow-right"></i>
-							</button>
-						</div>
-					</div>
+					<Facility />
 
 					<div className="outstanding-doctor-container">
 						<div className="doctor-content-up">
@@ -1068,7 +885,7 @@ class HomePage extends Component {
 								<div className="app-link">
 									<p>
 										Hoặc mở liên kết:
-										<a href="#">
+										<a href="#/">
 											https://bookingcare.vn/app
 										</a>
 									</p>
@@ -1178,24 +995,24 @@ class HomePage extends Component {
 						<div className="list-features">
 							<ul>
 								<li>
-									<a href="#">Liên hệ hợp tác</a>
+									<a href="#/">Liên hệ hợp tác</a>
 								</li>
 								<li>
-									<a href="#">
+									<a href="#/">
 										Gói chuyển đổi số doanh nghiệp
 									</a>
 								</li>
 								<li>
-									<a href="#">Tuyển dụng</a>
+									<a href="#/">Tuyển dụng</a>
 								</li>
 								<li>
-									<a href="#">Câu hỏi thường gặp</a>
+									<a href="#/">Câu hỏi thường gặp</a>
 								</li>
 								<li>
-									<a href="#">Điều khoản sử dụng</a>
+									<a href="#/">Điều khoản sử dụng</a>
 								</li>
 								<li>
-									<a href="#">Chính sách Bảo mật</a>
+									<a href="#/">Chính sách Bảo mật</a>
 								</li>
 							</ul>
 						</div>

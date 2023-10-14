@@ -40,7 +40,7 @@ class ChatApp extends Component {
 	}
 
 	async componentDidMount() {
-		const uns = onAuthStateChanged(auth, async (user) => {
+		onAuthStateChanged(auth, async (user) => {
 			await this.setState({
 				user: user,
 			});
@@ -76,7 +76,7 @@ class ChatApp extends Component {
 	}
 
 	async handleLoginWithFB() {
-		const data = await signInWithPopup(auth, FBProvider)
+		await signInWithPopup(auth, FBProvider)
 			.then(async (result) => {
 				const user = result.user;
 				await this.setState({

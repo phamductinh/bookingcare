@@ -87,6 +87,16 @@ let initWebRoutes = (app) => {
 		authApi,
 		telemedicineController.updateTelemedicine
 	);
+	router.get(
+		"/api/get-pagination-telemedicine",
+
+		telemedicineController.getPaginationTelemedicine
+	);
+	router.get(
+		"/api/get-total-row-telemedicine",
+
+		telemedicineController.getTotalRowTelemedicine
+	);
 
 	router.get("/api/get-all-specialty", specialtyController.getAllSpecialty);
 	router.post(
@@ -104,7 +114,7 @@ let initWebRoutes = (app) => {
 		authApi,
 		specialtyController.updateSpecialty
 	);
-    router.get(
+	router.get(
 		"/api/get-pagination-specialty",
 
 		specialtyController.getPaginationSpecialty

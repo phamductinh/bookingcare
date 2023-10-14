@@ -1,9 +1,4 @@
-import db from "../configs/connectDB";
 import telemedicineModel from "../models/telemedicineModel";
-
-let getHomePage = (req, res) => {
-	return res.send("hello");
-};
 
 const getAllTelemedicine = (req, res) => {
 	telemedicineModel.getAllTelemedicine((error, results) => {
@@ -85,11 +80,51 @@ let deleteTelemedicine = (req, res) => {
 	});
 };
 
+const getTotalRowTelemedicine = (req, res) => {
+	telemedicineModel.getTotalRowTelemedicineModel((error, results) => {
+		if (error) {
+			return res.status(500).send({
+				code: 500,
+				msg: errMsg.failed,
+			});
+		} else {
+			return res.status(200).send({
+				code: 200,
+				data: results[0],
+			});
+		}
+	});
+};
+
+const getPaginationTelemedicine = (req, res) => {
+	let page = req.query.page ? req.query.page : 1;
+	let limit = 4;
+	let start = (page - 1) * limit;
+	telemedicineModel.getPaginationTelemedicineModel(
+		start,
+		limit,
+		(error, results) => {
+			if (error) {
+				return res.status(500).send({
+					code: 500,
+					msg: "Failed!",
+				});
+			} else {
+				return res.status(200).send({
+					code: 200,
+					data: results,
+				});
+			}
+		}
+	);
+};
+
 module.exports = {
-	getHomePage,
 	createTelemedicine,
 	getAllTelemedicine,
 	deleteTelemedicine,
 	updateTelemedicine,
 	getTelemedicineById,
+	getPaginationTelemedicine,
+	getTotalRowTelemedicine,
 };

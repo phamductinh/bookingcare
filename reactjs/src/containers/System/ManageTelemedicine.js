@@ -10,10 +10,12 @@ import "react-markdown-editor-lite/lib/index.css";
 import { CommonUtils } from "../../utils";
 import {
 	handleCreateTelemedicine,
-	getALLTelemedicine,
 	deleteTelemedicine,
 	updateTelemedicine,
+	getPaginationTelemedicine,
+	getTotalRowTelemedicine,
 } from "../../services/telemedicineService";
+import Pagination from "../../components/Common/Pagination";
 
 const mdParser = new MarkdownIt();
 
@@ -28,11 +30,13 @@ class ManageTelemedicine extends Component {
 			arrTelems: [],
 			confirmDelete: false,
 			showBtnEdit: false,
+			newPage: 1,
 		};
 	}
 
 	async componentDidMount() {
 		await this.getALLTelemedicineReact();
+		await this.getTotalRowTelemedicineReact();
 	}
 
 	handleOnchangeInput = (event, id) => {
@@ -62,13 +66,29 @@ class ManageTelemedicine extends Component {
 	};
 
 	getALLTelemedicineReact = async () => {
-		let res = await getALLTelemedicine();
-		console.log("check res", res);
+		let res = await getPaginationTelemedicine(this.state.newPage);
 		if (res && res.code === 200) {
 			this.setState({
 				arrTelems: res.data,
 			});
 		}
+	};
+
+	getTotalRowTelemedicineReact = async () => {
+		let res = await getTotalRowTelemedicine();
+		if (res && res.code === 200) {
+			let row = Math.ceil(res.data.totalRow / 5);
+			this.setState({
+				totalRow: row,
+			});
+		}
+	};
+
+	handlePageChange = async (newPage) => {
+		await this.setState({
+			newPage: newPage,
+		});
+		await this.getALLTelemedicineReact();
 	};
 
 	handleCreateNewTelemedicine = async () => {
@@ -230,75 +250,83 @@ class ManageTelemedicine extends Component {
 						</div>
 					</form>
 					<table id="customers">
-						<tr>
-							<th width="10%" className="text-center">
-								Id
-							</th>
-							<th width="30%" className="text-center">
-								Name
-							</th>
-							<th width="40%" className="text-center">
-								Image
-							</th>
-							<th width="20%" className="text-center">
-								Actions
-							</th>
-						</tr>
+						<tbody>
+							<tr>
+								<th width="10%" className="text-center">
+									Id
+								</th>
+								<th width="30%" className="text-center">
+									Name
+								</th>
+								<th width="40%" className="text-center">
+									Image
+								</th>
+								<th width="20%" className="text-center">
+									Actions
+								</th>
+							</tr>
 
-						{arrTelems &&
-							arrTelems.map((item, index) => {
-								let imageBase64 = new Buffer(
-									item.image,
-									"base64"
-								).toString("binary");
-								return (
-									<tr
-										key={index}
-										height="160px"
-										className="tele-col"
-									>
-										<td className="text-center">
-											{item.id}
-										</td>
-										<td>{item.name}</td>
-										<td>
-											{item.image ? (
-												<div
-													className="tele-image-table"
-													style={{
-														backgroundImage: `url(${imageBase64})`,
-													}}
-												></div>
-											) : (
-												<div>Null</div>
-											)}
-										</td>
-										<td className="text-center">
-											<button
-												className="btn-edit"
-												onClick={() =>
-													this.handleFillDataEdit(
-														item
-													)
-												}
-											>
-												<i className="fas fa-pencil-alt"></i>
-											</button>
-											<button
-												className="btn-delete"
-												onClick={() =>
-													this.handleConfirmDelete(
-														item
-													)
-												}
-											>
-												<i className="fas fa-trash"></i>
-											</button>
-										</td>
-									</tr>
-								);
-							})}
+							{arrTelems &&
+								arrTelems.map((item, index) => {
+									let imageBase64 = new Buffer(
+										item.image,
+										"base64"
+									).toString("binary");
+									return (
+										<tr
+											key={index}
+											height="160px"
+											className="tele-col"
+										>
+											<td className="text-center">
+												{item.id}
+											</td>
+											<td>{item.name}</td>
+											<td>
+												{item.image ? (
+													<div
+														className="tele-image-table"
+														style={{
+															backgroundImage: `url(${imageBase64})`,
+														}}
+													></div>
+												) : (
+													<div>Null</div>
+												)}
+											</td>
+											<td className="text-center">
+												<button
+													className="btn-edit"
+													onClick={() =>
+														this.handleFillDataEdit(
+															item
+														)
+													}
+												>
+													<i className="fas fa-pencil-alt"></i>
+												</button>
+												<button
+													className="btn-delete"
+													onClick={() =>
+														this.handleConfirmDelete(
+															item
+														)
+													}
+												>
+													<i className="fas fa-trash"></i>
+												</button>
+											</td>
+										</tr>
+									);
+								})}
+						</tbody>
 					</table>
+				</div>
+				<div className="pagination-container">
+					<Pagination
+						totalPages={this.state.totalRow}
+						onPageChange={this.handlePageChange}
+					/>
 				</div>
 
 				{confirmDelete ? (

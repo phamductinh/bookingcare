@@ -6,9 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "../../Header/Header";
 import LoadingSpinner from "../../../components/Common/Loading";
 import {
-	confirmBooking,
-	deleteBooking,
-	getBookingByDate,
 	getAllConfirmedBooking,
 	finishBooking,
 } from "../../../services/bookingService";
@@ -75,50 +72,51 @@ class ManageConfirmedBooking extends Component {
 
 					<div className="users-table mt-3 mx-3">
 						<table id="customers">
-							<tr>
-								<th width="8%" className="text-center">
-									Time
-								</th>
-								<th width="15%" className="text-center">
-									Fullname
-								</th>
-								<th width="15%" className="text-center">
-									Address
-								</th>
-								<th width="7%" className="text-center">
-									Gender
-								</th>
-								<th width="10%" className="text-center">
-									Birthday
-								</th>
-								<th width="10%" className="text-center">
-									Phonenumber
-								</th>
-								<th width="15%" className="text-center">
-									Reason
-								</th>
-								<th width="10%" className="text-center">
-									Status
-								</th>
-								<th width="10%" className="text-center">
-									Actions
-								</th>
-							</tr>
+							<tbody>
+								<tr>
+									<th width="8%" className="text-center">
+										Time
+									</th>
+									<th width="15%" className="text-center">
+										Fullname
+									</th>
+									<th width="15%" className="text-center">
+										Address
+									</th>
+									<th width="7%" className="text-center">
+										Gender
+									</th>
+									<th width="10%" className="text-center">
+										Birthday
+									</th>
+									<th width="10%" className="text-center">
+										Phonenumber
+									</th>
+									<th width="15%" className="text-center">
+										Reason
+									</th>
+									<th width="10%" className="text-center">
+										Status
+									</th>
+									<th width="10%" className="text-center">
+										Actions
+									</th>
+								</tr>
 
-							{arrConfirmedBooking &&
-								arrConfirmedBooking.map((item, index) => {
-									return (
-										<tr key={index}>
-											<td>{item.booking_time}</td>
-											<td>{item.fullName}</td>
-											<td>{item.address}</td>
-											<td>{item.gender}</td>
-											<td>{item.birthday}</td>
-											<td>{item.phoneNumber}</td>
-											<td>{item.reason}</td>
-											<td>{item.status}</td>
-											<td className="text-center">
-												{/* <button
+								{arrConfirmedBooking &&
+									arrConfirmedBooking.map((item, index) => {
+										return (
+											<tr key={index}>
+												<td>{item.booking_time}</td>
+												<td>{item.fullName}</td>
+												<td>{item.address}</td>
+												<td>{item.gender}</td>
+												<td>{item.birthday}</td>
+												<td>{item.phoneNumber}</td>
+												<td>{item.reason}</td>
+												<td>{item.status}</td>
+												<td className="text-center">
+													{/* <button
 													className="btn-confirm"
 													onClick={() =>
 														this.handleConfirmBooking(
@@ -128,20 +126,21 @@ class ManageConfirmedBooking extends Component {
 												>
 													Confirm
 												</button> */}
-												<button
-													className="btn-refuse"
-													onClick={() =>
-														this.handleConfirmDelete(
-															item
-														)
-													}
-												>
-													Finish
-												</button>
-											</td>
-										</tr>
-									);
-								})}
+													<button
+														className="btn-refuse"
+														onClick={() =>
+															this.handleConfirmDelete(
+																item
+															)
+														}
+													>
+														Finish
+													</button>
+												</td>
+											</tr>
+										);
+									})}
+							</tbody>
 						</table>
 					</div>
 

@@ -10,10 +10,12 @@ import "react-markdown-editor-lite/lib/index.css";
 import { CommonUtils } from "../../utils";
 import {
 	handleCreateSpecialty,
-	getALLSpecialty,
 	deleteSpecialty,
 	updateSpecialty,
+	getTotalRowSpecialty,
+	getPaginationSpecialty,
 } from "../../services/specialtyService";
+import Pagination from "../../components/Common/Pagination";
 
 const mdParser = new MarkdownIt();
 
@@ -27,11 +29,13 @@ class ManageSpecialty extends Component {
 			descriptionHTML: "",
 			arrSpecialty: [],
 			confirmDelete: false,
+			newPage: 1,
 		};
 	}
 
 	async componentDidMount() {
 		await this.getALLSpecialtyReact();
+		await this.getTotalRowSpecialtyReact();
 	}
 
 	handleOnchangeInput = (event, id) => {
@@ -61,12 +65,29 @@ class ManageSpecialty extends Component {
 	};
 
 	getALLSpecialtyReact = async () => {
-		let res = await getALLSpecialty();
+		let res = await getPaginationSpecialty(this.state.newPage);
 		if (res && res.code === 200) {
 			this.setState({
 				arrSpecialty: res.data,
 			});
 		}
+	};
+
+	getTotalRowSpecialtyReact = async () => {
+		let res = await getTotalRowSpecialty();
+		if (res && res.code === 200) {
+			let row = Math.ceil(res.data.totalRow / 5);
+			this.setState({
+				totalRow: row,
+			});
+		}
+	};
+
+	handlePageChange = async (newPage) => {
+		await this.setState({
+			newPage: newPage,
+		});
+		await this.getALLSpecialtyReact();
 	};
 
 	handleCreateNewSpecialty = async () => {
@@ -119,7 +140,7 @@ class ManageSpecialty extends Component {
 			image: this.state.imageBase64,
 			id: this.state.id,
 		};
-        console.log(data)
+		console.log(data);
 		try {
 			let res = await updateSpecialty(data);
 			if (res && res.code === 200) {
@@ -167,8 +188,7 @@ class ManageSpecialty extends Component {
 	}
 
 	render() {
-		const { name, image, description, confirmDelete, showBtnEdit } =
-			this.state;
+		const { name, description, confirmDelete, showBtnEdit } = this.state;
 		let arrSpecialty = this.state.arrSpecialty;
 		return (
 			<>
@@ -232,71 +252,80 @@ class ManageSpecialty extends Component {
 						</div>
 					</form>
 					<table id="customers">
-						<tr>
-							<th width="10%" className="text-center">
-								Id
-							</th>
-							<th width="30%" className="text-center">
-								Name
-							</th>
-							<th width="40%" className="text-center">
-								Image
-							</th>
-							<th width="20%" className="text-center">
-								Actions
-							</th>
-						</tr>
+						<tbody>
+							<tr>
+								<th width="10%" className="text-center">
+									Id
+								</th>
+								<th width="30%" className="text-center">
+									Name
+								</th>
+								<th width="40%" className="text-center">
+									Image
+								</th>
+								<th width="20%" className="text-center">
+									Actions
+								</th>
+							</tr>
 
-						{arrSpecialty &&
-							arrSpecialty.map((item, index) => {
-								let imageBase64 = new Buffer(
-									item.image,
-									"base64"
-								).toString("binary");
-								return (
-									<tr
-										key={index}
-										height="160px"
-										className="tele-col"
-									>
-										<td className="text-center">
-											{item.id}
-										</td>
-										<td>{item.name}</td>
-										<td>
-											<div
-												className="tele-image-table"
-												style={{
-													backgroundImage: `url(${imageBase64})`,
-												}}
-											></div>
-										</td>
-										<td className="text-center">
-											<button
-												className="btn-edit"
-												onClick={() =>
-													this.handleFillDataEdit(
-														item
-													)
-												}
-											>
-												<i className="fas fa-pencil-alt"></i>
-											</button>
-											<button
-												className="btn-delete"
-												onClick={() =>
-													this.handleConfirmDelete(
-														item
-													)
-												}
-											>
-												<i className="fas fa-trash"></i>
-											</button>
-										</td>
-									</tr>
-								);
-							})}
+							{arrSpecialty &&
+								arrSpecialty.map((item, index) => {
+									let imageBase64 = new Buffer(
+										item.image,
+										"base64"
+									).toString("binary");
+									return (
+										<tr
+											key={index}
+											height="160px"
+											className="tele-col"
+										>
+											<td className="text-center">
+												{item.id}
+											</td>
+											<td>{item.name}</td>
+											<td>
+												<div
+													className="tele-image-table"
+													style={{
+														backgroundImage: `url(${imageBase64})`,
+													}}
+												></div>
+											</td>
+											<td className="text-center">
+												<button
+													className="btn-edit"
+													onClick={() =>
+														this.handleFillDataEdit(
+															item
+														)
+													}
+												>
+													<i className="fas fa-pencil-alt"></i>
+												</button>
+												<button
+													className="btn-delete"
+													onClick={() =>
+														this.handleConfirmDelete(
+															item
+														)
+													}
+												>
+													<i className="fas fa-trash"></i>
+												</button>
+											</td>
+										</tr>
+									);
+								})}
+						</tbody>
 					</table>
+				</div>
+
+				<div className="pagination-container">
+					<Pagination
+						totalPages={this.state.totalRow}
+						onPageChange={this.handlePageChange}
+					/>
 				</div>
 
 				{confirmDelete ? (

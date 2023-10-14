@@ -114,85 +114,87 @@ class ManageTelemedicineBooking extends Component {
 					</div>
 					<div className="users-table mt-3 mx-3">
 						<table id="customers">
-							<tr>
-								<th width="8%" className="text-center">
-									Time
-								</th>
-								<th width="15%" className="text-center">
-									Fullname
-								</th>
-								<th width="5%" className="text-center">
-									Gender
-								</th>
-								<th width="7%" className="text-center">
-									Birthday
-								</th>
-								<th width="10%" className="text-center">
-									Phonenumber
-								</th>
-								<th width="15%" className="text-center">
-									Reason
-								</th>
-								<th width="5%" className="text-center">
-									Exam time
-								</th>
-								<th width="10%" className="text-center">
-									Status
-								</th>
-								<th width="10%" className="text-center">
-									Join
-								</th>
-								<th width="15%" className="text-center">
-									Actions
-								</th>
-							</tr>
+							<tbody>
+								<tr>
+									<th width="8%" className="text-center">
+										Time
+									</th>
+									<th width="15%" className="text-center">
+										Fullname
+									</th>
+									<th width="5%" className="text-center">
+										Gender
+									</th>
+									<th width="7%" className="text-center">
+										Birthday
+									</th>
+									<th width="10%" className="text-center">
+										Phonenumber
+									</th>
+									<th width="15%" className="text-center">
+										Reason
+									</th>
+									<th width="5%" className="text-center">
+										Exam time
+									</th>
+									<th width="10%" className="text-center">
+										Status
+									</th>
+									<th width="10%" className="text-center">
+										Join
+									</th>
+									<th width="15%" className="text-center">
+										Actions
+									</th>
+								</tr>
 
-							{arrBooking &&
-								arrBooking.map((item, index) => {
-									return (
-										<tr key={index}>
-											<td>{item.booking_time}</td>
-											<td>{item.fullName}</td>
-											<td>{item.gender}</td>
-											<td>{item.birthday}</td>
-											<td>{item.phoneNumber}</td>
-											<td>{item.reason}</td>
-											<td>{item.exam_time}</td>
-											<td>{item.status}</td>
-											<td>
-												<button className="btn-join-calling-room">
-													<Link
-														to={`/room/${item.idRoom}`}
+								{arrBooking &&
+									arrBooking.map((item, index) => {
+										return (
+											<tr key={index}>
+												<td>{item.booking_time}</td>
+												<td>{item.fullName}</td>
+												<td>{item.gender}</td>
+												<td>{item.birthday}</td>
+												<td>{item.phoneNumber}</td>
+												<td>{item.reason}</td>
+												<td>{item.exam_time}</td>
+												<td>{item.status}</td>
+												<td>
+													<button className="btn-join-calling-room">
+														<Link
+															to={`/room/${item.idRoom}`}
+														>
+															Join room
+														</Link>
+													</button>
+												</td>
+												<td className="text-center">
+													<button
+														className="btn-confirm"
+														onClick={() =>
+															this.handleConfirmBooking(
+																item
+															)
+														}
 													>
-														Join room
-													</Link>
-												</button>
-											</td>
-											<td className="text-center">
-												<button
-													className="btn-confirm"
-													onClick={() =>
-														this.handleConfirmBooking(
-															item
-														)
-													}
-												>
-													Confirm
-												</button>
-												<button
-													className="btn-refuse"
-													onClick={() =>
-														this.handleConfirmDelete(
-															item
-														)
-													}
-												>
-													Decline
-												</button>
-											</td>
-										</tr>
-									);
-								})}
+														Confirm
+													</button>
+													<button
+														className="btn-refuse"
+														onClick={() =>
+															this.handleConfirmDelete(
+																item
+															)
+														}
+													>
+														Decline
+													</button>
+												</td>
+											</tr>
+										);
+									})}
+							</tbody>
 						</table>
 					</div>
 

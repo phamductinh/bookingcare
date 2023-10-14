@@ -512,7 +512,7 @@ class Booking extends Component {
 						<div className="more-questions">
 							<p>
 								Cần tìm hiểu thêm?
-								<a href="#">Xem câu hỏi thường gặp.</a>
+								<a href="#/">Xem câu hỏi thường gặp.</a>
 							</p>
 						</div>
 
@@ -542,24 +542,24 @@ class Booking extends Component {
 							<div className="list-features">
 								<ul>
 									<li>
-										<a href="#">Liên hệ hợp tác</a>
+										<a href="#/">Liên hệ hợp tác</a>
 									</li>
 									<li>
-										<a href="#">
+										<a href="#/">
 											Gói chuyển đổi số doanh nghiệp
 										</a>
 									</li>
 									<li>
-										<a href="#">Tuyển dụng</a>
+										<a href="#/">Tuyển dụng</a>
 									</li>
 									<li>
-										<a href="#">Câu hỏi thường gặp</a>
+										<a href="#/">Câu hỏi thường gặp</a>
 									</li>
 									<li>
-										<a href="#">Điều khoản sử dụng</a>
+										<a href="#/">Điều khoản sử dụng</a>
 									</li>
 									<li>
-										<a href="#">Chính sách Bảo mật</a>
+										<a href="#/">Chính sách Bảo mật</a>
 									</li>
 								</ul>
 							</div>
