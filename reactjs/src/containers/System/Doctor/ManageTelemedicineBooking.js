@@ -44,6 +44,7 @@ class ManageTelemedicineBooking extends Component {
 			console.log(error);
 			this.setState({
 				confirmDelete: false,
+				isLoading: false,
 			});
 			toast.error("Something wrong !");
 		}

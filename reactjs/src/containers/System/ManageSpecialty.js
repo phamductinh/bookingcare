@@ -140,7 +140,6 @@ class ManageSpecialty extends Component {
 			image: this.state.imageBase64,
 			id: this.state.id,
 		};
-		console.log(data);
 		try {
 			let res = await updateSpecialty(data);
 			if (res && res.code === 200) {

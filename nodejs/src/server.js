@@ -3,11 +3,9 @@ const app = express();
 import bodyParser, { text } from "body-parser";
 import viewEngine from "./configs/viewEngine";
 import initWebRoutes from "./routes/web";
-import fileUpload from "express-fileupload";
 const http = require("http");
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-// const { ExpressPeerServer } = require("peer");
 require("dotenv").config();
 import { sendRemindEmail } from "./sendEmail";
 
@@ -37,12 +35,6 @@ app.set("views", __dirname + "/views");
 viewEngine(app);
 
 initWebRoutes(app);
-
-app.use(
-	fileUpload({
-		limits: { fileSize: 10 * 1024 * 1024 },
-	})
-);
 
 app.use((req, res, next) => {
 	const err = new Error("Not Found");

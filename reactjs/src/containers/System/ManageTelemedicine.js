@@ -16,6 +16,7 @@ import {
 	getTotalRowTelemedicine,
 } from "../../services/telemedicineService";
 import Pagination from "../../components/Common/Pagination";
+import LoadingSpinner from "../../components/Common/Loading";
 
 const mdParser = new MarkdownIt();
 
@@ -31,6 +32,7 @@ class ManageTelemedicine extends Component {
 			confirmDelete: false,
 			showBtnEdit: false,
 			newPage: 1,
+			isLoading: false,
 		};
 	}
 
@@ -66,10 +68,18 @@ class ManageTelemedicine extends Component {
 	};
 
 	getALLTelemedicineReact = async () => {
+		this.setState({
+			isLoading: true,
+		});
 		let res = await getPaginationTelemedicine(this.state.newPage);
 		if (res && res.code === 200) {
 			this.setState({
 				arrTelems: res.data,
+				isLoading: false,
+			});
+		} else {
+			this.setState({
+				isLoading: false,
 			});
 		}
 	};
@@ -98,7 +108,6 @@ class ManageTelemedicine extends Component {
 			descriptionHTML: this.state.descriptionHTML,
 			image: this.state.imageBase64,
 		};
-		console.log(infor);
 		try {
 			let res = await handleCreateTelemedicine(infor);
 			if (res && res.code === 200) {
@@ -184,9 +193,9 @@ class ManageTelemedicine extends Component {
 	}
 
 	render() {
-		const { name, description, confirmDelete, showBtnEdit } = this.state;
+		const { name, description, confirmDelete, showBtnEdit, isLoading } =
+			this.state;
 		let arrTelems = this.state.arrTelems;
-		console.log(arrTelems);
 		return (
 			<>
 				{this.props.isLoggedIn && <Header />}
@@ -348,6 +357,7 @@ class ManageTelemedicine extends Component {
 						</div>
 					</div>
 				) : null}
+				{isLoading && <LoadingSpinner />}
 			</>
 		);
 	}
