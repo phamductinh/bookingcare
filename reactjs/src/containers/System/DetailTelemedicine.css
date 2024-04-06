@@ -243,7 +243,7 @@
 }
 .doctor-schedule i {
 	padding-right: 8px;
-    font-size: 27px;
+	font-size: 27px;
 }
 .available-schedule {
 	position: relative;
@@ -430,7 +430,7 @@
 	height: 350px;
 }
 .company-logo {
-	background: url(https://bookingcare.vn/assets/icon/bookingcare-2020.svg);
+	background: url(../../assets/images/logodana.png);
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: left;

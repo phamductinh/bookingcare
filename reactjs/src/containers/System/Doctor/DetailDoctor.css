@@ -81,7 +81,7 @@
 	display: flex;
 }
 .detail-doctor-schedule-left {
-    padding-top: 20px;
+	padding-top: 20px;
 	width: 50%;
 }
 .date-chooser {
@@ -187,14 +187,14 @@
 }
 .booking-now a {
 	text-decoration: none;
-    text-transform: uppercase;
+	text-transform: uppercase;
 	font-size: 18px;
 	color: red;
 	font-weight: bold;
 }
 .booking-now a i {
 	font-size: 20px;
-    margin-left: 6px;
+	margin-left: 6px;
 }
 .detail-doctor-introduction {
 	width: 100%;
@@ -277,7 +277,7 @@
 	height: 350px;
 }
 .company-logo {
-	background: url(https://bookingcare.vn/assets/icon/bookingcare-2020.svg);
+	background: url(../../../assets/images/logodana.png);
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: left;

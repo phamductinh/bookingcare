@@ -24,7 +24,6 @@ let initWebRoutes = (app) => {
 	router.get("/api/get-user", verifyJWT, userController.getUser);
 	router.get(
 		"/api/get-pagination-users",
-
 		userController.getPaginationUsers
 	);
 	router.get(
@@ -39,7 +38,6 @@ let initWebRoutes = (app) => {
 	router.get("/api/get-all-doctors", doctorController.getAllDoctors);
 	router.get(
 		"/api/get-pagination-doctors",
-
 		doctorController.getPaginationDoctors
 	);
 	router.get(
@@ -105,7 +103,7 @@ let initWebRoutes = (app) => {
 		specialtyController.createSpecialty
 	);
 	router.delete(
-		"/api/delete-telemedicine",
+		"/api/delete-specialty",
 		authApiOwner,
 		specialtyController.deleteSpecialty
 	);

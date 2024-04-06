@@ -416,7 +416,7 @@ class BookingCall extends Component {
 								className="bookingcare-role-btn"
 								onclick="hiden_introduction()"
 							>
-								<p>Vai trò của BookingCare</p>
+								<p>Vai trò của DANA Hospital</p>
 							</div>
 							<div
 								id="hiden-introduction"
@@ -497,7 +497,7 @@ class BookingCall extends Component {
 								<div className="company-logo"></div>
 								<div className="company-address">
 									<h2>
-										Công ty Cổ phần Công nghệ BookingCare
+										Công ty Cổ phần Công nghệ DANA Hospital
 									</h2>
 									<p>
 										<i className="fas fa-map-marker-alt"></i>

@@ -447,7 +447,7 @@ class HomePage extends Component {
 									<div className="describe">
 										<li>
 											Đặt lịch xét nghiệm tại Hệ thống Y
-											tế Medlatec qua BookingCare để nhận
+											tế Medlatec qua DANA Hospital để nhận
 											ngay Voucher 50.000đ/lần xét nghiệm
 										</li>
 									</div>
@@ -744,7 +744,7 @@ class HomePage extends Component {
 						</div>
 					</div>
 
-					<div className="handbook-container">
+					{/* <div className="handbook-container">
 						<div className="handbook-content-up">
 							<div className="handbook-title">Cẩm nang</div>
 							<button className="handbook-btn">
@@ -825,7 +825,7 @@ class HomePage extends Component {
 
 					<div className="media-container">
 						<div className="media-title">
-							Truyền thông nói về BookingCare
+							Truyền thông nói về DANA Hospital
 						</div>
 						<div className="media-content">
 							<div className="media-content-left">
@@ -863,7 +863,7 @@ class HomePage extends Component {
 						</div>
 						<div className="download-right">
 							<div className="download-right-content">
-								<h2>Tải ứng dụng BookingCare</h2>
+								<h2>Tải ứng dụng DANA Hospital</h2>
 								<div className="app-features">
 									<li>
 										<i className="fas fa-check"></i>Đặt khám
@@ -970,13 +970,13 @@ class HomePage extends Component {
 								<i className="fas fa-long-arrow-right"></i>
 							</button>
 						</div>
-					</div>
+					</div> */}
 
 					<div className="footer1">
 						<div className="company-infor">
 							<div className="company-logo"></div>
 							<div className="company-address">
-								<h2>Công ty Cổ phần Công nghệ BookingCare</h2>
+								<h2>Công ty Cổ phần Công nghệ DANA Hospital</h2>
 								<p>
 									<i className="fas fa-map-marker-alt"></i>28
 									Thành Thái, Dịch Vọng, Cầu Giấy, Hà Nội

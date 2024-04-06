@@ -70,7 +70,7 @@ class DetailTelemedicine extends Component {
 							<h2>Chuyên gia tư vấn Tâm lý giỏi</h2>
 							<ul>
 								<li>
-									BookingCare là Nền tảng Y tế chăm sóc Sức
+									DANA Hospital là Nền tảng Y tế chăm sóc Sức
 									khỏe toàn diện, trong đó có cung cấp dịch vụ
 									tư vấn tâm lý từ xa.
 								</li>
@@ -296,7 +296,7 @@ class DetailTelemedicine extends Component {
 
 						<div className="introduction">
 							<div className="bookingcare-role-btn">
-								<p>Vai trò của BookingCare</p>
+								<p>Vai trò của DANA Hospital</p>
 							</div>
 							<div
 								id="hiden-introduction"
@@ -377,7 +377,7 @@ class DetailTelemedicine extends Component {
 								<div className="company-logo"></div>
 								<div className="company-address">
 									<h2>
-										Công ty Cổ phần Công nghệ BookingCare
+										Công ty Cổ phần Công nghệ DANA Hospital
 									</h2>
 									<p>
 										<i className="fas fa-map-marker-alt"></i>
