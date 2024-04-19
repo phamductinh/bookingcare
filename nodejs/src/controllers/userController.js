@@ -111,6 +111,17 @@ let updateUser = (req, res) => {
 	});
 };
 
+let updateInforUser = (req, res) => {
+	let userData = req.body;
+	userModel.updateInforUserModel(userData, (error, results, fields) => {
+		if (error) throw error;
+		return res.send({
+			code: 200,
+			msg: successMsg.update_user_succeed,
+		});
+	});
+};
+
 let deleteUser = (req, res) => {
 	let userId = req.query.id;
 	if (!userId) {
@@ -138,4 +149,5 @@ module.exports = {
 	updateUser,
 	getPaginationUsers,
 	getTotalRowUser,
+    updateInforUser
 };

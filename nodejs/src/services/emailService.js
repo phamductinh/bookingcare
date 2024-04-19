@@ -148,9 +148,36 @@ let sendDeclineEmail = async (dataSend) => {
 	});
 };
 
+let sendEmailResetPassword = async (dataSend) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			let transporter = nodemailer.createTransport({
+				host: "smtp.gmail.com",
+				port: 587,
+				secure: false, // true for 465, false for other ports
+				auth: {
+					user: process.env.EMAIL_APP, // generated ethereal user
+					pass: process.env.EMAIL_APP_PASSWORD, // generated ethereal password
+				},
+			});
+
+			let info = await transporter.sendMail({
+				from: '"Phạm Đức Tịnh 👻" <phamductinh.t18@gmail.com>', // sender address
+				to: dataSend.receiverEmail, // list of receivers
+				subject: "Yêu cầu đặt lại mật khẩu", // Subject line
+				html: getBodyHTMLEmailRemedy(dataSend),
+			});
+			resolve(true);
+		} catch (error) {
+			reject(error);
+		}
+	});
+};
+
 module.exports = {
 	sendSimpleEmail,
 	sendDeclineEmail,
 	sendTelemedicineEmail,
 	sendReminderEmail,
+	sendEmailResetPassword,
 };

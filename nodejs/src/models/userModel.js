@@ -14,6 +14,7 @@ import {
 	updateUserQuery,
 	deleteUserById,
 	totalRowUser,
+	updateInforQuery,
 } from "../database/queries";
 import { errMsg } from "../utils/resMsg";
 
@@ -171,6 +172,26 @@ let updateAUser = (userData, callback) => {
 	db.query(updateUserQuery, values, callback);
 };
 
+let updateInforUserModel = (userData, callback) => {
+	let values = [
+		userData.fullName,
+		userData.address,
+		userData.phoneNumber,
+		userData.id,
+	];
+	if (!userData.id) {
+		let error = new Error(errMsg.missing_input);
+		error.statusCode = 400;
+		return callback(error);
+	}
+	if (userData.email || userData.password) {
+		let error = new Error(errMsg.cant_change);
+		error.statusCode = 400;
+		return callback(error);
+	}
+	db.query(updateInforQuery, values, callback);
+};
+
 let deleteAUser = (userId, callback) => {
 	return db.query(deleteUserById, [userId], callback);
 };
@@ -183,4 +204,5 @@ module.exports = {
 	deleteAUser,
 	getPaginationUsersModel,
 	getTotalRowUserModel,
+	updateInforUserModel,
 };

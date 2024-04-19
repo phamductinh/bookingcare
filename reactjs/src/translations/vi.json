@@ -21,7 +21,8 @@
 			"manage-telemedicine-booking": "Quản lý lịch khám từ xa",
 			"manage-confirmed-booking": "Quản lý lịch hẹn đã xác nhận",
 			"manage-finished-booking": "Quản lý lịch hẹn đã khám",
-			"manage-chats": "Quản lý tin nhắn"
+			"manage-chats": "Quản lý tin nhắn",
+            "manage-review": "Quản lý đánh giá"
 		},
 		"doctor": {
 			"doctor": "Bác sĩ",

@@ -46,6 +46,14 @@ const deleteBooking = (token, bookingId) => {
 	});
 };
 
+const cancelBooking = (bookingId) => {
+	return axios.delete(`/api/cancel-booking?id=${bookingId}`);
+};
+
+const getBookingByUserId = (userId) => {
+	return axios.get(`/api/get-booking-by-userId?userId=${userId}`);
+};
+
 export {
 	bookingAnAppointmentService,
 	getBookingByDate,
@@ -55,4 +63,6 @@ export {
 	finishBooking,
 	getAllFinishedBooking,
 	getTelemedicineBookingByDate,
+	cancelBooking,
+	getBookingByUserId,
 };

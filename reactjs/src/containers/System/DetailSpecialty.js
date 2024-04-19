@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import "./DetailTelemedicine.css";
-import { getDoctorIsTelemedicine } from "../../services/doctorService";
-import * as actions from "../../store/actions/";
+import "./DetailSpecialty.css";
+import { getDoctorBySpecialtyId } from "../../services/doctorService";
+import * as actions from "../../store/actions";
 import { NumericFormat } from "react-number-format";
 
-class DetailTelemedicine extends Component {
+class DetailSpecialty extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -21,7 +21,7 @@ class DetailTelemedicine extends Component {
 			this.props.match.params.id
 		) {
 			let id = this.props.match.params.id;
-			let res = await getDoctorIsTelemedicine(id);
+			let res = await getDoctorBySpecialtyId(id);
 			if (res && res.code === 200) {
 				this.setState({
 					arrDoctors: res.data,
@@ -31,7 +31,11 @@ class DetailTelemedicine extends Component {
 	}
 
 	handleViewBooking = (item) => {
-		this.props.history.push(`/booking-call-video/${item.id}`);
+		if (this.props.isLoggedIn) {
+			this.props.history.push(`/booking/${item.id}`);
+		} else {
+			this.props.history.push("/login");
+		}
 	};
 
 	goBack = () => {
@@ -50,7 +54,7 @@ class DetailTelemedicine extends Component {
 								className="fas fa-long-arrow-left"
 								onClick={this.goBack}
 							></i>
-							<h2>Tư vấn, trị liệu Tâm lý từ xa</h2>
+							<h2>Chuyên khoa phổ biến</h2>
 						</div>
 						<div className="detail-tele-header-right">
 							<div className="detail-tele-header-support">
@@ -61,7 +65,7 @@ class DetailTelemedicine extends Component {
 						</div>
 					</div>
 
-					<div className="telemedicine-infor-container">
+					{/* <div className="telemedicine-infor-container">
 						<div
 							className="telemedicine-infor"
 							id="telemedicine-infor"
@@ -70,7 +74,7 @@ class DetailTelemedicine extends Component {
 							<h2>Chuyên gia tư vấn Tâm lý giỏi</h2>
 							<ul>
 								<li>
-									DANA Hospital là Nền tảng Y tế chăm sóc Sức
+									BookingCare là Nền tảng Y tế chăm sóc Sức
 									khỏe toàn diện, trong đó có cung cấp dịch vụ
 									tư vấn tâm lý từ xa.
 								</li>
@@ -115,7 +119,7 @@ class DetailTelemedicine extends Component {
 						</div>
 						<p id="infor-show-more">Đọc thêm</p>
 						<p id="infor-show-less">Ẩn bớt</p>
-					</div>
+					</div> */}
 
 					<div className="detail-tele-list-doctors-container">
 						<div className="detail-tele-province-filter">
@@ -258,8 +262,7 @@ class DetailTelemedicine extends Component {
 										</div>
 										<div className="doctor-schedule">
 											<h2>
-												<i className="fas fa-video"></i>
-												ĐẶT LỊCH TƯ VẤN QUA VIDEO
+												Nếu bạn có vấn đề về sức khỏe
 											</h2>
 											<button
 												className="booking-now"
@@ -267,7 +270,7 @@ class DetailTelemedicine extends Component {
 													this.handleViewBooking(item)
 												}
 											>
-												<Link to="/booking-call-video">
+												<Link to="/booking">
 													Đặt lịch ngay
 													<i className="fa-solid fa-arrow-right"></i>
 												</Link>
@@ -278,9 +281,7 @@ class DetailTelemedicine extends Component {
 												và đặt (Phí đặt lịch 0đ)
 											</p>
 											<h3>
-												<strong>
-													GIÁ TƯ VẤN QUA VIDEO:
-												</strong>{" "}
+												<strong>GIÁ KHÁM:</strong>{" "}
 												<NumericFormat
 													className="price-booking-header"
 													value={item.price}
@@ -296,7 +297,7 @@ class DetailTelemedicine extends Component {
 
 						<div className="introduction">
 							<div className="bookingcare-role-btn">
-								<p>Vai trò của DANA Hospital</p>
+								<p>Vai trò của BookingCare</p>
 							</div>
 							<div
 								id="hiden-introduction"
@@ -377,7 +378,7 @@ class DetailTelemedicine extends Component {
 								<div className="company-logo"></div>
 								<div className="company-address">
 									<h2>
-										Công ty Cổ phần Công nghệ DANA Hospital
+										Công ty Cổ phần Công nghệ BookingCare
 									</h2>
 									<p>
 										<i className="fas fa-map-marker-alt"></i>
@@ -457,13 +458,13 @@ class DetailTelemedicine extends Component {
 }
 
 const mapStateToProps = (state) => {
-	return {};
-};
-
-const mapDispatchToProps = (dispatch) => {
 	return {
-		joinRoomSuccess: () => dispatch(actions.joinRoomSuccess()),
+		isLoggedIn: state.user.isLoggedIn,
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetailTelemedicine);
+const mapDispatchToProps = (dispatch) => {
+	return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetailSpecialty);

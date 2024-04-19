@@ -26,6 +26,10 @@ class Specialty extends Component {
 		}
 	};
 
+	handleShowSpecialty = (item) => {
+		this.props.history.push(`/specialty/${item.id}`);
+	};
+
 	handleNextSpecialty() {
 		let lists = document.querySelectorAll(".spec-slide-item");
 		document.getElementById("spec-slide").appendChild(lists[0]);
@@ -56,6 +60,9 @@ class Specialty extends Component {
 									return (
 										<div
 											className="spec-slide-item"
+											onClick={() =>
+												this.handleShowSpecialty(item)
+											}
 											key={index}
 										>
 											<div

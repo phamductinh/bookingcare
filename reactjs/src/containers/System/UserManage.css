@@ -73,6 +73,7 @@
 	background: #fff;
 	border: 1px solid #888;
 	width: 60%;
+	height: auto !important;
 }
 .modal-content p {
 	font-size: 20px;
@@ -147,7 +148,7 @@
 	width: auto;
 }
 .btn-add-new {
-	width: 80px;
+	width: fit-content !important;
 	height: 37px;
 	border: none;
 	outline: none;

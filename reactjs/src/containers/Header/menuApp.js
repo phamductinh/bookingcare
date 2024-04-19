@@ -57,6 +57,16 @@ export const adminMenu = [
 	},
 
 	{
+		//quản lý đánh giá
+		name: "menu.admin.manage-review",
+		menus: [
+			{
+				name: "menu.admin.manage-review",
+				link: "/system/manage-review",
+			},
+		],
+	},
+	{
 		//quản lý chat
 		name: "menu.admin.manage-chats",
 		menus: [

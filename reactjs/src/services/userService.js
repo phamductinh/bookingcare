@@ -11,6 +11,10 @@ const handleCreateUser = (data) => {
 	return axios.post("/api/create-user", data);
 };
 
+const changePasswordService = (userData) => {
+	return axios.put("/api/change-password", userData);
+};
+
 const getAllUsers = (token) => {
 	return axios.get("/api/users", {
 		headers: {
@@ -51,6 +55,14 @@ const editUser = (token, userData) => {
 	});
 };
 
+const updateInforUser = (userData) => {
+	return axios.put("/api/update-infor-user", userData);
+};
+
+const getUserById = (userId) => {
+	return axios.get(`/api/get-user?id=${userId}`);
+};
+
 export {
 	handleLoginAPI,
 	handleCreateUser,
@@ -59,4 +71,7 @@ export {
 	editUser,
 	getPaginationUsers,
 	getTotalRowUser,
+	getUserById,
+	updateInforUser,
+	changePasswordService,
 };

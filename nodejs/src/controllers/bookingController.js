@@ -1,6 +1,5 @@
 import bookingModel from "../models/bookingModel";
 
-
 const getAllConfirmedBooking = (req, res) => {
 	bookingModel.getAllConfirmedBookingModel((error, results) => {
 		if (error) {
@@ -14,6 +13,25 @@ const getAllConfirmedBooking = (req, res) => {
 				data: results,
 			});
 		}
+	});
+};
+
+let getBookingByUserId = (req, res) => {
+	let userId = req.query.userId;
+	if (!userId) {
+		return res.status(400).send({ code: 400, msg: "Missing input!" });
+	}
+
+	bookingModel.getBookingByUserIdModel(userId, (error, results) => {
+		if (error) {
+			return res
+				.status(500)
+				.send({ code: 500, msg: "Internal server error" });
+		}
+		return res.send({
+			code: 200,
+			data: results,
+		});
 	});
 };
 
@@ -150,8 +168,9 @@ module.exports = {
 	getBookingByDate,
 	confirmBooking,
 	deleteBooking,
-    getAllConfirmedBooking,
-    finishBooking,
-    getAllFinishedBooking,
-    getTelemedicineBookingByDate
+	getAllConfirmedBooking,
+	finishBooking,
+	getAllFinishedBooking,
+	getTelemedicineBookingByDate,
+	getBookingByUserId,
 };

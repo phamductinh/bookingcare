@@ -112,6 +112,28 @@ class HomePage extends Component {
 		this.props.history.push(`/detail-doctor/${doctor.id}`);
 	};
 
+	handleViewUpdateInfor = () => {
+		if (this.props.userInfor) {
+			this.props.history.push(`/update-infor/${this.props.userInfor.id}`);
+		}
+	};
+
+	handleViewBookingHistory = () => {
+		if (this.props.userInfor) {
+			this.props.history.push(
+				`/booking-history/${this.props.userInfor.id}`
+			);
+		}
+	};
+
+	handleViewChangePassword = () => {
+		if (this.props.userInfor) {
+			this.props.history.push(
+				`/change-password/${this.props.userInfor.id}`
+			);
+		}
+	};
+
 	handleNextDoctor() {
 		let lists = document.querySelectorAll(".doctor-slide-item");
 		document.getElementById("doctor-slide").appendChild(lists[0]);
@@ -202,7 +224,7 @@ class HomePage extends Component {
 															userInfor.image,
 															"base64"
 													  ).toString("binary")
-													: "https://ihfeducation.ihf.info/images/no_avatar.gif"
+													: "https://hienthao.com/wp-content/uploads/2023/05/c6e56503cfdd87da299f72dc416023d4-736x620.jpg"
 											})`,
 										}}
 										onClick={() => this.handleOpenMenu()}
@@ -225,7 +247,7 @@ class HomePage extends Component {
 																	  ).toString(
 																			"binary"
 																	  )
-																	: "https://ihfeducation.ihf.info/images/no_avatar.gif"
+																	: "https://hienthao.com/wp-content/uploads/2023/05/c6e56503cfdd87da299f72dc416023d4-736x620.jpg"
 															})`,
 														}}
 													></div>
@@ -236,14 +258,31 @@ class HomePage extends Component {
 													</div>
 												</div>
 												<div className="update-infor">
-													<Link to="/update-infor">
+													<div
+														onClick={() =>
+															this.handleViewUpdateInfor()
+														}
+													>
 														Chỉnh sửa thông tin
-													</Link>
+													</div>
 												</div>
 												<div className="his-booking">
-													<Link to="/history-booking">
+													<div
+														onClick={() =>
+															this.handleViewBookingHistory()
+														}
+													>
 														Lịch sử đặt lịch
-													</Link>
+													</div>
+												</div>
+												<div className="his-booking">
+													<div
+														onClick={() =>
+															this.handleViewChangePassword()
+														}
+													>
+														Đổi mật khẩu
+													</div>
 												</div>
 												<button
 													className="btn-logout"

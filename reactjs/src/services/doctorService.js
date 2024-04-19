@@ -46,6 +46,10 @@ const getPaginationDoctors = (page) => {
 	return axios.get(`/api/get-pagination-doctors?page=${page}`);
 };
 
+const getDoctorBySpecialtyId = (id) => {
+	return axios.get(`/api/get-doctor-by-specialtyId?id=${id}`);
+};
+
 export {
 	handleCreateDoctor,
 	getAllDoctors,
@@ -56,4 +60,5 @@ export {
 	getDoctorByKeyword,
 	getTotalRowDoctor,
 	getPaginationDoctors,
+	getDoctorBySpecialtyId,
 };

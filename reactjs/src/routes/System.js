@@ -10,6 +10,7 @@ import ManageTelemedicineBooking from "../containers/System/Doctor/ManageTelemed
 import ManageConfirmedBooking from "../containers/System/Doctor/ManageConfirmedBooking";
 import ManageFinishedBooking from "../containers/System/Doctor/ManageFinishedBooking";
 import ManageChats from "../containers/System/ManageChats";
+import ManageReview from "../containers/System/ManageReview";
 
 class System extends Component {
 	render() {
@@ -53,6 +54,10 @@ class System extends Component {
 						<Route
 							path="/system/manage-chats"
 							component={ManageChats}
+						/>
+						<Route
+							path="/system/manage-review"
+							component={ManageReview}
 						/>
 						<Route
 							component={() => {

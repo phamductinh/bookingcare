@@ -23,6 +23,11 @@ import Booking from "./System/Doctor/Booking";
 import BookingCall from "./System/Doctor/BookingCall";
 import CallingHome from "./VideoCall/CallingHome";
 import Room from "./VideoCall/Room";
+import DetailSpecialty from "./System/DetailSpecialty";
+import BookingHistory from "./System/BookingHistory";
+import UpdateInfor from "./System/UpdateInfor";
+import confirmEmail from "./Auth/confirmEmail";
+import changePassword from "./Auth/changePassword";
 
 class App extends Component {
 	handlePersistorState = () => {
@@ -77,6 +82,7 @@ class App extends Component {
 
 									<Route
 										path={path.HOMEPAGE}
+										exact
 										component={HomePage}
 									/>
 									<Route
@@ -105,6 +111,29 @@ class App extends Component {
 										exact
 										path={"/telemedicine/:id"}
 										component={DetailTelemedicine}
+									/>
+									<Route
+										exact
+										path={"/specialty/:id"}
+										component={DetailSpecialty}
+									/>
+									<Route
+										path={"/booking-history/:id"}
+										component={BookingHistory}
+									/>
+									<Route
+										path={"/update-infor/:id"}
+										component={UpdateInfor}
+									/>
+									<Route
+										path={"/change-password/:id"}
+										component={userIsAuthenticated(
+											changePassword
+										)}
+									/>
+									<Route
+										path={"/forgot-password"}
+										component={confirmEmail}
 									/>
 								</Switch>
 							</CustomScrollbars>

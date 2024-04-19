@@ -52,6 +52,114 @@
 	height: auto;
 }
 
+.form-container-email {
+	max-width: 600px;
+	width: 500px;
+	height: auto;
+	margin: 100px auto;
+	background-color: #fff;
+	padding: 32px 24px;
+	font-size: 14px;
+	font-family: inherit;
+	color: #212121;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	box-sizing: border-box;
+	border-radius: 10px;
+	box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084),
+		0px 2px 3px rgba(0, 0, 0, 0.168);
+}
+
+.form-group-email {
+	margin: 20px 0;
+}
+
+.form-container-email button:active {
+	scale: 0.95;
+}
+
+.form-container-email .logo-container-email {
+	text-align: center;
+	font-weight: 600;
+	font-size: 18px;
+}
+
+.form-container-email .form-email {
+	display: flex;
+	flex-direction: column;
+}
+
+.form-container-email .form-group-email {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.form-container-email .form-group-email label {
+	display: block;
+	margin-bottom: 5px;
+    
+}
+
+.form-container-email .form-group-email input {
+	width: 100%;
+	padding: 12px 16px;
+	border-radius: 6px;
+	font-family: inherit;
+	border: 1px solid #ccc;
+}
+
+.form-container-email .form-group-email input::placeholder {
+	opacity: 0.5;
+}
+
+.form-container-email .form-group-email input:focus {
+	outline: none;
+	border-color: #1778f2;
+}
+
+.form-container-email .form-submit-btn-email {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-family: inherit;
+	color: #fff;
+	background-color: #212121;
+	border: none;
+	width: 100%;
+	padding: 12px 16px;
+	font-size: inherit;
+	gap: 8px;
+	margin: 20px 0;
+	cursor: pointer;
+	border-radius: 6px;
+	box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084),
+		0px 2px 3px rgba(0, 0, 0, 0.168);
+}
+
+.form-container-email .form-submit-btn-email:hover {
+	background-color: #313131;
+}
+
+.form-container-email .link {
+	color: #1778f2;
+	text-decoration: none;
+}
+
+.form-container-email .signup-link {
+	align-self: center;
+	font-weight: 500;
+}
+
+.form-container-email .signup-link .link {
+	font-weight: 400;
+}
+
+.form-container-email .link:hover {
+	text-decoration: underline;
+}
+
 .more-questions {
 	height: 50px;
 	width: 100%;
@@ -83,7 +191,7 @@
 	height: 350px;
 }
 .company-logo {
-	background: url(../../assets/images/logodana.png);
+	background: url(https://bookingcare.vn/assets/icon/bookingcare-2020.svg);
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: left;
@@ -161,7 +269,10 @@
 	margin-bottom: 20px;
 }
 
-.footer2-room {
+.footer2cf {
+	position: fixed;
+	left: 0;
+	bottom: 0;
 	width: 100%;
 	height: 60px;
 	display: flex;
@@ -182,122 +293,4 @@
 	font-size: 20px;
 	padding: 20px;
 	cursor: pointer;
-}
-
-#localVideo,
-#remoteVideo {
-	width: 50%;
-	height: 454px;
-}
-
-.video-box:nth-child(n + 3) {
-	display: none;
-}
-
-#chatBox {
-	padding: 10px;
-	width: 100%;
-	height: 142px;
-	border: 1px solid gray;
-	overflow-y: scroll;
-}
-
-.chat-box {
-	position: relative;
-}
-
-.video-box-send {
-	position: relative;
-}
-
-#messageInput {
-	width: 100%;
-	padding: 8px;
-	outline: none;
-}
-
-#sendMessageButton {
-	padding: 10px 20px;
-	background-color: #4caf50;
-	color: white;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-	position: absolute;
-	right: 0;
-	bottom: 0;
-}
-
-.video-box {
-	display: flex;
-	position: relative;
-}
-
-.btn-join-room {
-	position: absolute;
-	top: 33%;
-	left: 15%;
-	padding: 20px;
-	border-radius: 50%;
-	background-color: #4caf50;
-	color: white;
-	border: none;
-}
-
-.btn-join-room2 {
-	position: absolute;
-	top: 33%;
-	left: 54%;
-	padding: 20px;
-	border-radius: 50%;
-	background-color: #4caf50;
-	color: white;
-	border: none;
-}
-
-.msg-name {
-	margin-bottom: 0;
-	font-size: 12px;
-	font-weight: 500;
-}
-
-.msg-message {
-	background-color: #1778f2;
-	color: white;
-	width: fit-content;
-	padding: 7px;
-	font-size: 18px;
-	margin-top: 5px;
-	margin-bottom: 0;
-	border-radius: 7px;
-}
-
-.mute-mic {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-}
-
-.mute-mic i {
-	font-size: 25px;
-	margin-left: 120px;
-	margin-bottom: 15px;
-	cursor: pointer;
-	color: #fff;
-}
-
-.mute-mic .mute-video i {
-	font-size: 25px;
-	margin-left: 70px;
-	margin-bottom: 15px;
-	cursor: pointer;
-}
-
-.mute-mic {
-	display: none;
-	transition: linear 2s;
-}
-
-.video-box:hover .mute-mic {
-	display: block;
 }

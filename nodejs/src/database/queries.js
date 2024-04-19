@@ -8,12 +8,16 @@ let createAUser = `INSERT INTO user (email, password, fullName, address, gender,
 
 let updateUserQuery = `UPDATE user SET fullName = ?, address = ?, gender = ?, role = ?, phoneNumber = ? WHERE id = ?`;
 
+let updateInforQuery = `UPDATE user SET fullName = ?, address = ?, phoneNumber = ? WHERE id = ?`;
+
 let deleteUserById = `DELETE FROM user WHERE id = ?`;
 
 //doctor
 let findAllDoctorsQuery = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image,doctor.specialtyId, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN clinic ON clinic.id = doctor.clinicId JOIN specialty ON specialty.id = doctor.specialtyId`;
 
 let findDoctorById = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN clinic ON clinic.id = doctor.clinicId JOIN specialty ON specialty.id = doctor.specialtyId WHERE doctor.id = ?`;
+
+let findDoctorBySpecialty = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN specialty ON doctor.specialtyId = specialty.id JOIN clinic ON doctor.clinicId = clinic.id WHERE doctor.specialtyId = ?`;
 
 let findDoctorIsTelemedicine = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN clinic ON clinic.id = doctor.clinicId JOIN specialty ON specialty.id = doctor.specialtyId WHERE doctor.telemId = ?`;
 
@@ -58,6 +62,12 @@ JOIN user ON user.id = booking.userId
 JOIN doctor ON doctor.id = booking.doctorId
 WHERE status = 'Pending' AND booking_date = ?`;
 
+let getBookingByUserIdQuery = `SELECT booking.*, user.email as patientEmail
+FROM booking 
+JOIN user ON user.id = booking.userId
+JOIN doctor ON doctor.id = booking.doctorId
+WHERE status = 'Pending' AND user.id = ?`;
+
 let getEmailPatientsQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
 FROM booking
 JOIN user ON user.id = booking.userId
@@ -84,12 +94,20 @@ let createRoomQuery = `INSERT INTO room (code, status) VALUES (?,?)`;
 
 let findRoomByCode = `SELECT * FROM room WHERE code = ?`;
 
+let deleteReviewById = `DELETE FROM review WHERE id = ?`;
+
 let totalRowUser = `SELECT COUNT(*) as totalRow FROM user`;
 let totalRowDoctor = `SELECT COUNT(*) as totalRow FROM doctor`;
 let totalRowSpecialty = `SELECT COUNT(*) as totalRow FROM specialty`;
 let totalRowTelemedicine = `SELECT COUNT(*) as totalRow FROM telemedicine`;
+let totalRowReview = `SELECT COUNT(*) as totalRow FROM review`;
 
 module.exports = {
+	updateInforQuery,
+	getBookingByUserIdQuery,
+	deleteReviewById,
+	totalRowReview,
+	findDoctorBySpecialty,
 	totalRowTelemedicine,
 	totalRowSpecialty,
 	totalRowDoctor,

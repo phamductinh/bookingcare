@@ -7,6 +7,7 @@ import doctorController from "../controllers/doctorController";
 import clinicController from "../controllers/clinicController";
 import bookingController from "../controllers/bookingController";
 import videoCallController from "../controllers/videoCallController";
+import reviewController from "../controllers/reviewController";
 import {
 	verifyJWT,
 	authApi,
@@ -19,13 +20,11 @@ let router = express.Router();
 let initWebRoutes = (app) => {
 	router.post("/api/login", authController.login);
 	router.post("/api/register", authController.register);
+	router.put("/api/change-password", authController.changePassword);
 
 	router.get("/api/users", verifyJWT, userController.getAllUsers);
-	router.get("/api/get-user", verifyJWT, userController.getUser);
-	router.get(
-		"/api/get-pagination-users",
-		userController.getPaginationUsers
-	);
+	router.get("/api/get-user", userController.getUser);
+	router.get("/api/get-pagination-users", userController.getPaginationUsers);
 	router.get(
 		"/api/get-total-row-user",
 
@@ -33,7 +32,8 @@ let initWebRoutes = (app) => {
 	);
 	router.post("/api/create-user", userController.createUser);
 	router.put("/api/edit-user", verifyJWT, userController.updateUser);
-	router.delete("/api/delete-user", authApiOwner, userController.deleteUser);
+	router.put("/api/update-infor-user", userController.updateInforUser);
+	router.delete("/api/delete-user", verifyJWT, userController.deleteUser);
 
 	router.get("/api/get-all-doctors", doctorController.getAllDoctors);
 	router.get(
@@ -54,11 +54,15 @@ let initWebRoutes = (app) => {
 		"/api/get-doctor-is-telemedicine",
 		doctorController.getDoctorIsTelemedicine
 	);
+	router.get(
+		"/api/get-doctor-by-specialtyId",
+		doctorController.getDoctorBySpecialtyId
+	);
 	router.post("/api/create-doctor", authApi, doctorController.createADoctor);
 	router.put("/api/update-doctor", authApi, doctorController.updateADoctor);
 	router.delete(
 		"/api/delete-doctor",
-		authApiOwner,
+		verifyJWT,
 		doctorController.deleteDoctor
 	);
 
@@ -77,7 +81,7 @@ let initWebRoutes = (app) => {
 	);
 	router.delete(
 		"/api/delete-telemedicine",
-		authApiOwner,
+		verifyJWT,
 		telemedicineController.deleteTelemedicine
 	);
 	router.put(
@@ -104,7 +108,7 @@ let initWebRoutes = (app) => {
 	);
 	router.delete(
 		"/api/delete-specialty",
-		authApiOwner,
+		verifyJWT,
 		specialtyController.deleteSpecialty
 	);
 	router.put(
@@ -135,6 +139,10 @@ let initWebRoutes = (app) => {
 		bookingController.getTelemedicineBookingByDate
 	);
 	router.get(
+		"/api/get-booking-by-userId",
+		bookingController.getBookingByUserId
+	);
+	router.get(
 		"/api/get-all-confirmed-booking",
 		bookingController.getAllConfirmedBooking
 	);
@@ -154,8 +162,20 @@ let initWebRoutes = (app) => {
 	);
 	router.delete(
 		"/api/delete-booking",
-		authApiOwner,
+		verifyJWT,
 		bookingController.deleteBooking
+	);
+	router.delete("/api/cancel-booking", bookingController.deleteBooking);
+
+	router.get(
+		"/api/get-pagination-review",
+		reviewController.getPaginationReviews
+	);
+	router.get("/api/get-total-row-review", reviewController.getTotalRowReview);
+	router.delete(
+		"/api/delete-review",
+		verifyJWT,
+		reviewController.deleteReview
 	);
 
 	router.get("/api/get-room", videoCallController.getRoom);

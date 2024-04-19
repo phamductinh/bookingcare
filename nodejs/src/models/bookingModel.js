@@ -10,6 +10,7 @@ import {
 	finishBookingQuery,
 	findAllFinishedBookingQuery,
 	getTelemedicineBookingByDateQuery,
+	getBookingByUserIdQuery,
 } from "../database/queries";
 import emailService from "../services/emailService";
 
@@ -20,6 +21,15 @@ let getAllConfirmedBookingModel = (callback) => {
 		} else {
 			callback(null, results);
 		}
+	});
+};
+
+let getBookingByUserIdModel = (userId, callback) => {
+	db.query(getBookingByUserIdQuery, userId, (error, results) => {
+		if (error) {
+			return callback(error);
+		}
+		return callback(null, results);
 	});
 };
 
@@ -158,10 +168,10 @@ let getTelemedicineBookingByDateModel = (date, callback) => {
 };
 
 let deleteBookingModel = async (bookingId, callback) => {
-	await emailService.sendDeclineEmail({
-		receiverEmail: "phamductinh.t18@gmail.com",
-		fullName: "Pham Duc Tinh",
-	});
+	// await emailService.sendDeclineEmail({
+	// 	receiverEmail: "phamductinh.t18@gmail.com",
+	// 	fullName: "Pham Duc Tinh",
+	// });
 	return db.query(deleteBookingById, [bookingId], callback);
 };
 
@@ -174,4 +184,5 @@ module.exports = {
 	finishBookingModel,
 	getAllFinishedBookingModel,
 	getTelemedicineBookingByDateModel,
+	getBookingByUserIdModel,
 };

@@ -4,7 +4,7 @@ import { push } from "connected-react-router";
 import { handleLoginAPI } from "../../services/userService";
 import * as actions from "../../store/actions/";
 import "react-toastify/dist/ReactToastify.css";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import "./Login.css";
 
 class Login extends Component {
@@ -62,11 +62,7 @@ class Login extends Component {
 					this.state.email,
 					this.state.password
 				);
-				if (data && data.code !== 200) {
-					this.setState({
-						errMsg: data.msg,
-					});
-				}
+                console.log(data)
 				if (data && data.code === 200) {
 					this.props.userLoginSuccess(data.user);
 					localStorage.setItem("token", data.token);
@@ -83,7 +79,7 @@ class Login extends Component {
 		}
 	};
 
-    handleShowHome = () => {
+	handleShowHome = () => {
 		this.props.history.push(`/`);
 	};
 
@@ -92,7 +88,7 @@ class Login extends Component {
 			<>
 				<div className="login-container">
 					<div className="login-box">
-                        <div
+						<div
 							className="login-logo"
 							onClick={() => this.handleShowHome()}
 						></div>
@@ -128,7 +124,7 @@ class Login extends Component {
 							<div className="errMsg" style={{ color: "red" }}>
 								{this.state.errMsg}
 							</div>
-							<Link to="/confirm-email" className="forgot-pass">
+							<Link to="/forgot-password" className="forgot-pass">
 								Quên mật khẩu ?
 							</Link>
 							<div>

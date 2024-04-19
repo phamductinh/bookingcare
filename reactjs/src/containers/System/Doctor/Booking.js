@@ -119,61 +119,65 @@ class Booking extends Component {
 	};
 
 	handleBooking = async () => {
-		let formatedDate = new Date(this.state.date).getTime();
-		let formattedDate = new Date(formatedDate);
+		if (this.props.isLoggedIn) {
+			let formatedDate = new Date(this.state.date).getTime();
+			let formattedDate = new Date(formatedDate);
 
-		let day = formattedDate.getDate();
-		let month = formattedDate.getMonth() + 1;
-		let year = formattedDate.getFullYear();
+			let day = formattedDate.getDate();
+			let month = formattedDate.getMonth() + 1;
+			let year = formattedDate.getFullYear();
 
-		let formattedDateString = `${day}/${month}/${year}`;
-		let data = {
-			userId: this.props.userInfor.id,
-			doctorId: this.props.match.params.id,
-			booking_date: formatedDate,
-			booking_time: this.state.selectedButton,
-			fullName: this.state.fullName,
-			gender: this.state.gender,
-			phoneNumber: this.state.phoneNumber,
-			birthday: this.state.birthday,
-			address: this.state.address,
-			reason: this.state.reason,
-			status: "Pending",
-			receiverEmail: this.props.userInfor.email,
-			doctorName: this.state.detailDoctor.name,
-			booking_date_formated: formattedDateString,
-			isTelemedicine: 1,
-		};
-		const isEmptyField = Object.values(data).some((value) => !value);
+			let formattedDateString = `${day}/${month}/${year}`;
+			let data = {
+				userId: this.props.userInfor.id,
+				doctorId: this.props.match.params.id,
+				booking_date: formatedDate,
+				booking_time: this.state.selectedButton,
+				fullName: this.state.fullName,
+				gender: this.state.gender,
+				phoneNumber: this.state.phoneNumber,
+				birthday: this.state.birthday,
+				address: this.state.address,
+				reason: this.state.reason,
+				status: "Pending",
+				receiverEmail: this.props.userInfor.email,
+				doctorName: this.state.detailDoctor.name,
+				booking_date_formated: formattedDateString,
+				isTelemedicine: 1,
+			};
+			const isEmptyField = Object.values(data).some((value) => !value);
 
-		if (isEmptyField) {
-			this.setState({
-				errMsgSignUp: "Vui lòng điền đầy đủ thông tin!",
-			});
-		} else {
-			try {
+			if (isEmptyField) {
 				this.setState({
-					errMsgSignUp: "",
-					isLoading: true,
+					errMsgSignUp: "Vui lòng điền đầy đủ thông tin!",
 				});
-				let response = await bookingAnAppointmentService(data);
-				console.log("check response", response);
-				toast.success("Booking successfully !");
-				this.setState({
-					isLoading: false,
-				});
-			} catch (error) {
-				this.setState({
-					isLoading: false,
-				});
-				if (error.response) {
-					if (error.response.data) {
-						this.setState({
-							errMsgSignUp: error.response.data.msg,
-						});
+			} else {
+				try {
+					this.setState({
+						errMsgSignUp: "",
+						isLoading: true,
+					});
+					let response = await bookingAnAppointmentService(data);
+					console.log("check response", response);
+					toast.success("Booking successfully !");
+					this.setState({
+						isLoading: false,
+					});
+				} catch (error) {
+					this.setState({
+						isLoading: false,
+					});
+					if (error.response) {
+						if (error.response.data) {
+							this.setState({
+								errMsgSignUp: error.response.data.msg,
+							});
+						}
 					}
 				}
 			}
+		} else {
+			this.props.history.push("/login");
 		}
 	};
 
@@ -605,6 +609,7 @@ class Booking extends Component {
 const mapStateToProps = (state) => {
 	return {
 		userInfor: state.user.userInfo,
+		isLoggedIn: state.user.isLoggedIn,
 	};
 };
 

@@ -7,6 +7,7 @@ import {
 	deleteDoctorById,
 	findDoctorIsTelemedicine,
 	totalRowDoctor,
+	findDoctorBySpecialty,
 } from "../database/queries";
 import { errMsg } from "../utils/resMsg";
 
@@ -117,6 +118,15 @@ let deleteADoctorModel = (doctorId, callback) => {
 	return db.query(deleteDoctorById, doctorId, callback);
 };
 
+let getDoctorBySpecialtyIdModel = (id, callback) => {
+	db.query(findDoctorBySpecialty, id, (error, results) => {
+		if (error) {
+			return callback(error);
+		}
+		return callback(null, results);
+	});
+};
+
 module.exports = {
 	getDoctorByIdModel,
 	getAllDoctorsModel,
@@ -126,4 +136,5 @@ module.exports = {
 	getDoctorIsTelemedicineModel,
 	getTotalRowDoctorModel,
 	getPaginationDoctorsModel,
+	getDoctorBySpecialtyIdModel,
 };

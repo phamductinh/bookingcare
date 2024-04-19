@@ -86,7 +86,7 @@ let login = async (req, res) => {
 							expiresIn: "1d",
 						}
 					);
-                    delete result[0].password;
+					delete result[0].password;
 					return res.status(200).send({
 						code: 200,
 						msg: "Logged in!",
@@ -103,7 +103,42 @@ let login = async (req, res) => {
 	);
 };
 
+let changePassword = async (req, res) => {
+	let password = req.body.password;
+	let userId = req.body.id;
+	if (!password) {
+		return res.status(500).send({
+			code: 500,
+			msg: "Missing password!",
+		});
+	}
+	bcrypt.hash(password, 10, (err, hash) => {
+		if (err) {
+			return res.status(400).send({
+				msg: err,
+				code: 400,
+			});
+		} else {
+			db.query(
+				`UPDATE user SET password = ${db.escape(
+					hash
+				)} WHERE id = ${userId}`,
+				(err, result) => {
+					if (err) {
+						throw err;
+					}
+					return res.status(200).send({
+						code: 200,
+						msg: "Đổi mật khẩu thành công!",
+					});
+				}
+			);
+		}
+	});
+};
+
 module.exports = {
 	login,
 	register,
+	changePassword,
 };

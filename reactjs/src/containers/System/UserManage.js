@@ -193,6 +193,7 @@ class UserManage extends Component {
 		try {
 			let token = await localStorage.getItem("token");
 			let res = await deleteUser(token, this.state.userId);
+			console.log(res);
 			if (res && res.code === 200) {
 				await this.getAllUsersReact();
 				toast.success("Delete successfully !");
@@ -443,7 +444,11 @@ class UserManage extends Component {
 											)
 										}
 									>
-										<option value="" disabled>
+										<option
+											value=""
+											disabled
+											defaultChecked
+										>
 											Gender
 										</option>
 										<option value="Male">Male</option>
@@ -581,7 +586,11 @@ class UserManage extends Component {
 											)
 										}
 									>
-										<option value="" disabled>
+										<option
+											value=""
+											disabled
+											defaultChecked
+										>
 											Gender
 										</option>
 										<option value="Male">Male</option>

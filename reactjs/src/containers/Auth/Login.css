@@ -144,8 +144,10 @@ body {
 	letter-spacing: 0.5;
 	font-size: 14px;
 	padding-top: 10px;
+    z-index: 1;
 }
 
 .forgot-pass:hover {
 	color: #03e9f4;
+    text-decoration: none;
 }
