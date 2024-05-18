@@ -6,11 +6,16 @@ import "./Booking.css";
 import {
 	bookingAnAppointmentService,
 	getBookingByDate,
+	checkoutBooking,
+	getBookingByDateAndTime,
 } from "../../../services/bookingService";
 import { toast } from "react-toastify";
 import * as actions from "../../../store/actions/";
 import LoadingSpinner from "../../../components/Common/Loading";
 import moment from "moment";
+import axios from "axios";
+import ReCAPTCHA from "react-google-recaptcha";
+import { v4 as uuidv4 } from "uuid";
 
 class Booking extends Component {
 	constructor(props) {
@@ -20,6 +25,7 @@ class Booking extends Component {
 			isLoading: false,
 			bookedTimes: [],
 			selectedButton: null,
+			captchaIsDone: false,
 		};
 	}
 
@@ -38,6 +44,10 @@ class Booking extends Component {
 				});
 			}
 		}
+		let date = "1331769600000";
+		let time = "9:00";
+		let ress = await getBookingByDateAndTime(date, time);
+		console.log(ress);
 	}
 
 	handleViewBooking = () => {
@@ -57,20 +67,14 @@ class Booking extends Component {
 		});
 	};
 
+	handleOnchangeCaptcha = () => {
+		this.setState({
+			captchaIsDone: true,
+		});
+	};
+
 	handleOnchangeDate = async (event) => {
 		let date = event.target.value;
-		// const hours = [
-		// 	"7:00",
-		// 	"8:00",
-		// 	"9:00",
-		// 	"10:00",
-		// 	"11:00",
-		// 	"13:00",
-		// 	"14:00",
-		// 	"15:00",
-		// 	"16:00",
-		// 	"17:00",
-		// ];
 
 		let hours = [];
 		let startTime = 7;
@@ -128,6 +132,12 @@ class Booking extends Component {
 			let year = formattedDate.getFullYear();
 
 			let formattedDateString = `${day}/${month}/${year}`;
+
+			let bookId = uuidv4();
+			this.setState({
+				bookId: bookId,
+			});
+
 			let data = {
 				userId: this.props.userInfor.id,
 				doctorId: this.props.match.params.id,
@@ -143,7 +153,8 @@ class Booking extends Component {
 				receiverEmail: this.props.userInfor.email,
 				doctorName: this.state.detailDoctor.name,
 				booking_date_formated: formattedDateString,
-				isTelemedicine: 1,
+				bookId: bookId,
+				isTelemedicine: 2,
 			};
 			const isEmptyField = Object.values(data).some((value) => !value);
 
@@ -151,28 +162,51 @@ class Booking extends Component {
 				this.setState({
 					errMsgSignUp: "Vui lòng điền đầy đủ thông tin!",
 				});
+				return false;
+			} else if (!this.state.captchaIsDone) {
+				this.setState({
+					errMsgSignUp: "Vui lòng xác nhận reCAPTCHA!",
+				});
+				return false;
 			} else {
-				try {
+				let ress = await getBookingByDateAndTime(
+					formatedDate,
+					this.state.selectedButton
+				);
+				console.log(ress);
+				if (ress.data.length > 0) {
 					this.setState({
-						errMsgSignUp: "",
-						isLoading: true,
+						errMsgSignUp: "Không được đặt trùng giờ trong ngày!",
 					});
-					let response = await bookingAnAppointmentService(data);
-					console.log("check response", response);
-					toast.success("Booking successfully !");
-					this.setState({
-						isLoading: false,
-					});
-				} catch (error) {
-					this.setState({
-						isLoading: false,
-					});
-					if (error.response) {
-						if (error.response.data) {
-							this.setState({
-								errMsgSignUp: error.response.data.msg,
-							});
+					return false;
+				} else {
+					try {
+						this.setState({
+							errMsgSignUp: "",
+							isLoading: true,
+						});
+						let response = await bookingAnAppointmentService(data);
+						console.log("check response", response);
+						toast.success(
+							"Đặt lịch thành công. Chuyển tới trang thanh toán!"
+						);
+						this.setState({
+							isLoading: false,
+						});
+						return true;
+					} catch (error) {
+						this.setState({
+							isLoading: false,
+						});
+						if (error.response) {
+							if (error.response.data) {
+								this.setState({
+									errMsgSignUp: error.response.data.msg,
+									isLoading: false,
+								});
+							}
 						}
+						return false;
 					}
 				}
 			}
@@ -181,11 +215,27 @@ class Booking extends Component {
 		}
 	};
 
+	handleCheckoutNow = async () => {
+		try {
+			const resultBook = await this.handleBooking();
+			if (!resultBook) return;
+			const resultUrlPayment = await checkoutBooking({
+				title: "Khám trực tiếp",
+				price: this.state.detailDoctor.price,
+				quantity: 1,
+				bookId: this.state.bookId,
+			});
+			window.open(resultUrlPayment.url, "_self");
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	render() {
 		let { detailDoctor, isLoading, hours, bookedTimes, selectedButton } =
 			this.state;
 		let currentDate = moment().format("YYYY-MM-DD");
-
+		let key = "6Ldzs9IpAAAAAPHFNOMBUWWsIkTQ2HRS9V3_lMP3";
 		return (
 			<>
 				<div className="booking-detail-doctor-container">
@@ -429,12 +479,25 @@ class Booking extends Component {
 									Quý khách vui lòng điền đầy đủ thông tin để
 									tiết kiệm thời gian làm thủ tục khám
 								</p>
-								<button
+								{/* <button
 									type="button"
 									className="btn-booking"
 									onClick={() => this.handleBooking()}
 								>
 									Xác nhận đặt khám
+								</button> */}
+								<ReCAPTCHA
+									sitekey={key}
+									onChange={(event) =>
+										this.handleOnchangeCaptcha(event)
+									}
+								/>
+								<button
+									type="button"
+									className="btn-booking"
+									onClick={() => this.handleCheckoutNow()}
+								>
+									Thanh Toán Ngay
 								</button>
 							</form>
 						</div>

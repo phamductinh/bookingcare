@@ -3,16 +3,25 @@ import { connect } from "react-redux";
 import { getDoctorById } from "../../../services/doctorService";
 import { NumericFormat } from "react-number-format";
 import "./BookingCall.css";
-import { bookingAnAppointmentService } from "../../../services/bookingService";
+import {
+	bookingAnAppointmentService,
+	checkoutBooking,
+	getBookingByDate,
+} from "../../../services/bookingService";
 import { toast } from "react-toastify";
 import * as actions from "../../../store/actions/";
 import { v4 as uuidv4 } from "uuid";
+import LoadingSpinner from "../../../components/Common/Loading";
+import ReCAPTCHA from "react-google-recaptcha";
 
 class BookingCall extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			detailDoctor: "",
+			captchaIsDone: false,
+			bookedTimes: [],
+			selectedButton: null,
 		};
 	}
 
@@ -50,70 +59,160 @@ class BookingCall extends Component {
 		});
 	};
 
-	handleBooking = async () => {
-		let formatedDate = new Date(this.state.date).getTime();
-		let formattedDate = new Date(formatedDate);
+	handleOnchangeCaptcha = () => {
+		this.setState({
+			captchaIsDone: true,
+		});
+	};
 
-		let day = formattedDate.getDate();
-		let month = formattedDate.getMonth() + 1;
-		let year = formattedDate.getFullYear();
+	handleOnchangeDate = async (event) => {
+		let date = event.target.value;
 
-		let formattedDateString = `${day}/${month}/${year}`;
-		let idRoom = uuidv4();
-		console.log(formatedDate);
+		let hours = [];
+		let startTime = 7;
+		let endTime = 16;
+		for (let i = startTime; i <= endTime; i++) {
+			let time = i + ":00";
+			hours.push(time);
+		}
 
-		let data = {
-			userId: this.props.userInfor.id,
-			doctorId: this.props.match.params.id,
-			booking_date: formatedDate,
-			booking_time: this.state.time,
-			fullName: this.state.fullName,
-			gender: this.state.gender,
-			phoneNumber: this.state.phoneNumber,
-			birthday: this.state.birthday,
-			address: this.state.address,
-			reason: this.state.reason,
-			status: "Pending",
-			receiverEmail: this.props.userInfor.email,
-			doctorName: this.state.detailDoctor.name,
-			booking_date_formated: formattedDateString,
-			isTelemedicine: 1,
-			exam_time: this.state.bookingTime,
-			idRoom: idRoom,
-		};
-		try {
-			this.setState({
-				errMsgSignUp: "",
-				isLoading: true,
-			});
-			let response = await bookingAnAppointmentService(data);
-			console.log("check response", response);
-			toast.success("Booking successfully !");
-			this.setState({
-				isLoading: false,
-			});
-		} catch (error) {
-			console.log(error);
-			if (error.response) {
-				if (error.response.data) {
-					this.setState({
-						errMsgSignUp: error.response.data.msg,
-					});
+		let currentDate = new Date();
+		currentDate.setHours(0, 0, 0, 0);
+		let dateChoosed = new Date(date);
+		dateChoosed.setHours(0, 0, 0, 0);
+
+		let formatDate = new Date(date).getTime();
+
+		this.setState({
+			hours: hours,
+			date: date,
+		});
+		let res = await getBookingByDate(formatDate);
+		if (res && res.code === 200) {
+			const bookingTimes = res.data.map((item) => item.booking_time);
+			if (currentDate.getTime() === dateChoosed.getTime()) {
+				const currentHour = new Date().getHours();
+				for (let i = 0; i < hours.length; i++) {
+					const [hour] = hours[i].split(":");
+					if (parseInt(hour, 10) <= currentHour + 1) {
+						bookingTimes.push(hours[i]);
+					}
 				}
 			}
+			this.setState({
+				bookedTimes: bookingTimes,
+			});
+		}
+	};
+
+	handleButtonClick = async (e, item) => {
+		e.preventDefault();
+		if (this.state.selectedButton !== item) {
+			await this.setState({ selectedButton: item });
+		} else {
+			await this.setState({ selectedButton: null });
+		}
+	};
+
+	handleBooking = async () => {
+		if (this.props.isLoggedIn) {
+			let formatedDate = new Date(this.state.date).getTime();
+			let formattedDate = new Date(formatedDate);
+
+			let day = formattedDate.getDate();
+			let month = formattedDate.getMonth() + 1;
+			let year = formattedDate.getFullYear();
+
+			let formattedDateString = `${day}/${month}/${year}`;
+			let idRoom = uuidv4();
+			let bookId = uuidv4();
+			this.setState({
+				bookId: bookId,
+			});
+
+			let data = {
+				userId: this.props.userInfor.id,
+				doctorId: this.props.match.params.id,
+				booking_date: formatedDate,
+				booking_time: this.state.selectedButton,
+				fullName: this.state.fullName,
+				gender: this.state.gender,
+				phoneNumber: this.state.phoneNumber,
+				birthday: this.state.birthday,
+				address: this.state.address,
+				reason: this.state.reason,
+				status: "Pending",
+				receiverEmail: this.props.userInfor.email,
+				doctorName: this.state.detailDoctor.name,
+				booking_date_formated: formattedDateString,
+				isTelemedicine: 1,
+				exam_time: this.state.bookingTime,
+				idRoom: idRoom,
+				bookId: bookId,
+			};
+			const isEmptyField = Object.values(data).some((value) => !value);
+			if (isEmptyField) {
+				this.setState({
+					errMsgSignUp: "Vui lòng điền đầy đủ thông tin!",
+				});
+				return false;
+			} else if (!this.state.captchaIsDone) {
+				this.setState({
+					errMsgSignUp: "Vui lòng xác nhận reCAPTCHA!",
+				});
+				return false;
+			} else {
+				try {
+					this.setState({
+						errMsgSignUp: "",
+						isLoading: true,
+					});
+					let response = await bookingAnAppointmentService(data);
+					toast.success(
+						"Đặt lịch thành công. Chuyển tới trang thanh toán!!"
+					);
+					this.setState({
+						isLoading: false,
+					});
+					return true;
+				} catch (error) {
+					console.log(error);
+					if (error.response) {
+						if (error.response.data) {
+							this.setState({
+								errMsgSignUp: error.response.data.msg,
+							});
+						}
+					}
+					return false;
+				}
+			}
+		} else {
+			this.props.history.push("/login");
+		}
+	};
+
+	handleCheckoutNow = async () => {
+		try {
+			const resultBook = await this.handleBooking();
+			if (!resultBook) return;
+			const resultUrlPayment = await checkoutBooking({
+				title: "Khám trực tuyến",
+				price: this.state.detailDoctor.price,
+				quantity: 1,
+			});
+			console.log("hi");
+			window.open(resultUrlPayment.url, "_self");
+		} catch (error) {
+			console.log(error);
 		}
 	};
 
 	render() {
-		let { detailDoctor } = this.state;
+		let { detailDoctor, isLoading, hours, bookedTimes, selectedButton } =
+			this.state;
 		let currentDate = new Date().toISOString().split("T")[0];
-		let arrTime = [];
-		let startTime = 7;
-		let endTime = 17;
-		for (let i = startTime; i <= endTime; i++) {
-			let time = i + ":00";
-			arrTime.push(time);
-		}
+		let key = "6Ldzs9IpAAAAAPHFNOMBUWWsIkTQ2HRS9V3_lMP3";
 		return (
 			<>
 				<div className="booking-detail-doctor-container">
@@ -230,36 +329,48 @@ class BookingCall extends Component {
 										type="date"
 										min={currentDate}
 										onChange={(event) =>
-											this.handleOnchangeInput(
+											this.handleOnchangeDate(
 												event,
 												"date"
 											)
 										}
 									/>
 								</div>
-								<label htmlFor="">Chọn giờ khám:</label>
-								<div className="booking-input">
-									<i className="fa-solid fa-clock"></i>
-									<select
-										value={this.state.hour}
-										onChange={(event) =>
-											this.handleOnchangeInput(
-												event,
-												"time"
-											)
-										}
-										defaultValue={""}
-									>
-										<option value="" disabled defaultValue>
-											Chọn giờ khám
-										</option>
-										{arrTime.map((hour, index) => (
-											<option key={index} value={hour}>
-												{hour}
-											</option>
-										))}
-									</select>
-								</div>
+								{hours && (
+									<>
+										<label htmlFor="">Chọn giờ khám:</label>
+										<div className="time-content-btns">
+											{hours.map((item, index) => {
+												const isDisabled =
+													bookedTimes.includes(item);
+												return (
+													<button
+														key={index}
+														className={`btn-time ${
+															isDisabled
+																? "btn-disabled"
+																: ""
+														} ${
+															selectedButton ===
+															item
+																? "btn-selected"
+																: ""
+														}`}
+														disabled={isDisabled}
+														onClick={(e) =>
+															this.handleButtonClick(
+																e,
+																item
+															)
+														}
+													>
+														{item}
+													</button>
+												);
+											})}
+										</div>
+									</>
+								)}
 								<div className="booking-input">
 									<i className="fa-solid fa-user"></i>
 									<input
@@ -401,12 +512,18 @@ class BookingCall extends Component {
 									Quý khách vui lòng điền đầy đủ thông tin để
 									tiết kiệm thời gian làm thủ tục khám
 								</p>
+								<ReCAPTCHA
+									sitekey={key}
+									onChange={(event) =>
+										this.handleOnchangeCaptcha(event)
+									}
+								/>
 								<button
 									type="button"
 									className="btn-booking"
-									onClick={() => this.handleBooking()}
+									onClick={() => this.handleCheckoutNow()}
 								>
-									Xác nhận đặt khám
+									Thanh toán ngay
 								</button>
 							</form>
 						</div>
@@ -571,6 +688,7 @@ class BookingCall extends Component {
 						</div>
 					</div>
 				</div>
+				{isLoading && <LoadingSpinner />}
 			</>
 		);
 	}
@@ -579,6 +697,7 @@ class BookingCall extends Component {
 const mapStateToProps = (state) => {
 	return {
 		userInfor: state.user.userInfo,
+		isLoggedIn: state.user.isLoggedIn,
 	};
 };
 

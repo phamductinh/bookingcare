@@ -5,6 +5,7 @@ import {
 	deleteTelemedicineById,
 	updateTelemedicineQuery,
 	totalRowTelemedicine,
+	findTelemedicineById,
 } from "../database/queries";
 
 let getAllTelemedicine = (callback) => {
@@ -22,7 +23,7 @@ let getTelemedicineByIdModel = (id, callback) => {
 		if (error) {
 			return callback(error);
 		}
-		return callback(null, results[0]);
+		return callback(null, results);
 	});
 };
 

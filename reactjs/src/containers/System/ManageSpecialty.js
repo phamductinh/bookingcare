@@ -102,7 +102,7 @@ class ManageSpecialty extends Component {
 			let res = await handleCreateSpecialty(infor);
 			if (res && res.code === 200) {
 				await this.getALLSpecialtyReact();
-				toast.success("Add new specialty successfully !");
+				toast.success("Thêm mới thành công!");
 				this.setState({
 					name: "",
 					description: "",
@@ -112,7 +112,7 @@ class ManageSpecialty extends Component {
 			}
 		} catch (error) {
 			console.log(error);
-			toast.error("Add new specialty failed !");
+			toast.error("Thêm mới thất bại!");
 		}
 	};
 
@@ -121,14 +121,14 @@ class ManageSpecialty extends Component {
 			let res = await deleteSpecialty(this.state.specialtyId);
 			if (res && res.code === 200) {
 				await this.getALLSpecialtyReact();
-				toast.success("Delete successfully !");
+				toast.success("Xóa thành công!");
 				this.setState({
 					confirmDelete: false,
 				});
 			}
 		} catch (error) {
 			console.log(error);
-			toast.error("Something wrong !");
+			toast.error("Xóa thất bại!");
 		}
 	};
 
@@ -144,7 +144,7 @@ class ManageSpecialty extends Component {
 			let res = await updateSpecialty(data);
 			if (res && res.code === 200) {
 				await this.getALLSpecialtyReact();
-				toast.success("Update successfully !");
+				toast.success("Chỉnh sửa thành công!");
 				this.setState({
 					name: "",
 					description: "",
@@ -155,7 +155,7 @@ class ManageSpecialty extends Component {
 			}
 		} catch (error) {
 			console.log(error);
-			toast.error("Update failed !");
+			toast.error("Chỉnh sửa thất bại!");
 		}
 	};
 
@@ -193,11 +193,11 @@ class ManageSpecialty extends Component {
 			<>
 				{this.props.isLoggedIn && <Header />}
 				<div className="tele-container">
-					<div className="title">Quản lý khám từ xa</div>
+					<div className="title">Quản lý chuyên khoa</div>
 					<form>
 						<div className="tele-input">
 							<div className="tele-name">
-								<label htmlFor="name">Specialty Name:</label>
+								<label htmlFor="name">Tên chuyên khoa:</label>
 								<input
 									type="text"
 									value={name}
@@ -207,7 +207,7 @@ class ManageSpecialty extends Component {
 								/>
 							</div>
 							<div className="tele-image">
-								<label htmlFor="image">Image:</label>
+								<label htmlFor="image">Ảnh:</label>
 								<input
 									id="file-input"
 									type="file"
@@ -241,7 +241,7 @@ class ManageSpecialty extends Component {
 						</div>
 
 						<div className="description">
-							<label htmlFor="">Description:</label>
+							<label htmlFor="">Mô tả:</label>
 							<MdEditor
 								style={{ height: "300px" }}
 								renderHTML={(text) => mdParser.render(text)}
@@ -257,13 +257,13 @@ class ManageSpecialty extends Component {
 									Id
 								</th>
 								<th width="30%" className="text-center">
-									Name
+									Tên
 								</th>
 								<th width="40%" className="text-center">
-									Image
+									Ảnh
 								</th>
 								<th width="20%" className="text-center">
-									Actions
+									Acts
 								</th>
 							</tr>
 
@@ -329,19 +329,21 @@ class ManageSpecialty extends Component {
 
 				{confirmDelete ? (
 					<div className="confirm-delete">
-						<div className="confirmation-text">Are you sure ?</div>
+						<div className="confirmation-text">
+							Bạn có chắc chắn muốn xóa?
+						</div>
 						<div className="button-container">
 							<button
 								className="cancel-button"
 								onClick={() => this.handleCloseConfirmDelete()}
 							>
-								Cancel
+								Hủy
 							</button>
 							<button
 								className="confirmation-button"
 								onClick={() => this.handleDeleteSpecialty()}
 							>
-								Delete
+								Xóa
 							</button>
 						</div>
 					</div>

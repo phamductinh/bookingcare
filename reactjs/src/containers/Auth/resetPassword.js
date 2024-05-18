@@ -1,16 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import "./changePassword.css";
+import "./resetPassword.css";
 import { toast } from "react-toastify";
 import * as actions from "../../store/actions/";
-import { changePasswordService } from "../../services/userService";
+import { resetPasswordService } from "../../services/userService";
 
-class changePassword extends Component {
+class resetPassword extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			oldPassword: "",
 			newPassword: "",
 			cfPassword: "",
 			isSuccess: false,
@@ -36,32 +35,31 @@ class changePassword extends Component {
 
 	handleChangePassword = async () => {
 		if (
-			!this.state.oldPassword ||
+			!this.state.email ||
 			!this.state.newPassword ||
 			!this.state.cfPassword
 		) {
 			this.setState({
 				errMsgSignUp: "Vui lòng điền đầy đủ thông tin!",
 			});
+		} else if (this.state.newPassword !== this.state.cfPassword) {
+			this.setState({
+				errMsgSignUp: "Mật khẩu không trùng khớp!",
+			});
 		} else if (
-			!this.validatePassword(this.state.oldPassword) ||
 			!this.validatePassword(this.state.newPassword) ||
 			!this.validatePassword(this.state.cfPassword)
 		) {
 			this.setState({
-				errMsgSignUp: "Mật khẩu sai định dạng!",
-			});
-		} else if (this.state.newPassword !== this.state.cfPassword) {
-			this.setState({
-				errMsgSignUp: "Mật khẩu không trùng khớp!",
+				errMsgSignUp: "Password sai định dạng!",
 			});
 		} else {
 			try {
 				let userData = {
 					password: this.state.newPassword,
-					id: this.props.userInfor.id,
+					email: this.state.email,
 				};
-				let res = await changePasswordService(userData);
+				let res = await resetPasswordService(userData);
 				if (res && res.code === 200) {
 					toast.success("Đổi mật khẩu thành công!");
 					await this.setState({
@@ -105,16 +103,16 @@ class changePassword extends Component {
 							<div class="logo-container-email">Đổi mật khẩu</div>
 							<form class="form-email">
 								<div class="form-group-password">
-									<label>Mật khẩu cũ:</label>
+									<label>Email tài khoản:</label>
 									<input
-										type="password"
-										id="password"
-										name="password"
-										value={this.state.oldPassword}
+										type="email"
+										id="email"
+										name="email"
+										value={this.state.email}
 										onChange={(event) =>
 											this.handleOnchangeInput(
 												event,
-												"oldPassword"
+												"email"
 											)
 										}
 									/>
@@ -209,4 +207,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(changePassword);
+export default connect(mapStateToProps, mapDispatchToProps)(resetPassword);

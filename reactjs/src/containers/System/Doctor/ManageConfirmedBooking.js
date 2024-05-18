@@ -67,7 +67,7 @@ class ManageConfirmedBooking extends Component {
 				{this.props.isLoggedIn && <Header />}
 				<div className="user-container">
 					<div className="title text-center">
-						Manage confirmed booking
+						Quản lý lịch hẹn đã xác nhận
 					</div>
 
 					<div className="users-table mt-3 mx-3">

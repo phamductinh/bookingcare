@@ -24,6 +24,10 @@ const getPaginationSpecialty = (page) => {
 	return axios.get(`/api/get-pagination-specialty?page=${page}`);
 };
 
+const getSpecialtyById = (id) => {
+	return axios.get(`/api/get-specialty-by-id?id=${id}`);
+};
+
 export {
 	handleCreateSpecialty,
 	getALLSpecialty,
@@ -31,4 +35,5 @@ export {
 	updateSpecialty,
 	getTotalRowSpecialty,
 	getPaginationSpecialty,
+    getSpecialtyById
 };

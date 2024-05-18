@@ -1,5 +1,11 @@
 import db from "../configs/connectDB";
-import { totalRowReview, deleteReviewById } from "../database/queries";
+import {
+	totalRowReview,
+	deleteReviewById,
+	createAFeedbackQuery,
+	getFeedbackByDoctorIdQuery,
+	updateFeedbackQuery,
+} from "../database/queries";
 import { errMsg } from "../utils/resMsg";
 
 let getTotalRowReviewModel = (callback) => {
@@ -27,8 +33,46 @@ let deleteReviewModel = (id, callback) => {
 	return db.query(deleteReviewById, [id], callback);
 };
 
+let getFeedbackByDoctorIdModel = (doctorId, callback) => {
+	db.query(getFeedbackByDoctorIdQuery, doctorId, (error, results) => {
+		if (error) {
+			return callback(error);
+		}
+		return callback(null, results);
+	});
+};
+
+let createAFeedbackModel = (data, callback) => {
+	let { doctorId, comment, userId } = data;
+
+	db.query(
+		createAFeedbackQuery,
+		[doctorId, comment, userId],
+		(err, results) => {
+			if (err) {
+				return callback(err);
+			}
+			callback(null, results);
+		}
+	);
+};
+
+let updateFeedbackModel = (data, callback) => {
+	let values = [data.comment, data.id];
+	if (!data.id) {
+		let error = new Error(errMsg.missing_input);
+		error.statusCode = 400;
+		return callback(error);
+	}
+
+	db.query(updateFeedbackQuery, values, callback);
+};
+
 module.exports = {
 	getTotalRowReviewModel,
 	getPaginationReviewModel,
 	deleteReviewModel,
+	createAFeedbackModel,
+	getFeedbackByDoctorIdModel,
+	updateFeedbackModel,
 };

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import "./ManageTelemedicine.css";
+import "./ManageService.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Header/Header";
@@ -9,36 +9,33 @@ import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
 import { CommonUtils } from "../../utils";
 import {
-	handleCreateTelemedicine,
-	deleteTelemedicine,
-	updateTelemedicine,
-	getPaginationTelemedicine,
-	getTotalRowTelemedicine,
-} from "../../services/telemedicineService";
+	handleCreateService,
+	deleteService,
+	updateService,
+	getTotalRowService,
+	getPaginationService,
+} from "../../services/serviceService";
 import Pagination from "../../components/Common/Pagination";
-import LoadingSpinner from "../../components/Common/Loading";
 
 const mdParser = new MarkdownIt();
 
-class ManageTelemedicine extends Component {
+class ManageService extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			name: "",
-			image: "",
+			price: "",
 			description: "",
 			descriptionHTML: "",
-			arrTelems: [],
+			arrSpecialty: [],
 			confirmDelete: false,
-			showBtnEdit: false,
 			newPage: 1,
-			isLoading: false,
 		};
 	}
 
 	async componentDidMount() {
-		await this.getALLTelemedicineReact();
-		await this.getTotalRowTelemedicineReact();
+		await this.getALLSpecialtyReact();
+		await this.getTotalRowSpecialtyReact();
 	}
 
 	handleOnchangeInput = (event, id) => {
@@ -67,25 +64,17 @@ class ManageTelemedicine extends Component {
 		}
 	};
 
-	getALLTelemedicineReact = async () => {
-		this.setState({
-			isLoading: true,
-		});
-		let res = await getPaginationTelemedicine(this.state.newPage);
+	getALLSpecialtyReact = async () => {
+		let res = await getPaginationService(this.state.newPage);
 		if (res && res.code === 200) {
 			this.setState({
-				arrTelems: res.data,
-				isLoading: false,
-			});
-		} else {
-			this.setState({
-				isLoading: false,
+				arrSpecialty: res.data,
 			});
 		}
 	};
 
-	getTotalRowTelemedicineReact = async () => {
-		let res = await getTotalRowTelemedicine();
+	getTotalRowSpecialtyReact = async () => {
+		let res = await getTotalRowService();
 		if (res && res.code === 200) {
 			let row = Math.ceil(res.data.totalRow / 5);
 			this.setState({
@@ -98,26 +87,27 @@ class ManageTelemedicine extends Component {
 		await this.setState({
 			newPage: newPage,
 		});
-		await this.getALLTelemedicineReact();
+		await this.getALLSpecialtyReact();
 	};
 
-	handleCreateNewTelemedicine = async () => {
+	handleCreateNewSpecialty = async () => {
 		let infor = {
 			name: this.state.name,
 			description: this.state.description,
 			descriptionHTML: this.state.descriptionHTML,
-			image: this.state.imageBase64,
+			price: this.state.price,
 		};
+		console.log(infor);
 		try {
-			let res = await handleCreateTelemedicine(infor);
+			let res = await handleCreateService(infor);
 			if (res && res.code === 200) {
-				await this.getALLTelemedicineReact();
 				toast.success("Thêm mới thành công!");
+				await this.getALLSpecialtyReact();
 				this.setState({
 					name: "",
 					description: "",
 					descriptionHTML: "",
-					image: "",
+					price: "",
 				});
 			}
 		} catch (error) {
@@ -126,11 +116,11 @@ class ManageTelemedicine extends Component {
 		}
 	};
 
-	handleDeleteTelemedicine = async () => {
+	handleDeleteSpecialty = async () => {
 		try {
-			let res = await deleteTelemedicine(this.state.telemedicineId);
+			let res = await deleteService(this.state.specialtyId);
 			if (res && res.code === 200) {
-				await this.getALLTelemedicineReact();
+				await this.getALLSpecialtyReact();
 				toast.success("Xóa thành công!");
 				this.setState({
 					confirmDelete: false,
@@ -142,24 +132,24 @@ class ManageTelemedicine extends Component {
 		}
 	};
 
-	handleEditTelemedicine = async () => {
+	handleEditSpecialty = async () => {
 		let data = {
 			name: this.state.name,
 			description: this.state.description,
 			descriptionHTML: this.state.descriptionHTML,
-			image: this.state.imageBase64,
+			price: this.state.price,
 			id: this.state.id,
 		};
 		try {
-			let res = await updateTelemedicine(data);
+			let res = await updateService(data);
 			if (res && res.code === 200) {
-				await this.getALLTelemedicineReact();
+				await this.getALLSpecialtyReact();
 				toast.success("Chỉnh sửa thành công!");
 				this.setState({
 					name: "",
 					description: "",
 					descriptionHTML: "",
-					image: "",
+					price: "",
 					showBtnEdit: false,
 				});
 			}
@@ -170,19 +160,24 @@ class ManageTelemedicine extends Component {
 	};
 
 	handleFillDataEdit = (item) => {
-		this.setState({
-			id: item.id,
-			name: item.name,
-			description: item.description,
-			descriptionHTML: item.descriptionHTML,
-			showBtnEdit: true,
-		});
+		try {
+			this.setState({
+				id: item.id,
+				name: item.name,
+				description: item.description,
+				descriptionHTML: item.descriptionHTML,
+				price: item.price,
+				showBtnEdit: true,
+			});
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	handleConfirmDelete = (user) => {
 		this.setState({
 			confirmDelete: true,
-			telemedicineId: user.id,
+			specialtyId: user.id,
 		});
 	};
 
@@ -193,18 +188,18 @@ class ManageTelemedicine extends Component {
 	}
 
 	render() {
-		const { name, description, confirmDelete, showBtnEdit, isLoading } =
+		const { name, description, confirmDelete, price, showBtnEdit } =
 			this.state;
-		let arrTelems = this.state.arrTelems;
+		let arrSpecialty = this.state.arrSpecialty;
 		return (
 			<>
 				{this.props.isLoggedIn && <Header />}
 				<div className="tele-container">
-					<div className="title">Quản lý khám từ xa</div>
+					<div className="title">Quản lý dịch vụ</div>
 					<form>
 						<div className="tele-input">
 							<div className="tele-name">
-								<label htmlFor="name">Tên:</label>
+								<label htmlFor="name">Tên dịch vụ:</label>
 								<input
 									type="text"
 									value={name}
@@ -213,25 +208,34 @@ class ManageTelemedicine extends Component {
 									}
 								/>
 							</div>
-							<div className="tele-image">
-								<label htmlFor="image">Ảnh:</label>
+							<div className="tele-name">
+								<label htmlFor="name">Giá:</label>
+								<input
+									type="text"
+									value={price}
+									onChange={(event) =>
+										this.handleOnchangeInput(event, "price")
+									}
+								/>
+							</div>
+							{/* <div className="tele-image">
+								<label htmlFor="image">Image:</label>
 								<input
 									id="file-input"
 									type="file"
 									name="file"
+									// value={image}
 									accept="image/png, image/jpeg"
 									onChange={(event) =>
 										this.handleOnchangeImage(event, "image")
 									}
 								/>
-							</div>
+							</div> */}
 							{showBtnEdit ? (
 								<button
 									className="btn-edit-tele"
 									type="button"
-									onClick={() =>
-										this.handleEditTelemedicine()
-									}
+									onClick={() => this.handleEditSpecialty()}
 								>
 									Lưu
 								</button>
@@ -240,7 +244,7 @@ class ManageTelemedicine extends Component {
 									className="btn-add-new-tele"
 									type="button"
 									onClick={() =>
-										this.handleCreateNewTelemedicine()
+										this.handleCreateNewSpecialty()
 									}
 								>
 									Thêm mới
@@ -268,19 +272,15 @@ class ManageTelemedicine extends Component {
 									Tên
 								</th>
 								<th width="40%" className="text-center">
-									Ảnh
+									Giá
 								</th>
 								<th width="20%" className="text-center">
 									Acts
 								</th>
 							</tr>
 
-							{arrTelems &&
-								arrTelems.map((item, index) => {
-									let imageBase64 = new Buffer(
-										item.image,
-										"base64"
-									).toString("binary");
+							{arrSpecialty &&
+								arrSpecialty.map((item, index) => {
 									return (
 										<tr
 											key={index}
@@ -291,18 +291,7 @@ class ManageTelemedicine extends Component {
 												{item.id}
 											</td>
 											<td>{item.name}</td>
-											<td>
-												{item.image ? (
-													<div
-														className="tele-image-table"
-														style={{
-															backgroundImage: `url(${imageBase64})`,
-														}}
-													></div>
-												) : (
-													<div>Null</div>
-												)}
-											</td>
+											<td>{item.price}</td>
 											<td className="text-center">
 												<button
 													className="btn-edit"
@@ -331,6 +320,7 @@ class ManageTelemedicine extends Component {
 						</tbody>
 					</table>
 				</div>
+
 				<div className="pagination-container">
 					<Pagination
 						totalPages={this.state.totalRow}
@@ -341,7 +331,7 @@ class ManageTelemedicine extends Component {
 				{confirmDelete ? (
 					<div className="confirm-delete">
 						<div className="confirmation-text">
-							Bạn có chắc chắn muốn xóa?
+							Bạn chắc chắn muốn xóa chứ?
 						</div>
 						<div className="button-container">
 							<button
@@ -349,17 +339,16 @@ class ManageTelemedicine extends Component {
 								onClick={() => this.handleCloseConfirmDelete()}
 							>
 								Hủy
-							</button>
+							</button>   
 							<button
 								className="confirmation-button"
-								onClick={() => this.handleDeleteTelemedicine()}
+								onClick={() => this.handleDeleteSpecialty()}
 							>
 								Xóa
 							</button>
 						</div>
 					</div>
 				) : null}
-				{isLoading && <LoadingSpinner />}
 			</>
 		);
 	}
@@ -375,4 +364,4 @@ const mapDispatchToProps = (dispatch) => {
 	return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManageTelemedicine);
+export default connect(mapStateToProps, mapDispatchToProps)(ManageService);

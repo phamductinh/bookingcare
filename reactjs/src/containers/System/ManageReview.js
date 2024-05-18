@@ -306,7 +306,7 @@ class ManageReview extends Component {
 													{item.id}
 												</td>
 												<td>{item.patientName}</td>
-												<td>{item.text}</td>
+												<td>{item.comment}</td>
 												<td className="text-center">
 													<button
 														className="btn-edit"

@@ -1,16 +1,25 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getDoctorById } from "../../../services/doctorService";
+import {
+	handleCreateFeedback,
+	getFeedbackByDoctorId,
+	updateFeedback,
+	deleteFeedback,
+} from "../../../services/reviewService";
 import { NumericFormat } from "react-number-format";
 import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import "./DetailDoctor.css";
+import { toast } from "react-toastify";
 
 class DetailDoctor extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			detailDoctor: "",
+			isShowUpdate: false,
+			confirmDelete: false,
 		};
 	}
 
@@ -29,19 +38,129 @@ class DetailDoctor extends Component {
 				});
 			}
 		}
+		this.getAllFeedbacks();
 	}
+
+	getAllFeedbacks = async () => {
+		if (
+			this.props.match &&
+			this.props.match.params &&
+			this.props.match.params.id
+		) {
+			let doctorId = this.props.match.params.id;
+			let res = await getFeedbackByDoctorId(doctorId);
+			console.log(res);
+			if (res && res.code === 200) {
+				this.setState({
+					feedbacks: res.data,
+				});
+			}
+		}
+	};
+
+	handleOnchangeInput = (event) => {
+		this.setState({
+			comment: event.target.value,
+		});
+	};
+
+	handleAddNewFeedback = async () => {
+		if (
+			this.props.match &&
+			this.props.match.params &&
+			this.props.match.params.id
+		)
+			if (this.props.isLoggedIn) {
+				let data = {
+					doctorId: this.props.match.params.id,
+					comment: this.state.comment,
+					userId: this.props.userInfor.id,
+				};
+
+				const isEmptyField = Object.values(data).some(
+					(value) => !value
+				);
+
+				if (isEmptyField) {
+					console.log("Vui lòng điền đầy đủ thông tin!");
+				} else {
+					try {
+						let res = await handleCreateFeedback(data);
+						toast.success("Đánh giá thành công!");
+						this.getAllFeedbacks();
+						this.setState({
+							comment: "",
+						});
+					} catch (error) {
+						console.log(error);
+					}
+				}
+			}
+	};
+
+	handleUpdateFeedback = async () => {
+		let data = {
+			comment: this.state.comment,
+			id: this.state.feedbackId,
+		};
+		try {
+			let res = await updateFeedback(data);
+			toast.success("Chỉnh sửa thành công!");
+			this.setState({
+				isShowUpdate: false,
+				comment: "",
+			});
+			this.getAllFeedbacks();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	handleShowUpdate = (item) => {
+		this.setState((prevState) => ({
+			feedbackId: item.id,
+			comment: item.comment,
+			isShowUpdate: !prevState.isShowUpdate,
+		}));
+	};
+
+	handleConfirmDelete = (item) => {
+		this.setState({
+			confirmDelete: true,
+			reviewId: item.id,
+		});
+	};
+
+	handleCloseConfirmDelete() {
+		this.setState({
+			confirmDelete: false,
+		});
+	}
+
+	handleDeleteFeedback = async () => {
+		try {
+			let res = await deleteFeedback(this.state.reviewId);
+			if (res && res.code === 200) {
+				await this.getAllFeedbacks();
+				toast.success("Xóa đánh giá thành công!");
+				this.setState({
+					confirmDelete: false,
+				});
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error("Something wrong !");
+		}
+	};
 
 	handleViewBooking = () => {
 		let id = this.props.match.params.id;
 		this.props.history.push(`/booking/${id}`);
 	};
 
-	componentDidUpdate(prevProps, prevState, snapshot) {}
-
 	render() {
-		console.log(this.props.match.params.id);
-		let { detailDoctor } = this.state;
-		console.log("check", detailDoctor);
+		let { detailDoctor, isShowUpdate, feedbacks, confirmDelete } =
+			this.state;
 		return (
 			<>
 				<div className="detail-doctor-container">
@@ -131,6 +250,93 @@ class DetailDoctor extends Component {
 								__html: detailDoctor.description,
 							}}
 						></div>
+
+						<div className="feedback-container">
+							<p className="feedback-title">
+								Phản hồi của bệnh nhân sau khi đi khám
+							</p>
+
+							{feedbacks &&
+								feedbacks.map((item, index) => {
+									let isMeSelf =
+										this.props.userInfor &&
+										item.userId === this.props.userInfor.id;
+
+									return (
+										<div
+											className="feedback-item"
+											key={index}
+										>
+											<div className="feedback-name">
+												{item.fullName}
+											</div>
+											<div className="feedback-content">
+												{item.comment}{" "}
+												{isMeSelf && (
+													<>
+														<a
+															className="edit-feedback"
+															href="#/"
+															onClick={() =>
+																this.handleShowUpdate(
+																	item
+																)
+															}
+														>
+															<i className="fas fa-pencil-alt"></i>
+														</a>
+														<a
+															className="delete-feedback"
+															href="#/"
+															onClick={() =>
+																this.handleConfirmDelete(
+																	item
+																)
+															}
+														>
+															<i className="fas fa-trash"></i>
+														</a>
+													</>
+												)}
+											</div>
+										</div>
+									);
+								})}
+
+							<div className="feedback-input-container">
+								<textarea
+									name=""
+									id=""
+									className="feedback-input"
+									cols="30"
+									rows="2"
+									placeholder="Đánh giá bác sĩ"
+									value={this.state.comment}
+									onChange={(event) =>
+										this.handleOnchangeInput(event)
+									}
+								></textarea>
+								{isShowUpdate ? (
+									<button
+										className="btn-feedback"
+										onClick={() =>
+											this.handleUpdateFeedback()
+										}
+									>
+										Chỉnh sửa
+									</button>
+								) : (
+									<button
+										className="btn-feedback"
+										onClick={() =>
+											this.handleAddNewFeedback()
+										}
+									>
+										Đánh giá
+									</button>
+								)}
+							</div>
+						</div>
 
 						<div className="introduction">
 							<div
@@ -292,13 +498,37 @@ class DetailDoctor extends Component {
 						</div>
 					</div>
 				</div>
+				{confirmDelete ? (
+					<div className="confirm-delete">
+						<div className="confirmation-text">
+							Bạn có chắc chắn muốn xóa không?
+						</div>
+						<div className="button-container">
+							<button
+								className="cancel-button"
+								onClick={() => this.handleCloseConfirmDelete()}
+							>
+								Cancel
+							</button>
+							<button
+								className="confirmation-button"
+								onClick={() => this.handleDeleteFeedback()}
+							>
+								Delete
+							</button>
+						</div>
+					</div>
+				) : null}
 			</>
 		);
 	}
 }
 
 const mapStateToProps = (state) => {
-	return {};
+	return {
+		isLoggedIn: state.user.isLoggedIn,
+		userInfor: state.user.userInfo,
+	};
 };
 
 const mapDispatchToProps = (dispatch) => {

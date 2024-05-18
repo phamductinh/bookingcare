@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 require("dotenv").config();
 const secretKey = process.env.SECRET_TOKEN_KEY;
+import emailService from "../services/emailService";
+import e from "express";
 
 let register = (req, res, next) => {
 	db.query(
@@ -106,7 +108,7 @@ let login = async (req, res) => {
 let changePassword = async (req, res) => {
 	let password = req.body.password;
 	let userId = req.body.id;
-	if (!password) {
+	if (!password || !userId) {
 		return res.status(500).send({
 			code: 500,
 			msg: "Missing password!",
@@ -137,8 +139,70 @@ let changePassword = async (req, res) => {
 	});
 };
 
+let resetPassword = async (req, res) => {
+	let password = req.body.password;
+	let email = req.body.email;
+	if (!password || !email) {
+		return res.status(500).send({
+			code: 500,
+			msg: "Missing password!",
+		});
+	}
+	bcrypt.hash(password, 10, (err, hash) => {
+		if (err) {
+			return res.status(400).send({
+				msg: err,
+				code: 400,
+			});
+		} else {
+			db.query(
+				`UPDATE user SET password = ${db.escape(
+					hash
+				)} WHERE email = '${email}'`,
+				(err, result) => {
+					if (err) {
+						throw err;
+					}
+					return res.status(200).send({
+						code: 200,
+						msg: "Đổi mật khẩu thành công!",
+					});
+				}
+			);
+		}
+	});
+};
+
+let sendResetPasswordEmail = async (req, res) => {
+	let email = req.query.email;
+	if (!email) {
+		return res.status(500).send({
+			code: 500,
+			msg: "Missing email!",
+		});
+	}
+	db.query(
+		`SELECT * FROM user WHERE email = "${email}"`,
+		async (err, result) => {
+			if (err) {
+				throw err;
+			}
+			await emailService.sendEmailResetPassword({
+				receiverEmail: email,
+				fullName: result[0].fullName,
+			});
+			return res.status(200).send({
+				code: 200,
+				msg: "Gửi email xác nhận thành công!",
+			});
+		}
+	);
+};
+
 module.exports = {
 	login,
 	register,
 	changePassword,
+	sendResetPasswordEmail,
+	resetPassword,
 };

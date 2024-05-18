@@ -17,7 +17,7 @@ const getAllTelemedicine = (req, res) => {
 };
 
 let getTelemedicineById = (req, res) => {
-	let id = req.body.id;
+	let id = req.query.id;
 	if (!id) {
 		return res.status(400).send({ code: 400, msg: "Missing id!" });
 	}
@@ -27,7 +27,7 @@ let getTelemedicineById = (req, res) => {
 		}
 		return res.send({
 			code: 200,
-			data: data,
+			data: data[0],
 		});
 	});
 };

@@ -377,3 +377,84 @@
 	padding: 20px;
 	cursor: pointer;
 }
+
+.feedback-container {
+	padding: 20px 80px;
+}
+
+.feedback-title {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.feedback-item {
+	border-top: 1px solid #eee;
+	margin-top: 10px;
+	padding: 10px;
+}
+
+.feedback-item:hover {
+	background-color: #efeef5;
+}
+
+.feedback-name {
+	font-weight: bold;
+	padding-top: 5px;
+}
+
+.feedback-input-container {
+	margin-top: 30px;
+	display: flex;
+}
+
+.feedback-input {
+	width: 90%;
+	outline: none;
+	padding: 10px;
+	font-size: 17px;
+	border-radius: 5px;
+}
+
+.btn-feedback {
+	border: none;
+	outline: none;
+	width: 100px;
+	height: 70px;
+	margin-left: 20px;
+	border-radius: 5px;
+	background-color: #fff04b;
+}
+
+.btn-feedback:hover {
+	background-color: #eed818;
+}
+
+.btn-feedback i {
+	font-size: 30px;
+	color: #45c3d2;
+}
+
+.edit-feedback {
+	text-decoration: none;
+	padding-left: 5px;
+	position: absolute;
+	background: transparent;
+	right: 80px;
+	color: orange;
+}
+.delete-feedback {
+	text-decoration: none;
+	padding-left: 5px;
+	position: absolute;
+	background: transparent;
+	right: 40px;
+	color: rgb(255, 0, 0);
+}
+
+.edit-feedback:hover {
+	color: rgb(255, 115, 0);
+}
+
+.delete-feedback:hover {
+	color: rgb(255, 0, 0) !important;
+}

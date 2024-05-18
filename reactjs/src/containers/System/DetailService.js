@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import "./DetailTelemedicine.css";
-import { getDoctorIsTelemedicine } from "../../services/doctorService";
-import { getTelemedicine } from "../../services/telemedicineService";
-import * as actions from "../../store/actions/";
+import "./DetailService.css";
+import { getDoctorByServiceId } from "../../services/doctorService";
+import { getServiceById } from "../../services/serviceService";
+import * as actions from "../../store/actions";
 import { NumericFormat } from "react-number-format";
 
-class DetailTelemedicine extends Component {
+class DetailService extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			arrDoctors: [],
-			detailTelemedicine: "",
+			detailService: "",
 		};
 	}
 
@@ -23,29 +23,32 @@ class DetailTelemedicine extends Component {
 			this.props.match.params.id
 		) {
 			let id = this.props.match.params.id;
-			let res = await getDoctorIsTelemedicine(id);
+			let res = await getDoctorByServiceId(id);
 			if (res && res.code === 200) {
 				this.setState({
 					arrDoctors: res.data,
 				});
 			}
-			this.getAllTelemedicine();
+			this.getService();
 		}
 	}
 
-	getAllTelemedicine = async () => {
+	getService = async () => {
 		let id = this.props.match.params.id;
-		let res = await getTelemedicine(id);
-		console.log("check", res);
+		let res = await getServiceById(id);
 		if (res && res.code === 200) {
 			this.setState({
-				detailTelemedicine: res.data,
+				detailService: res.data,
 			});
 		}
 	};
 
 	handleViewBooking = (item) => {
-		this.props.history.push(`/booking-call-video/${item.id}`);
+		if (this.props.isLoggedIn) {
+			this.props.history.push(`/booking/${item.id}`);
+		} else {
+			this.props.history.push("/login");
+		}
 	};
 
 	goBack = () => {
@@ -53,7 +56,7 @@ class DetailTelemedicine extends Component {
 	};
 
 	render() {
-		let { arrDoctors, detailTelemedicine } = this.state;
+		let { arrDoctors, detailService } = this.state;
 		return (
 			<>
 				<div className="detail-telemedicine-container">
@@ -63,7 +66,7 @@ class DetailTelemedicine extends Component {
 								className="fas fa-long-arrow-left"
 								onClick={this.goBack}
 							></i>
-							<h2>{detailTelemedicine.name}</h2>
+							<h2>{detailService.name}</h2>
 						</div>
 						<div className="detail-tele-header-right">
 							<div className="detail-tele-header-support">
@@ -79,13 +82,13 @@ class DetailTelemedicine extends Component {
 							className="telemedicine-infor"
 							id="telemedicine-infor"
 							dangerouslySetInnerHTML={{
-								__html: detailTelemedicine.descriptionHTML,
+								__html: detailService.descriptionHTML,
 							}}
 						></div>
 					</div>
 
 					<div className="detail-tele-list-doctors-container">
-						<div className="detail-tele-province-filter">
+						{/* <div className="detail-tele-province-filter">
 							<select
 								className="detail-tele-province"
 								id="detail-tele-province"
@@ -94,7 +97,7 @@ class DetailTelemedicine extends Component {
 								<option value="hanoi">Hà Nội</option>
 								<option value="hcm">Hồ Chí Minh</option>
 							</select>
-						</div>
+						</div> */}
 
 						{/* <div className="detail-tele-list-doctors">
 							<div className="doctor-content">
@@ -104,7 +107,7 @@ class DetailTelemedicine extends Component {
 								</div>
 								<div className="doctor-infor-telem">
 									<h1>
-										Thạc sĩ Tâm lý học Nguyễn Thị Thúy Hằng
+										Thạc sĩ  Nguyễn Thị Thúy Hằng
 										(Tư vấn từ xa)
 									</h1>
 									<p>
@@ -207,10 +210,7 @@ class DetailTelemedicine extends Component {
 												<a href="#/">Xem thêm</a>
 											</div>
 											<div className="doctor-infor-telem">
-												<h1>
-													Thạc sĩ Tâm lý học{" "}
-													{item.name}
-												</h1>
+												<h1>Thạc sĩ {item.name}</h1>
 												<div
 													dangerouslySetInnerHTML={{
 														__html: item.description,
@@ -225,8 +225,7 @@ class DetailTelemedicine extends Component {
 										</div>
 										<div className="doctor-schedule">
 											<h2>
-												<i className="fas fa-video"></i>
-												ĐẶT LỊCH TƯ VẤN QUA VIDEO
+												Nếu bạn có vấn đề về sức khỏe
 											</h2>
 											<button
 												className="booking-now"
@@ -234,7 +233,7 @@ class DetailTelemedicine extends Component {
 													this.handleViewBooking(item)
 												}
 											>
-												<Link to="/booking-call-video">
+												<Link to="/booking">
 													Đặt lịch ngay
 													<i className="fa-solid fa-arrow-right"></i>
 												</Link>
@@ -245,9 +244,7 @@ class DetailTelemedicine extends Component {
 												và đặt (Phí đặt lịch 0đ)
 											</p>
 											<h3>
-												<strong>
-													GIÁ TƯ VẤN QUA VIDEO:
-												</strong>{" "}
+												<strong>GIÁ KHÁM:</strong>{" "}
 												<NumericFormat
 													className="price-booking-header"
 													value={item.price}
@@ -424,13 +421,13 @@ class DetailTelemedicine extends Component {
 }
 
 const mapStateToProps = (state) => {
-	return {};
-};
-
-const mapDispatchToProps = (dispatch) => {
 	return {
-		joinRoomSuccess: () => dispatch(actions.joinRoomSuccess()),
+		isLoggedIn: state.user.isLoggedIn,
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetailTelemedicine);
+const mapDispatchToProps = (dispatch) => {
+	return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetailService);

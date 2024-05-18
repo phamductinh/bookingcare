@@ -9,7 +9,7 @@ const getALLTelemedicine = () => {
 };
 
 const getTelemedicine = (id) => {
-	return axios.get(`/api/get-telemedicine`, id);
+	return axios.get(`/api/get-telemedicine?id=${id}`);
 };
 
 const deleteTelemedicine = (id) => {

@@ -99,7 +99,6 @@
 .form-container-email .form-group-email label {
 	display: block;
 	margin-bottom: 5px;
-    
 }
 
 .form-container-email .form-group-email input {
@@ -191,7 +190,7 @@
 	height: 350px;
 }
 .company-logo {
-	background: url(https://bookingcare.vn/assets/icon/bookingcare-2020.svg);
+	background: url(../../assets/images/logodana.png);
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: left;

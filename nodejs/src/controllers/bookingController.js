@@ -1,4 +1,5 @@
 import bookingModel from "../models/bookingModel";
+import db from "../configs/connectDB";
 
 const getAllConfirmedBooking = (req, res) => {
 	bookingModel.getAllConfirmedBookingModel((error, results) => {
@@ -71,6 +72,26 @@ const confirmBooking = (req, res) => {
 	});
 };
 
+const confirmBookingByBookId = (req, res) => {
+	let bookId = req.query.bookId;
+	if (!bookId) {
+		return res.status(400).send({ code: 400, msg: "Missing input!" });
+	}
+	bookingModel.confirmBookingByBookIdModel(bookId, (error, results) => {
+		if (error) {
+			return res.status(500).send({
+				code: 500,
+				msg: "Confirm failed!",
+			});
+		} else {
+			return res.status(200).send({
+				code: 200,
+				msg: "Successfully!",
+			});
+		}
+	});
+};
+
 const finishBooking = (req, res) => {
 	let bookingId = req.query.id;
 	if (!bookingId) {
@@ -128,6 +149,30 @@ let getBookingByDate = (req, res) => {
 	});
 };
 
+let getBookingByDateAndTime = (req, res) => {
+	let date = req.query.booking_date;
+	let time = req.query.booking_time;
+	if (!date || !time) {
+		return res.status(400).send({ code: 400, msg: "Missing input!" });
+	}
+
+	let getBookingByDateAndTimeQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
+                                        FROM booking
+                                        JOIN user ON user.id = booking.userId
+                                        JOIN doctor ON doctor.id = booking.doctorId
+                                        WHERE booking_date = '${date}' AND booking_time = '${time}'`;
+
+	db.query(getBookingByDateAndTimeQuery, (error, results) => {
+		if (error) {
+			throw error;
+		}
+		return res.send({
+			code: 200,
+			data: results,
+		});
+	});
+};
+
 let getTelemedicineBookingByDate = (req, res) => {
 	let date = req.query.booking_date;
 	if (!date) {
@@ -163,6 +208,24 @@ let deleteBooking = (req, res) => {
 	});
 };
 
+let deleteBookingByBookId = (req, res) => {
+	let bookId = req.query.bookId;
+	if (!bookId) {
+		return res.status(400).send({ code: 400, msg: "Missing id!" });
+	}
+
+	bookingModel.deleteBookingByBookIdModel(
+		bookId,
+		(error, results, fields) => {
+			if (error) throw error;
+			return res.send({
+				code: 200,
+				msg: "Delete successfully!",
+			});
+		}
+	);
+};
+
 module.exports = {
 	bookingAnAppointment,
 	getBookingByDate,
@@ -173,4 +236,7 @@ module.exports = {
 	getAllFinishedBooking,
 	getTelemedicineBookingByDate,
 	getBookingByUserId,
+	getBookingByDateAndTime,
+	confirmBookingByBookId,
+	deleteBookingByBookId,
 };

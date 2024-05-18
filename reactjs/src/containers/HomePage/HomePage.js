@@ -112,6 +112,10 @@ class HomePage extends Component {
 		this.props.history.push(`/detail-doctor/${doctor.id}`);
 	};
 
+	handleViewDetailService = (id) => {
+		this.props.history.push(`/detail-service/${id}`);
+	};
+
 	handleViewUpdateInfor = () => {
 		if (this.props.userInfor) {
 			this.props.history.push(`/update-infor/${this.props.userInfor.id}`);
@@ -344,7 +348,12 @@ class HomePage extends Component {
 							</div>
 							<div className="content-down">
 								<div className="options">
-									<div className="option-child">
+									<div
+										className="option-child"
+										onClick={() =>
+											this.handleViewDetailService(1)
+										}
+									>
 										<div className="icon-child"></div>
 										<div className="text-child">
 											Khám
@@ -352,7 +361,12 @@ class HomePage extends Component {
 											Chuyên khoa
 										</div>
 									</div>
-									<div className="option-child">
+									<div
+										className="option-child"
+										onClick={() =>
+											this.handleViewDetailService(2)
+										}
+									>
 										<div className="icon-child"></div>
 										<div className="text-child">
 											Khám
@@ -360,14 +374,24 @@ class HomePage extends Component {
 											từ xa
 										</div>
 									</div>
-									<div className="option-child">
+									<div
+										className="option-child"
+										onClick={() =>
+											this.handleViewDetailService(3)
+										}
+									>
 										<div className="icon-child"></div>
 										<div className="text-child">
 											Xét nghiệm
 											<br />y học
 										</div>
 									</div>
-									<div className="option-child">
+									<div
+										className="option-child"
+										onClick={() =>
+											this.handleViewDetailService(4)
+										}
+									>
 										<div className="icon-child"></div>
 										<div className="text-child">
 											Sức khỏe
@@ -375,7 +399,12 @@ class HomePage extends Component {
 											tinh thần
 										</div>
 									</div>
-									<div className="option-child">
+									<div
+										className="option-child"
+										onClick={() =>
+											this.handleViewDetailService(5)
+										}
+									>
 										<div className="icon-child"></div>
 										<div className="text-child">
 											Khám
@@ -385,7 +414,12 @@ class HomePage extends Component {
 									</div>
 								</div>
 								<div className="options2">
-									<div className="option-child">
+									<div
+										className="option-child"
+										onClick={() =>
+											this.handleViewDetailService(6)
+										}
+									>
 										<div className="icon-child"></div>
 										<div className="text-child">
 											Khám
@@ -393,7 +427,12 @@ class HomePage extends Component {
 											nha khoa
 										</div>
 									</div>
-									<div className="option-child">
+									<div
+										className="option-child"
+										onClick={() =>
+											this.handleViewDetailService(7)
+										}
+									>
 										<div className="icon-child"></div>
 										<div className="text-child">
 											Gói
@@ -401,14 +440,24 @@ class HomePage extends Component {
 											phẫu thuật
 										</div>
 									</div>
-									<div className="option-child">
+									<div
+										className="option-child"
+										onClick={() =>
+											this.handleViewDetailService(8)
+										}
+									>
 										<div className="icon-child"></div>
 										<div className="text-child">
 											Sản phẩm
 											<br />y tế
 										</div>
 									</div>
-									<div className="option-child">
+									<div
+										className="option-child"
+										onClick={() =>
+											this.handleViewDetailService(9)
+										}
+									>
 										<div className="icon-child"></div>
 										<div className="text-child">
 											Sức khỏe
@@ -720,7 +769,7 @@ class HomePage extends Component {
 
 					<Specialty />
 
-					<Facility />
+					{/* <Facility /> */}
 
 					<div className="outstanding-doctor-container">
 						<div className="doctor-content-up">

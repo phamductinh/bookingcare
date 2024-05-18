@@ -41,14 +41,20 @@ class UserManage extends Component {
 	async componentDidMount() {
 		await this.getAllUsersReact();
 		await this.getTotalRowUser();
+		let token = await localStorage.getItem("token");
+		this.setState({
+			token: token,
+		});
 	}
 
 	getAllUsersReact = async () => {
 		this.setState({
 			isLoading: true,
 		});
-		let token = await localStorage.getItem("token");
-		let res = await getPaginationUsers(token, this.state.newPage);
+		let res = await getPaginationUsers(
+			this.state.token,
+			this.state.newPage
+		);
 		if (res && res.code === 200) {
 			this.setState({
 				arrUsers: res.data,
@@ -62,8 +68,7 @@ class UserManage extends Component {
 	};
 
 	getTotalRowUser = async () => {
-		let token = await localStorage.getItem("token");
-		let res = await getTotalRowUser(token);
+		let res = await getTotalRowUser(this.state.token);
 		if (res && res.code === 200) {
 			let row = Math.ceil(res.data.totalRow / 5);
 			this.setState({
@@ -153,7 +158,7 @@ class UserManage extends Component {
 		let isValid = this.validateModalInput();
 		if (newUserData.password !== this.state.confirmPass) {
 			this.setState({
-				errMsgSignUp: "Passwords are not the same !",
+				errMsgSignUp: "Mật khẩu không trùng khớp!",
 			});
 		} else if (isValid === true) {
 			try {
@@ -164,7 +169,7 @@ class UserManage extends Component {
 				let response = await handleCreateUser(newUserData);
 				await this.getAllUsersReact();
 				console.log("check response", response);
-				toast.success("Add user successfully !");
+				toast.success("Thêm mới thành công!");
 				this.setState({
 					newEmail: "",
 					newPassword: "",
@@ -191,12 +196,11 @@ class UserManage extends Component {
 
 	handleDeleteUser = async () => {
 		try {
-			let token = await localStorage.getItem("token");
-			let res = await deleteUser(token, this.state.userId);
+			let res = await deleteUser(this.state.token, this.state.userId);
 			console.log(res);
 			if (res && res.code === 200) {
 				await this.getAllUsersReact();
-				toast.success("Delete successfully !");
+				toast.success("Xóa người dùng thành công!");
 				this.setState({
 					confirmDelete: false,
 				});
@@ -220,14 +224,13 @@ class UserManage extends Component {
 				id: this.state.userId,
 			};
 
-			let token = await localStorage.getItem("token");
-			let res = await editUser(token, userData);
+			let res = await editUser(this.state.token, userData);
 			if (res && res.code === 200) {
 				this.setState({
 					setModalEditUser: false,
 				});
 				await this.getAllUsersReact();
-				toast.success("Update successfully !");
+				toast.success("Cập nhật thông tin thành công!");
 			}
 		} catch (error) {
 			toast.error("Something wrong !");
@@ -266,13 +269,13 @@ class UserManage extends Component {
 			<>
 				{this.props.isLoggedIn && <Header />}
 				<div className="user-container">
-					<div className="title text-center">Manage users</div>
+					<div className="title text-center">Quản lý người dùng</div>
 					<div className="mx-3">
 						<button
 							className="btn btn-primary px-3"
 							onClick={() => this.handleOpenModal()}
 						>
-							Add new user
+							Thêm mới
 						</button>
 					</div>
 					<div className="users-table mt-3 mx-3">
@@ -280,25 +283,25 @@ class UserManage extends Component {
 							<tbody>
 								<tr>
 									<th width="5%" className="text-center">
-										id
+										Id
 									</th>
 									<th width="20%" className="text-center">
 										Email
 									</th>
 									<th width="20%" className="text-center">
-										Fullname
+										Họ và tên
 									</th>
 									<th width="15%" className="text-center">
-										Address
+										Địa chỉ
 									</th>
 									<th width="14%" className="text-center">
-										Gender
+										Giới tính
 									</th>
 									<th width="14%" className="text-center">
-										Role
+										Chức năng
 									</th>
 									<th width="12%" className="text-center">
-										Actions
+										Acts
 									</th>
 								</tr>
 
@@ -352,7 +355,7 @@ class UserManage extends Component {
 					{setModalIsOpen ? (
 						<div id="add-new-modal" className="modal">
 							<div className="modal-content">
-								<p>Add new user</p>
+								<p>Thêm mới người dùng</p>
 								<input
 									className="email"
 									type="email"
@@ -370,7 +373,7 @@ class UserManage extends Component {
 										className="password"
 										type="password"
 										autoComplete="off"
-										placeholder="Password"
+										placeholder="Mật khẩu"
 										value={this.state.newPassword}
 										onChange={(event) =>
 											this.handleOnchangeModalInput(
@@ -383,7 +386,7 @@ class UserManage extends Component {
 										className="confirm-password"
 										type="password"
 										autoComplete="off"
-										placeholder="Confirm Password"
+										placeholder="Xác nhận mật khẩu"
 										value={this.state.confirmPass}
 										onChange={(event) =>
 											this.handleOnchangeModalInput(
@@ -397,7 +400,7 @@ class UserManage extends Component {
 									className="fullname"
 									name="fullName"
 									type="text"
-									placeholder="Fullname"
+									placeholder="Họ và tên"
 									value={this.state.fullName}
 									onChange={(event) =>
 										this.handleOnchangeModalInput(
@@ -410,7 +413,7 @@ class UserManage extends Component {
 									className="address"
 									name="address"
 									type="text"
-									placeholder="Address"
+									placeholder="Địa chỉ"
 									value={this.state.address}
 									onChange={(event) =>
 										this.handleOnchangeModalInput(
@@ -424,7 +427,7 @@ class UserManage extends Component {
 									<input
 										className="phoneNumber"
 										type="tel"
-										placeholder="Phone"
+										placeholder="Số điện thoại"
 										value={this.state.phoneNumber}
 										onChange={(event) =>
 											this.handleOnchangeModalInput(
@@ -449,11 +452,11 @@ class UserManage extends Component {
 											disabled
 											defaultChecked
 										>
-											Gender
+											Giới tính
 										</option>
-										<option value="Male">Male</option>
-										<option value="Female">Female</option>
-										<option value="Other">Other</option>
+										<option value="Male">Nam</option>
+										<option value="Female">Nữ</option>
+										<option value="Other">Khác</option>
 									</select>
 
 									<select
@@ -468,7 +471,7 @@ class UserManage extends Component {
 										}
 									>
 										<option value="" disabled>
-											Role
+											Chức năng
 										</option>
 										<option value="Admin">Admin</option>
 										<option value="Doctor">Doctor</option>
@@ -488,14 +491,14 @@ class UserManage extends Component {
 										type="button"
 										onClick={() => this.handleAddNewUser()}
 									>
-										Add
+										Thêm
 									</button>
 									<button
 										className="btn-cancel"
 										type="button"
 										onClick={() => this.handleCloseModal()}
 									>
-										Cancel
+										Hủy
 									</button>
 								</div>
 							</div>
@@ -505,7 +508,7 @@ class UserManage extends Component {
 					{setModalEditUser ? (
 						<div id="add-new-modal" className="modal">
 							<div className="modal-content">
-								<p>Edit user</p>
+								<p>Chỉnh sửa người dùng</p>
 								<input
 									className="email"
 									type="email"
@@ -525,7 +528,7 @@ class UserManage extends Component {
 										type="password"
 										disabled
 										autoComplete="off"
-										placeholder="Password"
+										placeholder="Mật khẩu"
 										value={this.state.newPassword}
 										onChange={(event) =>
 											this.handleOnchangeModalInput(
@@ -539,7 +542,7 @@ class UserManage extends Component {
 									className="fullname"
 									name="fullName"
 									type="text"
-									placeholder="Fullname"
+									placeholder="Họ và tên"
 									value={this.state.fullName}
 									onChange={(event) =>
 										this.handleOnchangeModalInput(
@@ -552,7 +555,7 @@ class UserManage extends Component {
 									className="address"
 									name="address"
 									type="text"
-									placeholder="Address"
+									placeholder="Địa chỉ"
 									value={this.state.address}
 									onChange={(event) =>
 										this.handleOnchangeModalInput(
@@ -566,7 +569,7 @@ class UserManage extends Component {
 									<input
 										className="phoneNumber"
 										type="tel"
-										placeholder="Phone"
+										placeholder="Số điện thoại"
 										value={this.state.phoneNumber}
 										onChange={(event) =>
 											this.handleOnchangeModalInput(
@@ -591,11 +594,11 @@ class UserManage extends Component {
 											disabled
 											defaultChecked
 										>
-											Gender
+											Giới tính
 										</option>
-										<option value="Male">Male</option>
-										<option value="Female">Female</option>
-										<option value="Other">Other</option>
+										<option value="Male">Nam</option>
+										<option value="Female">Nữ</option>
+										<option value="Other">Khác</option>
 									</select>
 
 									<select
@@ -610,7 +613,7 @@ class UserManage extends Component {
 										}
 									>
 										<option value="" disabled>
-											Role
+											Chức năng
 										</option>
 										<option value="Admin">Admin</option>
 										<option value="Doctor">Doctor</option>
@@ -630,14 +633,14 @@ class UserManage extends Component {
 										type="button"
 										onClick={() => this.handleEditUser()}
 									>
-										Save
+										Lưu
 									</button>
 									<button
 										className="btn-cancel"
 										type="button"
 										onClick={() => this.handleCloseModal()}
 									>
-										Cancel
+										Hủy
 									</button>
 								</div>
 							</div>
@@ -647,7 +650,7 @@ class UserManage extends Component {
 					{confirmDelete ? (
 						<div className="confirm-delete">
 							<div className="confirmation-text">
-								Are you sure ?
+								Bạn chắc chắn muốn xóa chứ?
 							</div>
 							<div className="button-container">
 								<button
@@ -656,13 +659,13 @@ class UserManage extends Component {
 										this.handleCloseConfirmDelete()
 									}
 								>
-									Cancel
+									Hủy
 								</button>
 								<button
 									className="confirmation-button"
 									onClick={() => this.handleDeleteUser()}
 								>
-									Delete
+									Xóa
 								</button>
 							</div>
 						</div>

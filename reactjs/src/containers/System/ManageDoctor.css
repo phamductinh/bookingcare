@@ -245,3 +245,8 @@
 	background-repeat: no-repeat;
 	background-size: cover;
 }
+
+.is-telem{
+    padding-top: 17px;
+    padding-right: 10px;
+}

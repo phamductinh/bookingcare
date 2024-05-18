@@ -18,4 +18,28 @@ const deleteReview = (token, id) => {
 	});
 };
 
-export { getTotalRowReview, getPaginationReviews, deleteReview };
+const getFeedbackByDoctorId = (doctorId) => {
+	return axios.get(`/api/get-feedback-by-doctorId?doctorId=${doctorId}`);
+};
+
+const handleCreateFeedback = (data) => {
+	return axios.post("/api/create-feedback", data);
+};
+
+const updateFeedback = (data) => {
+	return axios.put("/api/update-feedback", data);
+};
+
+const deleteFeedback = (id) => {
+	return axios.delete(`/api/delete-feedback?id=${id}`);
+};
+
+export {
+	getTotalRowReview,
+	getPaginationReviews,
+	deleteReview,
+	getFeedbackByDoctorId,
+	handleCreateFeedback,
+	updateFeedback,
+	deleteFeedback,
+};

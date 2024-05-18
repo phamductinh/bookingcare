@@ -105,6 +105,22 @@ let deleteSpecialty = (req, res) => {
 	});
 };
 
+let getSpecialtyById = (req, res) => {
+	let id = req.query.id;
+	if (!id) {
+		return res.status(400).send({ code: 400, msg: errMsg.missing_input });
+	}
+	specialtyModel.getSpecialtyByIdModel(id, (error, doctor) => {
+		if (error) {
+			throw error;
+		}
+		return res.send({
+			code: 200,
+			data: doctor[0],
+		});
+	});
+};
+
 module.exports = {
 	createSpecialty,
 	getAllSpecialty,
@@ -112,4 +128,5 @@ module.exports = {
 	updateSpecialty,
 	getTotalRowSpecialty,
 	getPaginationSpecialty,
+	getSpecialtyById,
 };

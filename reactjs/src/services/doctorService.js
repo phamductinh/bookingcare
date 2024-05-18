@@ -50,6 +50,10 @@ const getDoctorBySpecialtyId = (id) => {
 	return axios.get(`/api/get-doctor-by-specialtyId?id=${id}`);
 };
 
+const getDoctorByServiceId = (id) => {
+	return axios.get(`/api/get-doctor-by-serviceId?id=${id}`);
+};
+
 export {
 	handleCreateDoctor,
 	getAllDoctors,
@@ -61,4 +65,5 @@ export {
 	getTotalRowDoctor,
 	getPaginationDoctors,
 	getDoctorBySpecialtyId,
+	getDoctorByServiceId,
 };

@@ -13,6 +13,9 @@ class Home extends Component {
 			if (userInfo && userInfo.role === "User") {
 				return <Redirect to={"/home"} />;
 			}
+			if (userInfo && userInfo.role === "Doctor") {
+				return <Redirect to={"/system/manage-booking"} />;
+			}
 			if (userInfo && userInfo.role === "") {
 				return <Redirect to={"/home"} />;
 			}

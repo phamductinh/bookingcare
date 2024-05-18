@@ -4,6 +4,7 @@ import {
 	createNewSpecialtyQuery,
 	deleteSpecialtyById,
 	totalRowSpecialty,
+	findSpecialtyById,
 } from "../database/queries";
 
 let getAllSpecialtyModel = (callback) => {
@@ -66,6 +67,15 @@ let getPaginationSpecialtyModel = (start, limit, callback) => {
 	});
 };
 
+let getSpecialtyByIdModel = (id, callback) => {
+	db.query(findSpecialtyById, id, (error, results) => {
+		if (error) {
+			return callback(error);
+		}
+		return callback(null, results);
+	});
+};
+
 module.exports = {
 	getAllSpecialtyModel,
 	createNewSpecialtyModel,
@@ -73,4 +83,5 @@ module.exports = {
 	updateSpecialtyModel,
 	getTotalRowSpecialtyModel,
 	getPaginationSpecialtyModel,
+	getSpecialtyByIdModel,
 };

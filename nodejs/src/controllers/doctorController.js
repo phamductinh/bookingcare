@@ -170,6 +170,22 @@ let getDoctorBySpecialtyId = (req, res) => {
 	});
 };
 
+let getDoctorByServiceId = (req, res) => {
+	let id = req.query.id;
+	if (!id) {
+		return res.status(400).send({ code: 400, msg: errMsg.missing_input });
+	}
+	doctorModel.getDoctorByServiceIdModel(id, (error, doctor) => {
+		if (error) {
+			throw error;
+		}
+		return res.send({
+			code: 200,
+			data: doctor,
+		});
+	});
+};
+
 module.exports = {
 	getAllDoctors,
 	getADoctor,
@@ -181,4 +197,5 @@ module.exports = {
 	getTotalRowDoctor,
 	getPaginationDoctors,
 	getDoctorBySpecialtyId,
+	getDoctorByServiceId,
 };

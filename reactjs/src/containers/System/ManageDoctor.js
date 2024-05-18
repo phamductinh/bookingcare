@@ -186,7 +186,7 @@ class ManageDoctor extends Component {
 			);
 			await this.getAllDoctorsReact();
 			console.log("check response", response);
-			toast.success("Add doctor successfully !");
+			toast.success("Thêm mới thành công!");
 			this.setState({
 				name: "",
 				introduction: "",
@@ -216,14 +216,14 @@ class ManageDoctor extends Component {
 			let res = await deleteDoctor(this.state.userId);
 			if (res && res.code === 200) {
 				await this.getAllDoctorsReact();
-				toast.success("Delete successfully !");
+				toast.success("Xóa thành công!");
 				this.setState({
 					confirmDelete: false,
 				});
 			}
 		} catch (error) {
 			console.log(error);
-			toast.error("Something wrong !");
+			toast.error("Xóa thất bại!");
 		}
 	};
 
@@ -244,11 +244,11 @@ class ManageDoctor extends Component {
 					setModalEditUser: false,
 				});
 				await this.getAllUsersReact();
-				toast.success("Update successfully !");
+				toast.success("Chỉnh sửa thành công!");
 			}
 		} catch (error) {
 			console.log(error);
-			toast.error("Something wrong !");
+			toast.error("Xóa thất bại!");
 		}
 	};
 
@@ -294,13 +294,13 @@ class ManageDoctor extends Component {
 			<>
 				{this.props.isLoggedIn && <Header />}
 				<div className="user-container">
-					<div className="title text-center">Manage Doctors</div>
+					<div className="title text-center">Quản lý bác sĩ</div>
 					<div className="mx-3">
 						<button
 							className="btn btn-primary px-3"
 							onClick={() => this.handleOpenModal()}
 						>
-							Add new doctor
+							Thêm mới bác sĩ
 						</button>
 					</div>
 					<div className="users-table mt-3 mx-3">
@@ -311,22 +311,22 @@ class ManageDoctor extends Component {
 										Id
 									</th>
 									<th width="20%" className="text-center">
-										Image
+										Ảnh
 									</th>
 									<th width="20%" className="text-center">
-										Name
+										Họ và tên
 									</th>
 									<th width="20%" className="text-center">
-										Introduction
+										Giới thiệu
 									</th>
 									<th width="15%" className="text-center">
-										Address
+										Địa chỉ
 									</th>
 									<th width="10%" className="text-center">
-										Price
+										Giá
 									</th>
 									<th width="10%" className="text-center">
-										Actions
+										Acts
 									</th>
 								</tr>
 
@@ -390,11 +390,11 @@ class ManageDoctor extends Component {
 					{setModalIsOpen ? (
 						<div id="add-new-modal" className="modal">
 							<div className="modal-content">
-								<p>Add new doctor</p>
+								<p>Thêm mới bác sĩ</p>
 								<input
 									className="name"
 									type="text"
-									placeholder="Name"
+									placeholder="Họ và tên"
 									value={this.state.name}
 									onChange={(event) =>
 										this.handleOnchangeModalInput(
@@ -406,7 +406,7 @@ class ManageDoctor extends Component {
 								<textarea
 									name="introduction"
 									id="introduction"
-									placeholder="Introduction"
+									placeholder="Giới thiệu"
 									cols="30"
 									rows="5"
 									value={this.state.introduction}
@@ -422,7 +422,7 @@ class ManageDoctor extends Component {
 									className="address"
 									name="address"
 									type="text"
-									placeholder="Address"
+									placeholder="Địa chỉ"
 									value={this.state.address}
 									onChange={(event) =>
 										this.handleOnchangeModalInput(
@@ -436,7 +436,7 @@ class ManageDoctor extends Component {
 										className="price"
 										name="price"
 										type="text"
-										placeholder="Price"
+										placeholder="Giá"
 										value={this.state.price}
 										onChange={(event) =>
 											this.handleOnchangeModalInput(
@@ -471,7 +471,7 @@ class ManageDoctor extends Component {
 										}
 									>
 										<option value="" disabled>
-											Clinic
+											Phòng khám
 										</option>
 										{arrClinics &&
 											arrClinics.length > 0 &&
@@ -497,7 +497,7 @@ class ManageDoctor extends Component {
 										}
 									>
 										<option value="" disabled>
-											Specialty
+											Chuyên khoa
 										</option>
 										{arrSpecialty &&
 											arrSpecialty.length > 0 &&
@@ -511,16 +511,18 @@ class ManageDoctor extends Component {
 											))}
 									</select>
 								</div>
-								<div>
+								<div className="d-flex">
+									<span for="isTelemedicine" className="is-telem">
+										Khám từ xa:
+									</span>
 									<input
 										type="checkbox"
 										id="isTelemedicine"
 										checked={isTelemedicine === 1}
-										onChange={this.handleCheckboxChange()}
+										onChange={(e) =>
+											this.handleCheckboxChange(e)
+										}
 									/>
-									<label for="isTelemedicine">
-										Khám từ xa:
-									</label>
 								</div>
 								<MdEditor
 									style={{ height: "250px" }}
@@ -543,14 +545,14 @@ class ManageDoctor extends Component {
 											this.handleAddNewDoctor()
 										}
 									>
-										Add
+										Thêm mới
 									</button>
 									<button
 										className="btn-cancel"
 										type="button"
 										onClick={() => this.handleCloseModal()}
 									>
-										Cancel
+										Hủy
 									</button>
 								</div>
 							</div>

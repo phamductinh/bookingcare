@@ -15,6 +15,14 @@ const changePasswordService = (userData) => {
 	return axios.put("/api/change-password", userData);
 };
 
+const resetPasswordService = (userData) => {
+	return axios.put("/api/reset-password", userData);
+};
+
+const sendEmailPasswordService = (email) => {
+	return axios.post(`/api/send-email-reset-password?email=${email}`);
+};
+
 const getAllUsers = (token) => {
 	return axios.get("/api/users", {
 		headers: {
@@ -74,4 +82,6 @@ export {
 	getUserById,
 	updateInforUser,
 	changePasswordService,
+	sendEmailPasswordService,
+	resetPasswordService,
 };

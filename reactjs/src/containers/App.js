@@ -24,10 +24,15 @@ import BookingCall from "./System/Doctor/BookingCall";
 import CallingHome from "./VideoCall/CallingHome";
 import Room from "./VideoCall/Room";
 import DetailSpecialty from "./System/DetailSpecialty";
+import DetailService from "./System/DetailService";
 import BookingHistory from "./System/BookingHistory";
 import UpdateInfor from "./System/UpdateInfor";
 import confirmEmail from "./Auth/confirmEmail";
 import changePassword from "./Auth/changePassword";
+import Success from "./HomePage/Success";
+import Fail from "./HomePage/Fail";
+import resetPassword from "./Auth/resetPassword";
+import PrivateRoute from "../routes/PrivateRoute";
 
 class App extends Component {
 	handlePersistorState = () => {
@@ -75,11 +80,16 @@ class App extends Component {
 										path={path.SIGNUP}
 										component={SignUp}
 									/>
-									<Route
+									{/* <Route
 										path={path.SYSTEM}
 										component={userIsAuthenticated(System)}
-									/>
+									/> */}
 
+									<PrivateRoute
+										path={path.SYSTEM}
+										component={System}
+										user={this.props.userInfor}
+									/>
 									<Route
 										path={path.HOMEPAGE}
 										exact
@@ -118,6 +128,11 @@ class App extends Component {
 										component={DetailSpecialty}
 									/>
 									<Route
+										exact
+										path={"/detail-service/:id"}
+										component={DetailService}
+									/>
+									<Route
 										path={"/booking-history/:id"}
 										component={BookingHistory}
 									/>
@@ -134,6 +149,20 @@ class App extends Component {
 									<Route
 										path={"/forgot-password"}
 										component={confirmEmail}
+									/>
+									<Route
+										path={"/reset-password"}
+										component={userIsAuthenticated(
+											resetPassword
+										)}
+									/>
+									<Route
+										path={"/booking-success/:bookId"}
+										component={Success}
+									/>
+									<Route
+										path={"/booking-fail/:bookId"}
+										component={Fail}
 									/>
 								</Switch>
 							</CustomScrollbars>
@@ -162,6 +191,7 @@ const mapStateToProps = (state) => {
 	return {
 		started: state.app.started,
 		isLoggedIn: state.user.isLoggedIn,
+		userInfor: state.user.userInfo,
 	};
 };
 

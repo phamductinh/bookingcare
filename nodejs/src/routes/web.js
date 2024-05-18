@@ -3,6 +3,7 @@ import telemedicineController from "../controllers/telemedicineController";
 import authController from "../controllers/authController";
 import userController from "../controllers/userController";
 import specialtyController from "../controllers/specialtyController";
+import serviceController from "../controllers/serviceController";
 import doctorController from "../controllers/doctorController";
 import clinicController from "../controllers/clinicController";
 import bookingController from "../controllers/bookingController";
@@ -14,6 +15,7 @@ import {
 	authApiDoctor,
 	authApiOwner,
 } from "../middlewares/verifyJWT";
+import PaymentController from "../controllers/paymentController";
 
 let router = express.Router();
 
@@ -21,6 +23,11 @@ let initWebRoutes = (app) => {
 	router.post("/api/login", authController.login);
 	router.post("/api/register", authController.register);
 	router.put("/api/change-password", authController.changePassword);
+	router.put("/api/reset-password", authController.resetPassword);
+	router.post(
+		"/api/send-email-reset-password",
+		authController.sendResetPasswordEmail
+	);
 
 	router.get("/api/users", verifyJWT, userController.getAllUsers);
 	router.get("/api/get-user", userController.getUser);
@@ -57,6 +64,10 @@ let initWebRoutes = (app) => {
 	router.get(
 		"/api/get-doctor-by-specialtyId",
 		doctorController.getDoctorBySpecialtyId
+	);
+	router.get(
+		"/api/get-doctor-by-serviceId",
+		doctorController.getDoctorByServiceId
 	);
 	router.post("/api/create-doctor", authApi, doctorController.createADoctor);
 	router.put("/api/update-doctor", authApi, doctorController.updateADoctor);
@@ -101,6 +112,10 @@ let initWebRoutes = (app) => {
 	);
 
 	router.get("/api/get-all-specialty", specialtyController.getAllSpecialty);
+	router.get(
+		"/api/get-specialty-by-id",
+		specialtyController.getSpecialtyById
+	);
 	router.post(
 		"/api/create-specialty",
 		authApi,
@@ -127,6 +142,20 @@ let initWebRoutes = (app) => {
 		specialtyController.getTotalRowSpecialty
 	);
 
+	router.get("/api/get-all-service", serviceController.getAllService);
+	router.get("/api/get-service-by-id", serviceController.getServiceById);
+	router.post("/api/create-service", serviceController.createService);
+	router.delete("/api/delete-service", serviceController.deleteService);
+	router.put("/api/update-service", serviceController.updateService);
+	router.get(
+		"/api/get-pagination-service",
+		serviceController.getPaginationService
+	);
+	router.get(
+		"/api/get-total-row-service",
+		serviceController.getTotalRowService
+	);
+
 	router.get("/api/get-all-clinics", clinicController.getAllClinics);
 
 	router.post(
@@ -134,6 +163,10 @@ let initWebRoutes = (app) => {
 		bookingController.bookingAnAppointment
 	);
 	router.get("/api/get-booking-by-date", bookingController.getBookingByDate);
+	router.get(
+		"/api/get-booking-by-date-and-time",
+		bookingController.getBookingByDateAndTime
+	);
 	router.get(
 		"/api/get-telemedicine-booking-by-date",
 		bookingController.getTelemedicineBookingByDate
@@ -156,6 +189,10 @@ let initWebRoutes = (app) => {
 		bookingController.confirmBooking
 	);
 	router.put(
+		"/api/confirm-booking-by-bookId",
+		bookingController.confirmBookingByBookId
+	);
+	router.put(
 		"/api/finish-booking",
 		authApiDoctor,
 		bookingController.finishBooking
@@ -164,6 +201,10 @@ let initWebRoutes = (app) => {
 		"/api/delete-booking",
 		verifyJWT,
 		bookingController.deleteBooking
+	);
+	router.delete(
+		"/api/delete-booking-by-bookId",
+		bookingController.deleteBookingByBookId
 	);
 	router.delete("/api/cancel-booking", bookingController.deleteBooking);
 
@@ -177,9 +218,17 @@ let initWebRoutes = (app) => {
 		verifyJWT,
 		reviewController.deleteReview
 	);
+	router.delete("/api/delete-feedback", reviewController.deleteReview);
+	router.get(
+		"/api/get-feedback-by-doctorId",
+		reviewController.getFeedbackByDoctorId
+	);
+	router.post("/api/create-feedback", reviewController.createAFeedback);
+	router.put("/api/update-feedback", reviewController.updateFeedback);
 
 	router.get("/api/get-room", videoCallController.getRoom);
 	router.post("/api/create-room", videoCallController.createRoom);
+	router.post("/api/payment", PaymentController.getUrlPay);
 
 	return app.use("/", router);
 };

@@ -21,11 +21,19 @@ let findDoctorBySpecialty = `SELECT doctor.id, doctor.name, doctor.introduction,
 
 let findDoctorIsTelemedicine = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN clinic ON clinic.id = doctor.clinicId JOIN specialty ON specialty.id = doctor.specialtyId WHERE doctor.telemId = ?`;
 
+let findDoctorByServiceId = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN specialty ON doctor.specialtyId = specialty.id JOIN clinic ON doctor.clinicId = clinic.id WHERE doctor.serviceId = ?`;
+
 let createADoctorQuery = `INSERT INTO doctor (name, introduction, clinicId, specialtyId, description, address, price, image, isTelemedicine) VALUES (?,?,?,?,?,?,?,?,?)`;
 
 let updateDoctorQuery = `UPDATE doctor SET name = ?, introduction = ?, clinicId = ?, specialtyId = ?, description = ?, address = ?, price = ? WHERE id = ?`;
 
 let deleteDoctorById = `DELETE FROM doctor WHERE id = ?`;
+
+let createAFeedbackQuery = `INSERT INTO review (doctorId, comment, userId) VALUES (?,?,?)`;
+
+let getFeedbackByDoctorIdQuery = `SELECT review.*, user.fullName FROM review JOIN user ON user.id = review.userId WHERE doctorId = ?`;
+
+let updateFeedbackQuery = `UPDATE review SET comment = ? WHERE id = ?`;
 
 //Telemedicine
 let findAllTelemedicine = "SELECT * FROM telemedicine";
@@ -51,16 +59,36 @@ let deleteSpecialtyById = `DELETE FROM specialty WHERE id = ?`;
 
 let findAllClinicsQuery = "SELECT * FROM clinic";
 
+let findSpecialtyById = `SELECT * FROM specialty WHERE id = ?`;
+
+//Service
+let findAllServiceQuery = "SELECT * FROM service";
+
+let findServiceById = `SELECT * FROM service WHERE id = ?`;
+
+let createNewServiceQuery = `INSERT INTO service (name, description, descriptionHTML, price) VALUES (?,?,?,?)`;
+
+let updateServiceQuery =
+	"UPDATE service SET name = ?, description = ?, descriptionHTML = ? WHERE id = ?";
+
+let deleteServiceById = `DELETE FROM service WHERE id = ?`;
+
 let findBookedAppointmentQuery =
 	"SELECT * from booking WHERE booking_date = ? AND booking_time = ?";
 
-let bookingAnAppointmentQuery = `INSERT INTO booking (userId, doctorId, booking_date, booking_time,fullName, gender, phoneNumber, birthday, address, reason, status, isTelemedicine, exam_time, idRoom) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+let bookingAnAppointmentQuery = `INSERT INTO booking (userId, doctorId, booking_date, booking_time,fullName, gender, phoneNumber, birthday, address, reason, status, isTelemedicine, exam_time, idRoom, bookId) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
 let getBookingByDateQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
 FROM booking
 JOIN user ON user.id = booking.userId
 JOIN doctor ON doctor.id = booking.doctorId
 WHERE status = 'Pending' AND booking_date = ?`;
+
+let getBookingByDateAndTimeQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
+FROM booking
+JOIN user ON user.id = booking.userId
+JOIN doctor ON doctor.id = booking.doctorId
+WHERE status = 'Pending' AND booking_date = ? AND booking_time = ?`;
 
 let getBookingByUserIdQuery = `SELECT booking.*, user.email as patientEmail
 FROM booking 
@@ -86,9 +114,13 @@ let findAllFinishedBookingQuery = `SELECT * FROM booking WHERE status = 'Done'`;
 
 let confirmBookingQuery = `UPDATE booking SET status = 'Confirmed' WHERE id = ?`;
 
+let confirmBookingByBookIdQuery = `UPDATE booking SET status = 'Confirmed' WHERE bookId = ?`;
+
 let finishBookingQuery = `UPDATE booking SET status = 'Done' WHERE id = ?`;
 
 let deleteBookingById = `DELETE FROM booking WHERE id = ?`;
+
+let deleteBookingByBookId = `DELETE FROM booking WHERE bookId = ?`;
 
 let createRoomQuery = `INSERT INTO room (code, status) VALUES (?,?)`;
 
@@ -101,8 +133,16 @@ let totalRowDoctor = `SELECT COUNT(*) as totalRow FROM doctor`;
 let totalRowSpecialty = `SELECT COUNT(*) as totalRow FROM specialty`;
 let totalRowTelemedicine = `SELECT COUNT(*) as totalRow FROM telemedicine`;
 let totalRowReview = `SELECT COUNT(*) as totalRow FROM review`;
+let totalRowService = `SELECT COUNT(*) as totalRow FROM service`;
 
 module.exports = {
+	getBookingByDateAndTimeQuery,
+	findServiceById,
+	findAllServiceQuery,
+	createNewServiceQuery,
+	updateServiceQuery,
+	deleteServiceById,
+	totalRowService,
 	updateInforQuery,
 	getBookingByUserIdQuery,
 	deleteReviewById,
@@ -146,4 +186,11 @@ module.exports = {
 	findAllClinicsQuery,
 	findBookedAppointmentQuery,
 	bookingAnAppointmentQuery,
+	findDoctorByServiceId,
+	createAFeedbackQuery,
+	getFeedbackByDoctorIdQuery,
+	updateFeedbackQuery,
+	confirmBookingByBookIdQuery,
+	deleteBookingByBookId,
+	findSpecialtyById,
 };

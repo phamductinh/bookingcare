@@ -4,6 +4,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import UserManage from "../containers/System/UserManage";
 import ManageTelemedicine from "../containers/System/ManageTelemedicine";
 import ManageSpecialty from "../containers/System/ManageSpecialty";
+import ManageService from "../containers/System/ManageService";
 import ManageDoctor from "../containers/System/ManageDoctor";
 import ManageBooking from "../containers/System/Doctor/ManageBooking";
 import ManageTelemedicineBooking from "../containers/System/Doctor/ManageTelemedicineBooking";
@@ -58,6 +59,10 @@ class System extends Component {
 						<Route
 							path="/system/manage-review"
 							component={ManageReview}
+						/>
+						<Route
+							path="/system/manage-service"
+							component={ManageService}
 						/>
 						<Route
 							component={() => {

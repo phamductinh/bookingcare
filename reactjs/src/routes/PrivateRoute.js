@@ -1,19 +1,14 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-const PrivateRoute = ({
-	component: Component,
-	userInfo,
-	allowedRoles,
-	...rest
-}) => (
+const PrivateRoute = ({ component: Component, user, ...rest }) => (
 	<Route
 		{...rest}
 		render={(props) =>
-			userInfo && allowedRoles.includes(userInfo.role) ? (
+			user && (user.role === "Admin" || user.role === "Doctor") ? (
 				<Component {...props} />
 			) : (
-				<Redirect to="/home" />
+				<Redirect to="/login" />
 			)
 		}
 	/>

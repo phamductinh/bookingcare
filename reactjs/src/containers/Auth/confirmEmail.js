@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import "./confirmEmail.css";
 import { toast } from "react-toastify";
-import { handleConfirmEmail } from "../../services/userService";
+import { sendEmailPasswordService } from "../../services/userService";
 
 class confirmEmail extends Component {
 	constructor(props) {
@@ -19,22 +19,21 @@ class confirmEmail extends Component {
 		});
 	};
 
-	// handleConfirm = async (data) => {
-	// 	this.setState({
-	// 		errMsgSignUp: "",
-	// 	});
-	// 	let email = this.state.email;
-	// 	try {
-	// 		let response = await handleConfirmEmail(email);
-	// 		toast.success("Gửi email xác nhận thành công!");
-	// 		console.log("check response", response);
-	// 		this.setState({
-	// 			email: "",
-	// 		});
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 	}
-	// };
+	handleConfirm = async () => {
+		this.setState({
+			errMsgSignUp: "",
+		});
+		try {
+			let response = await sendEmailPasswordService(this.state.email);
+			toast.success("Gửi email xác nhận thành công!");
+			console.log("check response", response);
+			this.setState({
+				email: "",
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	goBack = () => {
 		this.props.history.push(`/login`);
@@ -64,8 +63,8 @@ class confirmEmail extends Component {
 						<form class="form-email">
 							<div class="form-group-email">
 								<label for="email">
-									Vui lòng nhập email để tìm kiếm tài khoản
-									của bạn
+									Vui lòng nhập email để đặt lại mật khẩu của
+									bạn
 								</label>
 								<input
 									type="text"
@@ -84,7 +83,7 @@ class confirmEmail extends Component {
 								type="button"
 								onClick={() => this.handleConfirm()}
 							>
-								Send Email
+								Gửi email xác nhận
 							</button>
 						</form>
 

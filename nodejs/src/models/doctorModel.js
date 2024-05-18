@@ -8,6 +8,7 @@ import {
 	findDoctorIsTelemedicine,
 	totalRowDoctor,
 	findDoctorBySpecialty,
+    findDoctorByServiceId
 } from "../database/queries";
 import { errMsg } from "../utils/resMsg";
 
@@ -127,6 +128,15 @@ let getDoctorBySpecialtyIdModel = (id, callback) => {
 	});
 };
 
+let getDoctorByServiceIdModel = (id, callback) => {
+	db.query(findDoctorByServiceId, id, (error, results) => {
+		if (error) {
+			return callback(error);
+		}
+		return callback(null, results);
+	});
+};
+
 module.exports = {
 	getDoctorByIdModel,
 	getAllDoctorsModel,
@@ -137,4 +147,5 @@ module.exports = {
 	getTotalRowDoctorModel,
 	getPaginationDoctorsModel,
 	getDoctorBySpecialtyIdModel,
+    getDoctorByServiceIdModel
 };

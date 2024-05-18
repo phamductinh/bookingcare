@@ -11,6 +11,8 @@ import {
 	findAllFinishedBookingQuery,
 	getTelemedicineBookingByDateQuery,
 	getBookingByUserIdQuery,
+	confirmBookingByBookIdQuery,
+	deleteBookingByBookId,
 } from "../database/queries";
 import emailService from "../services/emailService";
 
@@ -53,6 +55,16 @@ let confirmBookingModel = async (bookingId, callback) => {
 	});
 };
 
+let confirmBookingByBookIdModel = async (bookId, callback) => {
+	db.query(confirmBookingByBookIdQuery, bookId, (error, results) => {
+		if (error) {
+			callback(error);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
 let finishBookingModel = async (bookingId, callback) => {
 	db.query(finishBookingQuery, bookingId, (error, results) => {
 		if (error) {
@@ -79,6 +91,7 @@ let bookingAnAppointmentModel = (data, callback) => {
 		isTelemedicine,
 		exam_time,
 		idRoom,
+		bookId,
 	} = data;
 	if (!userId || !doctorId || !booking_date || !booking_time || !fullName) {
 		let error = new Error("Missing input!");
@@ -101,7 +114,7 @@ let bookingAnAppointmentModel = (data, callback) => {
 				error.statusCode = 409;
 				return callback(error);
 			}
-			if (isTelemedicine == 1) {
+			if (isTelemedicine === 1) {
 				await emailService.sendTelemedicineEmail({
 					receiverEmail: data.receiverEmail,
 					fullName: data.fullName,
@@ -138,6 +151,7 @@ let bookingAnAppointmentModel = (data, callback) => {
 					isTelemedicine,
 					exam_time,
 					idRoom,
+					bookId,
 				],
 				(err, results) => {
 					if (err) {
@@ -152,6 +166,14 @@ let bookingAnAppointmentModel = (data, callback) => {
 
 let getBookingByDateModel = (date, callback) => {
 	db.query(getBookingByDateQuery, date, (error, results) => {
+		if (error) {
+			return callback(error);
+		}
+		return callback(null, results);
+	});
+};
+let getBookingByDateAndTimeModel = (date, time, callback) => {
+	db.query(getBookingByDateAndTimeQuery, [date, time], (error, results) => {
 		if (error) {
 			return callback(error);
 		}
@@ -175,6 +197,14 @@ let deleteBookingModel = async (bookingId, callback) => {
 	return db.query(deleteBookingById, [bookingId], callback);
 };
 
+let deleteBookingByBookIdModel = async (bookId, callback) => {
+	// await emailService.sendDeclineEmail({
+	// 	receiverEmail: "phamductinh.t18@gmail.com",
+	// 	fullName: "Pham Duc Tinh",
+	// });
+	return db.query(deleteBookingByBookId, [bookId], callback);
+};
+
 module.exports = {
 	bookingAnAppointmentModel,
 	getBookingByDateModel,
@@ -185,4 +215,7 @@ module.exports = {
 	getAllFinishedBookingModel,
 	getTelemedicineBookingByDateModel,
 	getBookingByUserIdModel,
+	getBookingByDateAndTimeModel,
+	confirmBookingByBookIdModel,
+	deleteBookingByBookIdModel,
 };

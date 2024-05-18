@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import "./DetailSpecialty.css";
 import { getDoctorBySpecialtyId } from "../../services/doctorService";
-import * as actions from "../../store/actions";
+import { getSpecialtyById } from "../../services/specialtyService";
 import { NumericFormat } from "react-number-format";
 
 class DetailSpecialty extends Component {
@@ -11,6 +11,7 @@ class DetailSpecialty extends Component {
 		super(props);
 		this.state = {
 			arrDoctors: [],
+			detailSpecialty: "",
 		};
 	}
 
@@ -27,8 +28,20 @@ class DetailSpecialty extends Component {
 					arrDoctors: res.data,
 				});
 			}
+			this.getAllSpecialty();
 		}
 	}
+
+	getAllSpecialty = async () => {
+		let id = this.props.match.params.id;
+		let res = await getSpecialtyById(id);
+		console.log(res);
+		if (res && res.code === 200) {
+			this.setState({
+				detailSpecialty: res.data,
+			});
+		}
+	};
 
 	handleViewBooking = (item) => {
 		if (this.props.isLoggedIn) {
@@ -43,8 +56,7 @@ class DetailSpecialty extends Component {
 	};
 
 	render() {
-		console.log(this.state.arrDoctors);
-		let { arrDoctors } = this.state;
+		let { arrDoctors, detailSpecialty } = this.state;
 		return (
 			<>
 				<div className="detail-telemedicine-container">
@@ -65,64 +77,18 @@ class DetailSpecialty extends Component {
 						</div>
 					</div>
 
-					{/* <div className="telemedicine-infor-container">
+					<div className="telemedicine-infor-container">
 						<div
 							className="telemedicine-infor"
 							id="telemedicine-infor"
-						>
-							<h1>Tư vấn, trị liệu Tâm lý từ xa</h1>
-							<h2>Chuyên gia tư vấn Tâm lý giỏi</h2>
-							<ul>
-								<li>
-									BookingCare là Nền tảng Y tế chăm sóc Sức
-									khỏe toàn diện, trong đó có cung cấp dịch vụ
-									tư vấn tâm lý từ xa.
-								</li>
-								<li>
-									Chuyên gia được đào tạo bài bản về chuyên
-									ngành Tâm lý tại các trường đại học trong
-									nước và quốc tế.
-								</li>
-								<li>
-									Nhà Tâm lý học là những người có nhiều kinh
-									nghiệm trong lĩnh vực tâm lý, chăm sóc sức
-									khỏe tinh thần.
-								</li>
-								<li>
-									Các nhà chuyên môn nghiên cứu, tư vấn và trị
-									liệu theo các phương pháp tiếp cận mới, hiệu
-									quả.
-								</li>
-								<li>
-									Lắng nghe và thấu hiểu khách hàng để giúp họ
-									vượt qua khó khăn của bản thân.
-								</li>
-							</ul>
-							<h2>Tư vấn và trị liệu</h2>
-							<ul>
-								<li>Khó khăn, rối nhiễu tâm lý</li>
-								<li>Phát triển cá nhân</li>
-								<li>
-									Mâu thuẫn, lạm dụng và tổn thương tâm lý
-								</li>
-								<li>Tái hòa nhập xã hội</li>
-								<li>Vấn đề khuyết tật và nhóm yếu thế</li>
-								<li>Những vấn đề của vị thành niên</li>
-								<li>Giới tính và tình dục</li>
-								<li>Những vấn đề trong mối quan hệ gia đình</li>
-							</ul>
-							<p>
-								Ngoài những vấn đề nêu trên, khách hàng có thể
-								liên hệ với chúng tôi để được hỗ trợ, sắp xếp
-								lịch tư vấn phù hợp.
-							</p>
-						</div>
-						<p id="infor-show-more">Đọc thêm</p>
-						<p id="infor-show-less">Ẩn bớt</p>
-					</div> */}
+							dangerouslySetInnerHTML={{
+								__html: detailSpecialty.descriptionHTML,
+							}}
+						></div>
+					</div>
 
 					<div className="detail-tele-list-doctors-container">
-						<div className="detail-tele-province-filter">
+						{/* <div className="detail-tele-province-filter">
 							<select
 								className="detail-tele-province"
 								id="detail-tele-province"
@@ -131,7 +97,7 @@ class DetailSpecialty extends Component {
 								<option value="hanoi">Hà Nội</option>
 								<option value="hcm">Hồ Chí Minh</option>
 							</select>
-						</div>
+						</div> */}
 
 						{/* <div className="detail-tele-list-doctors">
 							<div className="doctor-content">
@@ -297,7 +263,7 @@ class DetailSpecialty extends Component {
 
 						<div className="introduction">
 							<div className="bookingcare-role-btn">
-								<p>Vai trò của BookingCare</p>
+								<p>Vai trò của DANA Hospital</p>
 							</div>
 							<div
 								id="hiden-introduction"
@@ -378,7 +344,7 @@ class DetailSpecialty extends Component {
 								<div className="company-logo"></div>
 								<div className="company-address">
 									<h2>
-										Công ty Cổ phần Công nghệ BookingCare
+										Công ty Cổ phần Công nghệ DANA Hospital
 									</h2>
 									<p>
 										<i className="fas fa-map-marker-alt"></i>

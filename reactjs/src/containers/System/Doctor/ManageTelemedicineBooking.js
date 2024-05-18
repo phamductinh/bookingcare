@@ -33,7 +33,7 @@ class ManageTelemedicineBooking extends Component {
 			let token = await localStorage.getItem("token");
 			let res = await deleteBooking(token, this.state.bookingId);
 			if (res && res.code === 200) {
-				toast.success("Delete successfully !");
+				toast.success("Xóa lịch hẹn thành công!");
 				await getBookingByDate(this.state.formatedDate);
 				this.setState({
 					confirmDelete: false,
@@ -46,7 +46,7 @@ class ManageTelemedicineBooking extends Component {
 				confirmDelete: false,
 				isLoading: false,
 			});
-			toast.error("Something wrong !");
+			toast.error("Xóa thất bại!");
 		}
 	};
 
@@ -55,12 +55,12 @@ class ManageTelemedicineBooking extends Component {
 			let token = await localStorage.getItem("token");
 			let res = await confirmBooking(token, item.id);
 			if (res && res.code === 200) {
-				toast.success("Confirm successfully !");
+				toast.success("Xác nhận lịch hẹn thành công!");
 				await getBookingByDate(this.state.formatedDate);
 			}
 		} catch (error) {
 			console.log(error);
-			toast.error("Something wrong !");
+			toast.error("Xác nhận thất bại!");
 		}
 	};
 
@@ -101,7 +101,7 @@ class ManageTelemedicineBooking extends Component {
 				{this.props.isLoggedIn && <Header />}
 				<div className="user-container">
 					<div className="title text-center">
-						Manage telemedicine booking
+						Quản lý lịch khám từ xa
 					</div>
 					<div className="mx-3">
 						<input
@@ -118,34 +118,34 @@ class ManageTelemedicineBooking extends Component {
 							<tbody>
 								<tr>
 									<th width="8%" className="text-center">
-										Time
+										Thời gian
 									</th>
 									<th width="15%" className="text-center">
-										Fullname
+										Họ và tên
 									</th>
 									<th width="5%" className="text-center">
-										Gender
+										Giới tính
 									</th>
 									<th width="7%" className="text-center">
-										Birthday
+										Ngày sinh
 									</th>
 									<th width="10%" className="text-center">
-										Phonenumber
+										Số điện thoại
 									</th>
 									<th width="15%" className="text-center">
-										Reason
+										Lý do
 									</th>
 									<th width="5%" className="text-center">
-										Exam time
+										Thời lượng
 									</th>
 									<th width="10%" className="text-center">
-										Status
+										Trạng thái
 									</th>
 									<th width="10%" className="text-center">
-										Join
+										Tham gia
 									</th>
 									<th width="15%" className="text-center">
-										Actions
+										Acts
 									</th>
 								</tr>
 
@@ -166,7 +166,7 @@ class ManageTelemedicineBooking extends Component {
 														<Link
 															to={`/room/${item.idRoom}`}
 														>
-															Join room
+															Vào phòng
 														</Link>
 													</button>
 												</td>

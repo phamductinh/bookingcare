@@ -30,7 +30,7 @@ class ManageBooking extends Component {
 			});
 			let res = await deleteBooking(this.state.bookingId);
 			if (res && res.code === 200) {
-				toast.success("Delete successfully !");
+				toast.success("Xóa thành công!");
 				await getBookingByDate(this.state.formatedDate);
 				this.setState({
 					confirmDelete: false,
@@ -39,7 +39,7 @@ class ManageBooking extends Component {
 			}
 		} catch (error) {
 			console.log(error);
-			toast.error("Something wrong !");
+			toast.error("Xóa thất bại!");
 		}
 	};
 
@@ -47,12 +47,12 @@ class ManageBooking extends Component {
 		try {
 			let res = await confirmBooking(item.id);
 			if (res && res.code === 200) {
-				toast.success("Confirm successfully !");
+				toast.success("Xác nhận thành công!");
 				await getBookingByDate(this.state.formatedDate);
 			}
 		} catch (error) {
 			console.log(error);
-			toast.error("Something wrong !");
+			toast.error("Xác nhận thất bại!");
 		}
 	};
 
@@ -91,7 +91,7 @@ class ManageBooking extends Component {
 			<>
 				{this.props.isLoggedIn && <Header />}
 				<div className="user-container">
-					<div className="title text-center">Manage booking</div>
+					<div className="title text-center">Quản lý đặt lịch</div>
 					<div className="mx-3">
 						<input
 							className="date-choose"
@@ -107,31 +107,31 @@ class ManageBooking extends Component {
 							<tbody>
 								<tr>
 									<th width="8%" className="text-center">
-										Time
+										Thời gian
 									</th>
 									<th width="15%" className="text-center">
-										Fullname
+										Họ và tên
 									</th>
 									<th width="15%" className="text-center">
-										Address
+										Địa chỉ
 									</th>
 									<th width="5%" className="text-center">
-										Gender
+										Giới tính
 									</th>
 									<th width="7%" className="text-center">
-										Birthday
+										Ngày sinh
 									</th>
 									<th width="10%" className="text-center">
-										Phonenumber
+										Số điện thoại
 									</th>
 									<th width="15%" className="text-center">
-										Reason
+										Lý do
 									</th>
 									<th width="10%" className="text-center">
-										Status
+										Trạng thái
 									</th>
 									<th width="15%" className="text-center">
-										Actions
+										Acts
 									</th>
 								</tr>
 
@@ -156,7 +156,7 @@ class ManageBooking extends Component {
 															)
 														}
 													>
-														Confirm
+														Xác nhận
 													</button>
 													<button
 														className="btn-refuse"
@@ -166,7 +166,7 @@ class ManageBooking extends Component {
 															)
 														}
 													>
-														Decline
+														Từ chối
 													</button>
 												</td>
 											</tr>
@@ -179,7 +179,7 @@ class ManageBooking extends Component {
 					{confirmDelete ? (
 						<div className="confirm-delete">
 							<div className="confirmation-text">
-								You want to decline this appointment?
+								Bạn muốn từ chối lịch hẹn này?
 							</div>
 							<div className="button-container">
 								<button
@@ -188,13 +188,13 @@ class ManageBooking extends Component {
 										this.handleCloseConfirmDelete()
 									}
 								>
-									Cancel
+									Hủy
 								</button>
 								<button
 									className="confirmation-button"
 									onClick={() => this.handleDeleteUser()}
 								>
-									Decline
+									Từ chối
 								</button>
 							</div>
 						</div>
