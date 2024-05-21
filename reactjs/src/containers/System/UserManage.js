@@ -41,10 +41,6 @@ class UserManage extends Component {
 	async componentDidMount() {
 		await this.getAllUsersReact();
 		await this.getTotalRowUser();
-		let token = await localStorage.getItem("token");
-		this.setState({
-			token: token,
-		});
 	}
 
 	getAllUsersReact = async () => {
@@ -52,7 +48,6 @@ class UserManage extends Component {
 			isLoading: true,
 		});
 		let res = await getPaginationUsers(
-			this.state.token,
 			this.state.newPage
 		);
 		if (res && res.code === 200) {
@@ -68,7 +63,7 @@ class UserManage extends Component {
 	};
 
 	getTotalRowUser = async () => {
-		let res = await getTotalRowUser(this.state.token);
+		let res = await getTotalRowUser();
 		if (res && res.code === 200) {
 			let row = Math.ceil(res.data.totalRow / 5);
 			this.setState({
@@ -196,7 +191,7 @@ class UserManage extends Component {
 
 	handleDeleteUser = async () => {
 		try {
-			let res = await deleteUser(this.state.token, this.state.userId);
+			let res = await deleteUser(this.state.userId);
 			console.log(res);
 			if (res && res.code === 200) {
 				await this.getAllUsersReact();
@@ -224,7 +219,7 @@ class UserManage extends Component {
 				id: this.state.userId,
 			};
 
-			let res = await editUser(this.state.token, userData);
+			let res = await editUser(userData);
 			if (res && res.code === 200) {
 				this.setState({
 					setModalEditUser: false,

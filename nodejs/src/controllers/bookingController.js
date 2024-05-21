@@ -1,8 +1,42 @@
 import bookingModel from "../models/bookingModel";
 import db from "../configs/connectDB";
+import emailService from "../services/emailService";
+import moment from "moment";
 
 const getAllConfirmedBooking = (req, res) => {
 	bookingModel.getAllConfirmedBookingModel((error, results) => {
+		if (error) {
+			return res.status(500).send({
+				code: 500,
+				msg: "Error fetch data !",
+			});
+		} else {
+			return res.status(200).send({
+				code: 200,
+				data: results,
+			});
+		}
+	});
+};
+
+const getAllConfirmedTelemedicineBooking = (req, res) => {
+	bookingModel.getAllConfirmedTelemedicineBookingModel((error, results) => {
+		if (error) {
+			return res.status(500).send({
+				code: 500,
+				msg: "Error fetch data !",
+			});
+		} else {
+			return res.status(200).send({
+				code: 200,
+				data: results,
+			});
+		}
+	});
+};
+
+const getAllPendingBooking = (req, res) => {
+	bookingModel.getAllPendingBookingModel((error, results) => {
 		if (error) {
 			return res.status(500).send({
 				code: 500,
@@ -24,6 +58,25 @@ let getBookingByUserId = (req, res) => {
 	}
 
 	bookingModel.getBookingByUserIdModel(userId, (error, results) => {
+		if (error) {
+			return res
+				.status(500)
+				.send({ code: 500, msg: "Internal server error" });
+		}
+		return res.send({
+			code: 200,
+			data: results,
+		});
+	});
+};
+
+let getBookingByBookId = (req, res) => {
+	let bookId = req.query.bookId;
+	if (!bookId) {
+		return res.status(400).send({ code: 400, msg: "Missing input!" });
+	}
+
+	bookingModel.getBookingByBookIdModel(bookId, (error, results) => {
 		if (error) {
 			return res
 				.status(500)
@@ -226,6 +279,84 @@ let deleteBookingByBookId = (req, res) => {
 	);
 };
 
+let sendSuccessBookingEmail = async (req, res) => {
+	let bookId = req.query.bookId;
+	if (!bookId) {
+		return res.status(500).send({
+			code: 500,
+			msg: "Missing bookId!",
+		});
+	}
+	db.query(
+		`SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
+        FROM booking 
+        JOIN user ON user.id = booking.userId
+        JOIN doctor ON doctor.id = booking.doctorId
+        WHERE bookId = "${bookId}"`,
+		async (err, result) => {
+			if (err) {
+				throw err;
+			}
+			const date = moment(result[0].booking_date / 1).format(
+				"YYYY-MM-DD"
+			);
+			if (result[0].isTelemedicine === 1) {
+				await emailService.sendTelemedicineEmail({
+					receiverEmail: result[0].patientEmail,
+					fullName: result[0].fullName,
+					booking_date: date,
+					booking_time: result[0].booking_time,
+					exam_time: result[0].exam_time,
+					doctorName: result[0].doctorName,
+					idRoom: result[0].idRoom,
+				});
+			} else {
+				await emailService.sendSimpleEmail({
+					receiverEmail: result[0].patientEmail,
+					fullName: result[0].fullName,
+					booking_date: date,
+					booking_time: result[0].booking_time,
+					doctorName: result[0].doctorName,
+				});
+			}
+			return res.status(200).send({
+				code: 200,
+				msg: "Gửi email xác nhận thành công!",
+			});
+		}
+	);
+};
+
+let sendFailBookingEmail = async (req, res) => {
+	let bookId = req.query.bookId;
+	if (!bookId) {
+		return res.status(500).send({
+			code: 500,
+			msg: "Missing bookId!",
+		});
+	}
+	db.query(
+		`SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
+        FROM booking 
+        JOIN user ON user.id = booking.userId
+        JOIN doctor ON doctor.id = booking.doctorId
+        WHERE bookId = "${bookId}"`,
+		async (err, result) => {
+			if (err) {
+				throw err;
+			}
+			await emailService.sendDeclineEmail({
+				receiverEmail: result[0].patientEmail,
+				fullName: result[0].fullName,
+			});
+			return res.status(200).send({
+				code: 200,
+				msg: "Gửi email xác nhận thành công!",
+			});
+		}
+	);
+};
+
 module.exports = {
 	bookingAnAppointment,
 	getBookingByDate,
@@ -239,4 +370,9 @@ module.exports = {
 	getBookingByDateAndTime,
 	confirmBookingByBookId,
 	deleteBookingByBookId,
+	getBookingByBookId,
+	sendSuccessBookingEmail,
+	sendFailBookingEmail,
+	getAllPendingBooking,
+	getAllConfirmedTelemedicineBooking,
 };

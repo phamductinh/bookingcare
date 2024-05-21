@@ -9,6 +9,7 @@ import {
 	getAllConfirmedBooking,
 	finishBooking,
 } from "../../../services/bookingService";
+import moment from "moment";
 
 class ManageConfirmedBooking extends Component {
 	constructor(props) {
@@ -31,10 +32,9 @@ class ManageConfirmedBooking extends Component {
 
 	handleConfirmBooking = async () => {
 		try {
-			let token = await localStorage.getItem("token");
-			let res = await finishBooking(token, this.state.bookingId);
+			let res = await finishBooking( this.state.bookingId);
 			if (res && res.code === 200) {
-				toast.success("Update successfully !");
+				toast.success("Kết thúc lịch khám thành công!");
 				this.setState({
 					confirmDelete: false,
 				});
@@ -42,7 +42,7 @@ class ManageConfirmedBooking extends Component {
 			}
 		} catch (error) {
 			console.log(error);
-			toast.error("Something wrong !");
+			toast.error("Kết thúc lịch khám thất bại!");
 		}
 	};
 
@@ -75,38 +75,45 @@ class ManageConfirmedBooking extends Component {
 							<tbody>
 								<tr>
 									<th width="8%" className="text-center">
-										Time
+										Ngày
+									</th>
+									<th width="8%" className="text-center">
+										Thời gian
 									</th>
 									<th width="15%" className="text-center">
-										Fullname
+										Họ và tên
 									</th>
 									<th width="15%" className="text-center">
-										Address
+										Địa chỉ
 									</th>
 									<th width="7%" className="text-center">
-										Gender
+										Giới tính
 									</th>
 									<th width="10%" className="text-center">
-										Birthday
+										Ngày sinh
 									</th>
 									<th width="10%" className="text-center">
-										Phonenumber
+										Số điện thoại
 									</th>
 									<th width="15%" className="text-center">
-										Reason
+										Lý do
 									</th>
 									<th width="10%" className="text-center">
-										Status
+										Tình trạng
 									</th>
 									<th width="10%" className="text-center">
-										Actions
+										Acts
 									</th>
 								</tr>
 
 								{arrConfirmedBooking &&
 									arrConfirmedBooking.map((item, index) => {
+										const date = moment(
+											item.booking_date / 1
+										).format("YYYY-MM-DD");
 										return (
 											<tr key={index}>
+												<td>{date}</td>
 												<td>{item.booking_time}</td>
 												<td>{item.fullName}</td>
 												<td>{item.address}</td>

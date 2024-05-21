@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "./confirmEmail.css";
 import { toast } from "react-toastify";
 import { sendEmailPasswordService } from "../../services/userService";
+import LoadingSpinner from "../../components/Common/Loading";
 
 class confirmEmail extends Component {
 	constructor(props) {
@@ -22,6 +23,7 @@ class confirmEmail extends Component {
 	handleConfirm = async () => {
 		this.setState({
 			errMsgSignUp: "",
+			isLoading: true,
 		});
 		try {
 			let response = await sendEmailPasswordService(this.state.email);
@@ -29,9 +31,14 @@ class confirmEmail extends Component {
 			console.log("check response", response);
 			this.setState({
 				email: "",
+				isLoading: false,
 			});
 		} catch (error) {
 			console.log(error);
+			this.setState({
+				email: "",
+				isLoading: false,
+			});
 		}
 	};
 
@@ -40,6 +47,7 @@ class confirmEmail extends Component {
 	};
 
 	render() {
+		let { isLoading } = this.state;
 		return (
 			<>
 				<div className="booking-detail-doctor-container">
@@ -107,6 +115,7 @@ class confirmEmail extends Component {
 						</div>
 					</div>
 				</div>
+				{isLoading && <LoadingSpinner />}
 			</>
 		);
 	}

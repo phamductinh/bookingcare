@@ -23,44 +23,24 @@ const sendEmailPasswordService = (email) => {
 	return axios.post(`/api/send-email-reset-password?email=${email}`);
 };
 
-const getAllUsers = (token) => {
-	return axios.get("/api/users", {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+const getAllUsers = () => {
+	return axios.get("/api/users");
 };
 
-const getTotalRowUser = (token) => {
-	return axios.get("/api/get-total-row-user", {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+const getTotalRowUser = () => {
+	return axios.get("/api/get-total-row-user");
 };
 
-const getPaginationUsers = (token, page) => {
-	return axios.get(`/api/get-pagination-users?page=${page}`, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+const getPaginationUsers = (page) => {
+	return axios.get(`/api/get-pagination-users?page=${page}`);
 };
 
-const deleteUser = (token, userId) => {
-	return axios.delete(`/api/delete-user?id=${userId}`, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+const deleteUser = (userId) => {
+	return axios.delete(`/api/delete-user?id=${userId}`);
 };
 
-const editUser = (token, userData) => {
-	return axios.put("/api/edit-user", userData, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+const editUser = (userData) => {
+	return axios.put("/api/edit-user", userData);
 };
 
 const updateInforUser = (userData) => {

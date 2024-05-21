@@ -10,12 +10,8 @@ const getPaginationReviews = (doctorId, page) => {
 	);
 };
 
-const deleteReview = (token, id) => {
-	return axios.delete(`/api/delete-review?id=${id}`, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+const deleteReview = (id) => {
+	return axios.delete(`/api/delete-review?id=${id}`);
 };
 
 const getFeedbackByDoctorId = (doctorId) => {

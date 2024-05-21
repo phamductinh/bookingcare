@@ -16,6 +16,7 @@ import moment from "moment";
 import axios from "axios";
 import ReCAPTCHA from "react-google-recaptcha";
 import { v4 as uuidv4 } from "uuid";
+import Footer from "../../HomePage/Footer";
 
 class Booking extends Component {
 	constructor(props) {
@@ -44,10 +45,6 @@ class Booking extends Component {
 				});
 			}
 		}
-		let date = "1331769600000";
-		let time = "9:00";
-		let ress = await getBookingByDateAndTime(date, time);
-		console.log(ress);
 	}
 
 	handleViewBooking = () => {
@@ -224,6 +221,7 @@ class Booking extends Component {
 				price: this.state.detailDoctor.price,
 				quantity: 1,
 				bookId: this.state.bookId,
+				isTelemedicine: 0,
 			});
 			window.open(resultUrlPayment.url, "_self");
 		} catch (error) {
@@ -583,71 +581,7 @@ class Booking extends Component {
 							</p>
 						</div>
 
-						<div className="footer1">
-							<div className="company-infor">
-								<div className="company-logo"></div>
-								<div className="company-address">
-									<h2>
-										Công ty Cổ phần Công nghệ DANA Hospital
-									</h2>
-									<p>
-										<i className="fas fa-map-marker-alt"></i>
-										28 Thành Thái, Dịch Vọng, Cầu Giấy, Hà
-										Nội
-									</p>
-									<p>
-										<i className="fas fa-check"></i>ĐKKD số:
-										0106790291. Sở KHĐT Hà Nội cấp ngày
-										16/03/2015
-									</p>
-								</div>
-								<div className="registered">
-									<div className="registered-1"></div>
-									<div className="registered-2"></div>
-								</div>
-							</div>
-							<div className="list-features">
-								<ul>
-									<li>
-										<a href="#/">Liên hệ hợp tác</a>
-									</li>
-									<li>
-										<a href="#/">
-											Gói chuyển đổi số doanh nghiệp
-										</a>
-									</li>
-									<li>
-										<a href="#/">Tuyển dụng</a>
-									</li>
-									<li>
-										<a href="#/">Câu hỏi thường gặp</a>
-									</li>
-									<li>
-										<a href="#/">Điều khoản sử dụng</a>
-									</li>
-									<li>
-										<a href="#/">Chính sách Bảo mật</a>
-									</li>
-								</ul>
-							</div>
-							<div className="more-infor">
-								<div className="headquarter">
-									<h2>Trụ sở tại Hà Nội</h2>
-									<p>
-										28 Thành Thái, Dịch Vọng, Cầu Giấy, Hà
-										Nội
-									</p>
-								</div>
-								<div className="office">
-									<h2>Văn phòng tại TP Hồ Chí Minh</h2>
-									<p>Số 01, Hồ Bá Kiện, Phường 15, Quận 10</p>
-								</div>
-								<div className="footer-support">
-									<h2>Hỗ trợ khách hàng</h2>
-									<p>support@bookingcare.vn (7h - 18h)</p>
-								</div>
-							</div>
-						</div>
+						<Footer />
 
 						<div className="footer2">
 							<div className="footer-left">

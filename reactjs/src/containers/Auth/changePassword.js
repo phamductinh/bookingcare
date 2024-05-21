@@ -14,6 +14,7 @@ class changePassword extends Component {
 			newPassword: "",
 			cfPassword: "",
 			isSuccess: false,
+			isShowPass: false,
 		};
 	}
 
@@ -79,6 +80,12 @@ class changePassword extends Component {
 		this.props.history.push(`/login`);
 	};
 
+	toggleShowPassword = () => {
+		this.setState((prevState) => ({
+			isShowPass: !prevState.isShowPass,
+		}));
+	};
+
 	render() {
 		let { isSuccess } = this.state;
 		const { processLogout } = this.props;
@@ -107,7 +114,11 @@ class changePassword extends Component {
 								<div class="form-group-password">
 									<label>Mật khẩu cũ:</label>
 									<input
-										type="password"
+										type={
+											this.state.isShowPass
+												? "text"
+												: "password"
+										}
 										id="password"
 										name="password"
 										value={this.state.oldPassword}
@@ -118,11 +129,26 @@ class changePassword extends Component {
 											)
 										}
 									/>
+									{this.state.isShowPass ? (
+										<i
+											class="fa-solid fa-eye"
+											onClick={this.toggleShowPassword}
+										></i>
+									) : (
+										<i
+											class="fa-solid fa-eye-slash"
+											onClick={this.toggleShowPassword}
+										></i>
+									)}
 								</div>
 								<div class="form-group-password">
 									<label>Mật khẩu mới:</label>
 									<input
-										type="password"
+										type={
+											this.state.isShowPass
+												? "text"
+												: "password"
+										}
 										id="password"
 										name="password"
 										value={this.state.newPassword}
@@ -133,11 +159,26 @@ class changePassword extends Component {
 											)
 										}
 									/>
+									{this.state.isShowPass ? (
+										<i
+											class="fa-solid fa-eye"
+											onClick={this.toggleShowPassword}
+										></i>
+									) : (
+										<i
+											class="fa-solid fa-eye-slash"
+											onClick={this.toggleShowPassword}
+										></i>
+									)}
 								</div>
 								<div class="form-group-password">
 									<label>Xác nhận mật khẩu:</label>
 									<input
-										type="password"
+										type={
+											this.state.isShowPass
+												? "text"
+												: "password"
+										}
 										id="password"
 										name="password"
 										value={this.state.cfPassword}
@@ -148,6 +189,17 @@ class changePassword extends Component {
 											)
 										}
 									/>
+									{this.state.isShowPass ? (
+										<i
+											class="fa-solid fa-eye"
+											onClick={this.toggleShowPassword}
+										></i>
+									) : (
+										<i
+											class="fa-solid fa-eye-slash"
+											onClick={this.toggleShowPassword}
+										></i>
+									)}
 								</div>
 								<div className="errMsgSignUp">
 									{this.state.errMsgSignUp}

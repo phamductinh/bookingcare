@@ -33,6 +33,10 @@ import Success from "./HomePage/Success";
 import Fail from "./HomePage/Fail";
 import resetPassword from "./Auth/resetPassword";
 import PrivateRoute from "../routes/PrivateRoute";
+import AllTelemedicines from "./HomePage/AllTelemedicines";
+import AllSpecialty from "./HomePage/AllSpecialty";
+import AllServices from "./HomePage/AllServices";
+import AllDoctors from "./HomePage/AllDoctors";
 
 class App extends Component {
 	handlePersistorState = () => {
@@ -152,9 +156,7 @@ class App extends Component {
 									/>
 									<Route
 										path={"/reset-password"}
-										component={userIsAuthenticated(
-											resetPassword
-										)}
+										component={resetPassword}
 									/>
 									<Route
 										path={"/booking-success/:bookId"}
@@ -163,6 +165,26 @@ class App extends Component {
 									<Route
 										path={"/booking-fail/:bookId"}
 										component={Fail}
+									/>
+									<Route
+										path={"/telemedicines"}
+										component={AllTelemedicines}
+									/>
+									<Route
+										path={"/services"}
+										component={AllServices}
+									/>
+									<Route
+										path={"/Specialties"}
+										component={AllSpecialty}
+									/>
+									<Route
+										path={"/telemedicines"}
+										component={AllTelemedicines}
+									/>
+									<Route
+										path={"/doctors"}
+										component={AllDoctors}
 									/>
 								</Switch>
 							</CustomScrollbars>

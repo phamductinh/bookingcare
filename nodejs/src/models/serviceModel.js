@@ -4,7 +4,8 @@ import {
 	createNewServiceQuery,
 	deleteServiceById,
 	totalRowService,
-    findServiceById
+	findServiceById,
+	updateServiceQuery,
 } from "../database/queries";
 
 let getAllServiceModel = (callback) => {
@@ -37,7 +38,7 @@ let createNewServiceModel = (data, callback) => {
 };
 
 let updateServiceModel = (data, callback) => {
-	db.query(updateSpecialtyQuery, data, (error, results, fields) => {
+	db.query(updateServiceQuery, data, (error, results, fields) => {
 		callback(error, results, fields);
 	});
 };

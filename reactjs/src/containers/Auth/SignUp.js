@@ -19,6 +19,7 @@ class SignUp extends Component {
 			role: "",
 			errMsg: "",
 			errMsgSignUp: "",
+			isShowPass: false,
 		};
 	}
 
@@ -30,7 +31,12 @@ class SignUp extends Component {
 		await this.setState({
 			...copyState,
 		});
-		console.log("check state", this.state);
+	};
+
+	toggleShowPassword = () => {
+		this.setState((prevState) => ({
+			isShowPass: !prevState.isShowPass,
+		}));
 	};
 
 	validateFullName(fullName) {
@@ -170,7 +176,11 @@ class SignUp extends Component {
 							<div className="input-group">
 								<label>Mật khẩu:</label>
 								<input
-									type="password"
+									type={
+										this.state.isShowPass
+											? "text"
+											: "password"
+									}
 									className="form-control"
 									name="password"
 									id="password"
@@ -184,7 +194,17 @@ class SignUp extends Component {
 									}
 									required
 								/>
-								<i className="fa-solid fa-lock"></i>
+								{this.state.isShowPass ? (
+									<i
+										class="fa-solid fa-eye"
+										onClick={this.toggleShowPassword}
+									></i>
+								) : (
+									<i
+										class="fa-solid fa-eye-slash"
+										onClick={this.toggleShowPassword}
+									></i>
+								)}
 								<div className="invalid-feedback">
 									Vui lòng điền đầy đủ thông tin!
 								</div>
@@ -192,7 +212,11 @@ class SignUp extends Component {
 							<div className="input-group">
 								<label>Nhập lại mật khẩu:</label>
 								<input
-									type="password"
+									type={
+										this.state.isShowPass
+											? "text"
+											: "password"
+									}
 									className="form-control"
 									name="cf-password"
 									id="cf-password"
@@ -206,7 +230,17 @@ class SignUp extends Component {
 									}
 									required
 								/>
-								<i className="fa-solid fa-lock"></i>
+								{this.state.isShowPass ? (
+									<i
+										class="fa-solid fa-eye"
+										onClick={this.toggleShowPassword}
+									></i>
+								) : (
+									<i
+										class="fa-solid fa-eye-slash"
+										onClick={this.toggleShowPassword}
+									></i>
+								)}
 								<div className="invalid-feedback">
 									Vui lòng điền đầy đủ thông tin!
 								</div>

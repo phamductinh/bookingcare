@@ -13,6 +13,7 @@ class resetPassword extends Component {
 			newPassword: "",
 			cfPassword: "",
 			isSuccess: false,
+			isShowPass: false,
 		};
 	}
 
@@ -73,13 +74,18 @@ class resetPassword extends Component {
 		}
 	};
 
+	toggleShowPassword = () => {
+		this.setState((prevState) => ({
+			isShowPass: !prevState.isShowPass,
+		}));
+	};
+
 	goBack = () => {
 		this.props.history.push(`/login`);
 	};
 
 	render() {
 		let { isSuccess } = this.state;
-		const { processLogout } = this.props;
 		return (
 			<>
 				<div className="booking-detail-doctor-container">
@@ -116,11 +122,16 @@ class resetPassword extends Component {
 											)
 										}
 									/>
+									<i className="fa-solid fa-envelope"></i>
 								</div>
 								<div class="form-group-password">
 									<label>Mật khẩu mới:</label>
 									<input
-										type="password"
+										type={
+											this.state.isShowPass
+												? "text"
+												: "password"
+										}
 										id="password"
 										name="password"
 										value={this.state.newPassword}
@@ -131,11 +142,26 @@ class resetPassword extends Component {
 											)
 										}
 									/>
+									{this.state.isShowPass ? (
+										<i
+											class="fa-solid fa-eye"
+											onClick={this.toggleShowPassword}
+										></i>
+									) : (
+										<i
+											class="fa-solid fa-eye-slash"
+											onClick={this.toggleShowPassword}
+										></i>
+									)}
 								</div>
 								<div class="form-group-password">
 									<label>Xác nhận mật khẩu:</label>
 									<input
-										type="password"
+										type={
+											this.state.isShowPass
+												? "text"
+												: "password"
+										}
 										id="password"
 										name="password"
 										value={this.state.cfPassword}
@@ -146,6 +172,17 @@ class resetPassword extends Component {
 											)
 										}
 									/>
+									{this.state.isShowPass ? (
+										<i
+											class="fa-solid fa-eye"
+											onClick={this.toggleShowPassword}
+										></i>
+									) : (
+										<i
+											class="fa-solid fa-eye-slash"
+											onClick={this.toggleShowPassword}
+										></i>
+									)}
 								</div>
 								<div className="errMsgSignUp">
 									{this.state.errMsgSignUp}
@@ -168,7 +205,7 @@ class resetPassword extends Component {
 							<div className="button-container">
 								<button
 									className="go-login-button"
-									onClick={processLogout}
+									onClick={() => this.goBack()}
 								>
 									Đăng nhập
 								</button>

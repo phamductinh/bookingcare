@@ -14,6 +14,7 @@ class Login extends Component {
 			email: "",
 			password: "",
 			errMsg: "",
+			isShowPass: false,
 		};
 	}
 
@@ -26,6 +27,12 @@ class Login extends Component {
 		this.setState({
 			password: event.target.value,
 		});
+	};
+
+	toggleShowPassword = () => {
+		this.setState((prevState) => ({
+			isShowPass: !prevState.isShowPass,
+		}));
 	};
 
 	validateEmail(email) {
@@ -54,7 +61,7 @@ class Login extends Component {
 			});
 		} else if (!this.validatePassword(this.state.password)) {
 			this.setState({
-				errMsg: "Mật khẩu sai định dạng!",
+				errMsg: "Mật khẩu bao gồm 1 ký tự đầu viết hoa, 1 số và 1 ký tự đặc biệt!",
 			});
 		} else {
 			try {
@@ -62,7 +69,7 @@ class Login extends Component {
 					this.state.email,
 					this.state.password
 				);
-                console.log(data)
+				console.log(data);
 				if (data && data.code === 200) {
 					this.props.userLoginSuccess(data.user);
 					localStorage.setItem("token", data.token);
@@ -109,7 +116,11 @@ class Login extends Component {
 							</div>
 							<div className="user-box">
 								<input
-									type="password"
+									type={
+										this.state.isShowPass
+											? "text"
+											: "password"
+									}
 									id="password"
 									required=""
 									autoComplete="off"
@@ -119,7 +130,17 @@ class Login extends Component {
 									}
 								/>
 								<label>Mật khẩu:</label>
-								<i className="fa-solid fa-lock"></i>
+								{this.state.isShowPass ? (
+									<i
+										class="fa-solid fa-eye"
+										onClick={this.toggleShowPassword}
+									></i>
+								) : (
+									<i
+										class="fa-solid fa-eye-slash"
+										onClick={this.toggleShowPassword}
+									></i>
+								)}
 							</div>
 							<div className="errMsg" style={{ color: "red" }}>
 								{this.state.errMsg}

@@ -15,17 +15,40 @@ let deleteUserById = `DELETE FROM user WHERE id = ?`;
 //doctor
 let findAllDoctorsQuery = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image,doctor.specialtyId, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN clinic ON clinic.id = doctor.clinicId JOIN specialty ON specialty.id = doctor.specialtyId`;
 
+let findOutDoctorsQuery = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image,doctor.specialtyId, specialty.name as specialty, clinic.name as clinic, COUNT(booking.id) AS booking_count
+FROM doctor JOIN clinic ON clinic.id = doctor.clinicId 
+JOIN specialty ON specialty.id = doctor.specialtyId 
+LEFT JOIN booking ON doctor.id = booking.doctorId
+GROUP BY doctor.id, doctor.name
+ORDER BY booking_count DESC
+LIMIT 6`;
+
 let findDoctorById = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN clinic ON clinic.id = doctor.clinicId JOIN specialty ON specialty.id = doctor.specialtyId WHERE doctor.id = ?`;
 
-let findDoctorBySpecialty = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN specialty ON doctor.specialtyId = specialty.id JOIN clinic ON doctor.clinicId = clinic.id WHERE doctor.specialtyId = ?`;
+let findDoctorBySpecialty = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name AS specialty, clinic.name AS clinic
+FROM doctor
+JOIN clinic ON clinic.id = doctor.clinicId
+JOIN specialty ON doctor.specialtyId = specialty.id
+JOIN doctor_specialty ON doctor_specialty.doctorId = doctor.id
+WHERE doctor_specialty.specialtyId = ?`;
 
-let findDoctorIsTelemedicine = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN clinic ON clinic.id = doctor.clinicId JOIN specialty ON specialty.id = doctor.specialtyId WHERE doctor.telemId = ?`;
+let findDoctorIsTelemedicine = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic
+FROM doctor
+JOIN clinic ON clinic.id = doctor.clinicId
+JOIN specialty ON specialty.id = doctor.specialtyId
+JOIN doctor_telemedicine ON doctor_telemedicine.doctorId = doctor.id
+WHERE doctor_telemedicine.telemId = ?`;
 
-let findDoctorByServiceId = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name as specialty, clinic.name as clinic FROM doctor JOIN specialty ON doctor.specialtyId = specialty.id JOIN clinic ON doctor.clinicId = clinic.id WHERE doctor.serviceId = ?`;
+let findDoctorByServiceId = `SELECT doctor.id, doctor.name, doctor.introduction, doctor.description, doctor.address, doctor.price, doctor.image, specialty.name AS specialty, clinic.name AS clinic
+FROM doctor
+JOIN clinic ON clinic.id = doctor.clinicId
+JOIN specialty ON doctor.specialtyId = specialty.id
+JOIN doctor_service ON doctor_service.doctorId = doctor.id
+WHERE doctor_service.serviceId = ?`;
 
-let createADoctorQuery = `INSERT INTO doctor (name, introduction, clinicId, specialtyId, description, address, price, image, isTelemedicine) VALUES (?,?,?,?,?,?,?,?,?)`;
+let createADoctorQuery = `INSERT INTO doctor (name, introduction, clinicId, specialtyId, description, address, price, image, telemId) VALUES (?,?,?,?,?,?,?,?,?)`;
 
-let updateDoctorQuery = `UPDATE doctor SET name = ?, introduction = ?, clinicId = ?, specialtyId = ?, description = ?, address = ?, price = ? WHERE id = ?`;
+let updateDoctorQuery = `UPDATE doctor SET name = ?, introduction = ?, clinicId = ?, specialtyId = ?, description = ?, address = ?, price = ?, image = ?, telemId = ? WHERE id = ?`;
 
 let deleteDoctorById = `DELETE FROM doctor WHERE id = ?`;
 
@@ -69,7 +92,7 @@ let findServiceById = `SELECT * FROM service WHERE id = ?`;
 let createNewServiceQuery = `INSERT INTO service (name, description, descriptionHTML, price) VALUES (?,?,?,?)`;
 
 let updateServiceQuery =
-	"UPDATE service SET name = ?, description = ?, descriptionHTML = ? WHERE id = ?";
+	"UPDATE service SET name = ?, description = ?, descriptionHTML = ?, price = ? WHERE id = ?";
 
 let deleteServiceById = `DELETE FROM service WHERE id = ?`;
 
@@ -88,27 +111,41 @@ let getBookingByDateAndTimeQuery = `SELECT booking.*, user.email as patientEmail
 FROM booking
 JOIN user ON user.id = booking.userId
 JOIN doctor ON doctor.id = booking.doctorId
-WHERE status = 'Pending' AND booking_date = ? AND booking_time = ?`;
+WHERE booking_date = ? AND booking_time = ?`;
 
 let getBookingByUserIdQuery = `SELECT booking.*, user.email as patientEmail
 FROM booking 
 JOIN user ON user.id = booking.userId
 JOIN doctor ON doctor.id = booking.doctorId
-WHERE status = 'Pending' AND user.id = ?`;
+WHERE user.id = ?`;
+
+let getBookingByBookIdQuery = `SELECT booking.*, user.email as patientEmail
+FROM booking 
+JOIN user ON user.id = booking.userId
+JOIN doctor ON doctor.id = booking.doctorId
+WHERE bookId = ?`;
 
 let getEmailPatientsQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
 FROM booking
 JOIN user ON user.id = booking.userId
 JOIN doctor ON doctor.id = booking.doctorId
-WHERE status = 'Pending' AND isTelemedicine = 1`;
+WHERE status = 'Confirmed' AND isTelemedicine = 1`;
 
 let getTelemedicineBookingByDateQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
 FROM booking 
 JOIN user ON user.id = booking.userId
 JOIN doctor ON doctor.id = booking.doctorId
-WHERE isTelemedicine = 1 AND status = 'Pending' AND booking_date = ?`;
+WHERE isTelemedicine = 1 AND status = 'Confirmed' AND booking_date = ?`;
 
-let findAllConfirmedBookingQuery = `SELECT * FROM booking WHERE status = 'Confirmed'`;
+let findAllConfirmedBookingQuery = `SELECT * FROM booking WHERE isTelemedicine <> 1 AND status = 'Confirmed'`;
+
+let findAllConfirmedTelemedicineBookingQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
+FROM booking 
+JOIN user ON user.id = booking.userId
+JOIN doctor ON doctor.id = booking.doctorId
+WHERE isTelemedicine = 1 AND status = 'Confirmed'`;
+
+let findAllPendingBookingQuery = `SELECT * FROM booking WHERE isTelemedicine <> 1 AND status = 'Pending'`;
 
 let findAllFinishedBookingQuery = `SELECT * FROM booking WHERE status = 'Done'`;
 
@@ -136,6 +173,8 @@ let totalRowReview = `SELECT COUNT(*) as totalRow FROM review`;
 let totalRowService = `SELECT COUNT(*) as totalRow FROM service`;
 
 module.exports = {
+	findAllConfirmedTelemedicineBookingQuery,
+	findAllPendingBookingQuery,
 	getBookingByDateAndTimeQuery,
 	findServiceById,
 	findAllServiceQuery,
@@ -193,4 +232,6 @@ module.exports = {
 	confirmBookingByBookIdQuery,
 	deleteBookingByBookId,
 	findSpecialtyById,
+	getBookingByBookIdQuery,
+	findOutDoctorsQuery,
 };

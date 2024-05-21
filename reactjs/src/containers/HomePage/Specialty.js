@@ -30,6 +30,10 @@ class Specialty extends Component {
 		this.props.history.push(`/specialty/${item.id}`);
 	};
 
+	handleViewSpecialties = () => {
+		this.props.history.push(`/specialties`);
+	};
+
 	handleNextSpecialty() {
 		let lists = document.querySelectorAll(".spec-slide-item");
 		document.getElementById("spec-slide").appendChild(lists[0]);
@@ -46,7 +50,12 @@ class Specialty extends Component {
 				<div className="specialty-container">
 					<div className="spec-content-up">
 						<div className="spec-title">Chuyên khoa phổ biến</div>
-						<button className="spec-btn">Xem thêm</button>
+						<button
+							className="spec-btn"
+							onClick={() => this.handleViewSpecialties()}
+						>
+							Xem thêm
+						</button>
 					</div>
 					<div className="spec-slide-container">
 						<div id="spec-slide">

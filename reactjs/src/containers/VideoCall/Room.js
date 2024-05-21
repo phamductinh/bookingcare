@@ -174,7 +174,7 @@ const Room = (props) => {
 	};
 
 	const goBack = () => {
-		props.history.push("/join-room");
+		props.history.push("/home");
 	};
 
 	return (

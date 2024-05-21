@@ -8,6 +8,10 @@ const getAllDoctors = () => {
 	return axios.get("/api/get-all-doctors");
 };
 
+const getOutstandingDoctors = () => {
+	return axios.get("/api/get-outstanding-doctors");
+};
+
 const getDoctorById = (doctorId) => {
 	return axios.get(`/api/get-a-doctor?id=${doctorId}`);
 };
@@ -22,20 +26,12 @@ const getDoctorByKeyword = (keyword, specialtyId) => {
 	);
 };
 
-const deleteDoctor = (token, doctorId) => {
-	return axios.delete(`/api/delete-doctor?id=${doctorId}`, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+const deleteDoctor = (doctorId) => {
+	return axios.delete(`/api/delete-doctor?id=${doctorId}`);
 };
 
-const updateDoctor = (token, doctorData) => {
-	return axios.put("/api/update-doctor", doctorData, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+const updateDoctor = (doctorData) => {
+	return axios.put("/api/update-doctor", doctorData);
 };
 
 const getTotalRowDoctor = () => {
@@ -66,4 +62,5 @@ export {
 	getPaginationDoctors,
 	getDoctorBySpecialtyId,
 	getDoctorByServiceId,
+	getOutstandingDoctors,
 };

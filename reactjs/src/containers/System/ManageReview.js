@@ -5,6 +5,7 @@ import {
 	getPaginationReviews,
 	getTotalRowReview,
 	deleteReview,
+	updateFeedback,
 } from "../../services/reviewService";
 import { getAllDoctors } from "../../services/doctorService";
 import { toast } from "react-toastify";
@@ -46,20 +47,6 @@ class ManageReview extends Component {
 		}
 	};
 
-	// getAllReviewsReact = async () => {
-	// 	this.setState({
-	// 		isLoading: true,
-	// 	});
-	// 	let res = await getPaginationReviews(this.state.newPage);
-	// 	console.log(res);
-	// 	if (res && res.code === 200) {
-	// 		this.setState({
-	// 			arrReviews: res.data,
-	// 			isLoading: false,
-	// 		});
-	// 	}
-	// };
-
 	getTotalRowReviewReact = async () => {
 		let res = await getTotalRowReview();
 		if (res && res.code === 200) {
@@ -79,8 +66,9 @@ class ManageReview extends Component {
 	handleOpenModalEdit(item) {
 		this.setState({
 			setModalIsOpen: true,
-			textReview: item.text,
+			textReview: item.comment,
 			patientName: item.patientName,
+			reviewId: item.id,
 		});
 	}
 
@@ -88,14 +76,8 @@ class ManageReview extends Component {
 		this.setState({
 			setModalEditUser: false,
 			setModalIsOpen: false,
-			newEmail: "",
-			newPassword: "",
-			confirmPass: "",
-			fullName: "",
-			address: "",
-			gender: "",
-			role: "",
-			phoneNumber: "",
+			patientName: "",
+			textReview: "",
 			errMsgSignUp: "",
 		});
 	}
@@ -128,61 +110,11 @@ class ManageReview extends Component {
 		}
 	};
 
-	// handleAddNewUser = async (data) => {
-	// 	let newUserData = {
-	// 		email: this.state.newEmail,
-	// 		password: this.state.newPassword,
-	// 		fullName: this.state.fullName,
-	// 		address: this.state.address,
-	// 		gender: this.state.gender,
-	// 		role: this.state.role,
-	// 		phoneNumber: this.state.phoneNumber,
-	// 	};
-	// 	let isValid = this.validateModalInput();
-	// 	if (newUserData.password !== this.state.confirmPass) {
-	// 		this.setState({
-	// 			errMsgSignUp: "Passwords are not the same !",
-	// 		});
-	// 	} else if (isValid === true) {
-	// 		try {
-	// 			this.setState({
-	// 				errMsgSignUp: "",
-	// 				isLoading: true,
-	// 			});
-	// 			let response = await handleCreateUser(newUserData);
-	// 			await this.getAllUsersReact();
-	// 			console.log("check response", response);
-	// 			toast.success("Add user successfully !");
-	// 			this.setState({
-	// 				newEmail: "",
-	// 				newPassword: "",
-	// 				confirmPass: "",
-	// 				fullName: "",
-	// 				address: "",
-	// 				gender: "",
-	// 				role: "",
-	// 				phoneNumber: "",
-	// 				setModalIsOpen: false,
-	// 				isLoading: false,
-	// 			});
-	// 		} catch (error) {
-	// 			if (error.response) {
-	// 				if (error.response.data) {
-	// 					this.setState({
-	// 						errMsgSignUp: error.response.data.msg,
-	// 					});
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// };
-
 	handleDeleteReview = async () => {
 		try {
-			let token = await localStorage.getItem("token");
-			let res = await deleteReview(token, this.state.id);
+			let res = await deleteReview(this.state.id);
 			if (res && res.code === 200) {
-				toast.success("Delete successfully !");
+				toast.success("Xóa đánh giá thành công!");
 				await getPaginationReviews(
 					this.state.doctorId,
 					this.state.newPage
@@ -195,34 +127,27 @@ class ManageReview extends Component {
 			this.setState({
 				confirmDelete: false,
 			});
-			toast.error("Something wrong !");
 		}
 	};
 
-	// handleEditUser = async () => {
-	// 	try {
-	// 		let userData = {
-	// 			fullName: this.state.fullName,
-	// 			address: this.state.address,
-	// 			gender: this.state.gender,
-	// 			role: this.state.role,
-	// 			phoneNumber: this.state.phoneNumber,
-	// 			id: this.state.userId,
-	// 		};
+	handleEditReview = async () => {
+		try {
+			let data = {
+				comment: this.state.textReview,
+				id: this.state.reviewId,
+			};
 
-	// 		let token = await localStorage.getItem("token");
-	// 		let res = await editUser(token, userData);
-	// 		if (res && res.code === 200) {
-	// 			this.setState({
-	// 				setModalEditUser: false,
-	// 			});
-	// 			await this.getAllUsersReact();
-	// 			toast.success("Update successfully !");
-	// 		}
-	// 	} catch (error) {
-	// 		toast.error("Something wrong !");
-	// 	}
-	// };
+			let res = await updateFeedback(data);
+			if (res && res.code === 200) {
+				this.setState({
+					setModalIsOpen: false,
+				});
+				toast.success("Chỉnh sửa thành công!");
+			}
+		} catch (error) {
+			toast.error("Chỉnh sửa thất bại!");
+		}
+	};
 
 	handleConfirmDelete = (item) => {
 		this.setState({
@@ -257,7 +182,7 @@ class ManageReview extends Component {
 			<>
 				{this.props.isLoggedIn && <Header />}
 				<div className="user-container">
-					<div className="title text-center">Manage Review</div>
+					<div className="title text-center">Quản lý đánh giá</div>
 					<div className="mx-3">
 						<select
 							name="doctor"
@@ -308,7 +233,7 @@ class ManageReview extends Component {
 												<td>{item.patientName}</td>
 												<td>{item.comment}</td>
 												<td className="text-center">
-													<button
+													{/* <button
 														className="btn-edit"
 														onClick={() =>
 															this.handleOpenModalEdit(
@@ -317,7 +242,7 @@ class ManageReview extends Component {
 														}
 													>
 														<i className="fas fa-pencil-alt"></i>
-													</button>
+													</button> */}
 													<button
 														className="btn-delete"
 														onClick={() =>
@@ -380,9 +305,7 @@ class ManageReview extends Component {
 									<button
 										className="btn-add-new"
 										type="button"
-										onClick={() =>
-											this.handleAddNewDoctor()
-										}
+										onClick={() => this.handleEditReview()}
 									>
 										Chỉnh sửa
 									</button>
@@ -401,7 +324,7 @@ class ManageReview extends Component {
 					{confirmDelete ? (
 						<div className="confirm-delete">
 							<div className="confirmation-text">
-								Are you sure ?
+								Bạn có chắc chắn muốn xóa không?
 							</div>
 							<div className="button-container">
 								<button
@@ -410,13 +333,13 @@ class ManageReview extends Component {
 										this.handleCloseConfirmDelete()
 									}
 								>
-									Cancel
+									Hủy
 								</button>
 								<button
 									className="confirmation-button"
 									onClick={() => this.handleDeleteReview()}
 								>
-									Delete
+									Xóa
 								</button>
 							</div>
 						</div>

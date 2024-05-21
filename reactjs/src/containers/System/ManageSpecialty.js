@@ -140,6 +140,10 @@ class ManageSpecialty extends Component {
 			image: this.state.imageBase64,
 			id: this.state.id,
 		};
+		const isEmptyField = Object.values(data).some((value) => !value);
+		if (isEmptyField) {
+			console.log("Điền đầy đủ thông tin!");
+		}
 		try {
 			let res = await updateSpecialty(data);
 			if (res && res.code === 200) {

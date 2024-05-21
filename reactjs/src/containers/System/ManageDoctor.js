@@ -10,6 +10,7 @@ import {
 } from "../../services/doctorService";
 import { getALLSpecialty } from "../../services/specialtyService";
 import { getAllClinics } from "../../services/clinicService";
+import { getALLTelemedicine } from "../../services/telemedicineService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Header/Header";
@@ -28,13 +29,14 @@ class ManageDoctor extends Component {
 			arrDoctors: [],
 			arrClinics: [],
 			arrSpecialty: [],
+			arrTelems: [],
 			id: "",
 			name: "",
 			address: "",
 			image: "",
 			imageBase64: "",
 			setModalIsOpen: false,
-			setModalEditUser: false,
+			setModalEditIsOpen: false,
 			isLoading: false,
 			confirmDelete: false,
 			newPage: 1,
@@ -46,10 +48,7 @@ class ManageDoctor extends Component {
 		await this.getAllClinicsReact();
 		await this.getAllSpecialtyReact();
 		await this.getTotalRowDoctorReact();
-		let token = await localStorage.getItem("token");
-		this.setState({
-			token: token,
-		});
+		await this.getAllTelemedicineReact();
 	}
 
 	getAllDoctorsReact = async () => {
@@ -100,6 +99,18 @@ class ManageDoctor extends Component {
 			});
 		}
 	};
+	getAllTelemedicineReact = async () => {
+		this.setState({
+			isLoading: true,
+		});
+		let res = await getALLTelemedicine();
+		if (res && res.code === 200) {
+			this.setState({
+				arrTelems: res.data,
+				isLoading: false,
+			});
+		}
+	};
 
 	handleOpenModal() {
 		this.setState({
@@ -108,21 +119,25 @@ class ManageDoctor extends Component {
 	}
 
 	handleOpenModalEdit(user) {
+		console.log(user);
 		this.setState({
-			setModalEditUser: true,
+			setModalEditIsOpen: true,
 			name: user.name,
 			introduction: user.introduction,
 			clinicId: user.clinicId,
 			specialtyId: user.specialtyId,
+			telemId: user.telemId,
 			description: user.description,
 			address: user.address,
+			image: user.image,
 			price: user.price,
+			doctorId: user.id,
 		});
 	}
 
 	handleCloseModal() {
 		this.setState({
-			setModalEditUser: false,
+			setModalEditIsOpen: false,
 			setModalIsOpen: false,
 			name: "",
 			introduction: "",
@@ -132,7 +147,7 @@ class ManageDoctor extends Component {
 			address: "",
 			price: "",
 			image: "",
-			isTelemedicine: "",
+			telemId: "",
 			isLoading: false,
 			errMsgSignUp: "",
 		});
@@ -172,18 +187,15 @@ class ManageDoctor extends Component {
 			description: this.state.descriptionHTML,
 			address: this.state.address,
 			price: this.state.price,
-			image: this.state.imageBase64,
-			isTelemedicine: this.state.isTelemedicine,
+			imageBase64: this.state.imageBase64,
+			telemId: this.state.telemId,
 		};
 		try {
 			this.setState({
 				errMsgSignUp: "",
 				isLoading: true,
 			});
-			let response = await handleCreateDoctor(
-				newDoctorData,
-				this.state.token
-			);
+			let response = await handleCreateDoctor(newDoctorData);
 			await this.getAllDoctorsReact();
 			console.log("check response", response);
 			toast.success("Thêm mới thành công!");
@@ -196,7 +208,7 @@ class ManageDoctor extends Component {
 				address: "",
 				price: "",
 				image: "",
-				isTelemedicine: "",
+				telemId: "",
 				setModalIsOpen: false,
 				isLoading: false,
 			});
@@ -204,6 +216,7 @@ class ManageDoctor extends Component {
 			if (error.response) {
 				if (error.response.data) {
 					this.setState({
+						isLoading: false,
 						errMsgSignUp: error.response.data.msg,
 					});
 				}
@@ -213,7 +226,9 @@ class ManageDoctor extends Component {
 
 	handleDeleteUser = async () => {
 		try {
-			let res = await deleteDoctor(this.state.userId);
+			let doctorId = this.state.doctorId;
+			let res = await deleteDoctor(doctorId);
+			console.log(res);
 			if (res && res.code === 200) {
 				await this.getAllDoctorsReact();
 				toast.success("Xóa thành công!");
@@ -224,38 +239,47 @@ class ManageDoctor extends Component {
 		} catch (error) {
 			console.log(error);
 			toast.error("Xóa thất bại!");
+			this.setState({
+				confirmDelete: false,
+			});
 		}
 	};
 
-	handleEditUser = async () => {
+	handleEditDoctor = async () => {
 		try {
 			let userData = {
-				fullName: this.state.fullName,
+				name: this.state.name,
+				introduction: this.state.introduction,
+				clinicId: this.state.clinicId,
+				specialtyId: this.state.specialtyId,
+				description: this.state.descriptionHTML,
 				address: this.state.address,
-				gender: this.state.gender,
-				role: this.state.role,
-				phoneNumber: this.state.phoneNumber,
-				id: this.state.userId,
+				price: this.state.price,
+				image: this.state.imageBase64,
+				telemId: this.state.telemId,
+				id: this.state.doctorId,
 			};
 
-			let res = await updateDoctor(this.state.token, userData);
+			console.log(userData);
+
+			let res = await updateDoctor(userData);
 			if (res && res.code === 200) {
 				this.setState({
-					setModalEditUser: false,
+					setModalEditIsOpen: false,
 				});
-				await this.getAllUsersReact();
 				toast.success("Chỉnh sửa thành công!");
+				await this.getAllDoctorsReact();
 			}
 		} catch (error) {
 			console.log(error);
-			toast.error("Xóa thất bại!");
+			toast.error("Chỉnh sửa thất bại!");
 		}
 	};
 
-	handleConfirmDelete = (user) => {
-		this.setState({
+	handleConfirmDelete = async (item) => {
+		await this.setState({
 			confirmDelete: true,
-			userId: user.id,
+			doctorId: item.id,
 		});
 	};
 
@@ -284,8 +308,9 @@ class ManageDoctor extends Component {
 			arrDoctors,
 			arrClinics,
 			arrSpecialty,
+			arrTelems,
 			setModalIsOpen,
-			setModalEditUser,
+			setModalEditIsOpen,
 			isLoading,
 			confirmDelete,
 			isTelemedicine,
@@ -512,17 +537,31 @@ class ManageDoctor extends Component {
 									</select>
 								</div>
 								<div className="d-flex">
-									<span for="isTelemedicine" className="is-telem">
-										Khám từ xa:
-									</span>
-									<input
-										type="checkbox"
-										id="isTelemedicine"
-										checked={isTelemedicine === 1}
-										onChange={(e) =>
-											this.handleCheckboxChange(e)
+									<select
+										name="specialty"
+										id="telem-select-doctor"
+										value={this.state.telemId}
+										onChange={(event) =>
+											this.handleOnchangeModalInput(
+												event,
+												"telemId"
+											)
 										}
-									/>
+									>
+										<option value="" disabled>
+											Khám từ xa
+										</option>
+										{arrTelems &&
+											arrTelems.length > 0 &&
+											arrTelems.map((item, index) => (
+												<option
+													key={index}
+													value={item.id}
+												>
+													{item.name}
+												</option>
+											))}
+									</select>
 								</div>
 								<MdEditor
 									style={{ height: "250px" }}
@@ -559,57 +598,42 @@ class ManageDoctor extends Component {
 						</div>
 					) : null}
 
-					{setModalEditUser ? (
+					{setModalEditIsOpen ? (
 						<div id="add-new-modal" className="modal">
 							<div className="modal-content">
-								<p>Edit user</p>
+								<p>Thêm mới bác sĩ</p>
 								<input
-									className="email"
-									type="email"
-									placeholder="Email"
-									value={this.state.newEmail}
-									disabled
-									onChange={(event) =>
-										this.handleOnchangeModalInput(
-											event,
-											"newEmail"
-										)
-									}
-								/>
-								<div className="pass-field">
-									<input
-										className="password-edit"
-										type="password"
-										disabled
-										autoComplete="off"
-										placeholder="Password"
-										value={this.state.newPassword}
-										onChange={(event) =>
-											this.handleOnchangeModalInput(
-												event,
-												"newPassword"
-											)
-										}
-									/>
-								</div>
-								<input
-									className="fullname"
-									name="fullName"
+									className="name"
 									type="text"
-									placeholder="Fullname"
-									value={this.state.fullName}
+									placeholder="Họ và tên"
+									value={this.state.name}
 									onChange={(event) =>
 										this.handleOnchangeModalInput(
 											event,
-											"fullName"
+											"name"
 										)
 									}
 								/>
+								<textarea
+									name="introduction"
+									id="introduction"
+									placeholder="Giới thiệu"
+									cols="30"
+									rows="5"
+									value={this.state.introduction}
+									onChange={(event) =>
+										this.handleOnchangeModalInput(
+											event,
+											"introduction"
+										)
+									}
+								></textarea>
+
 								<input
 									className="address"
 									name="address"
 									type="text"
-									placeholder="Address"
+									placeholder="Địa chỉ"
 									value={this.state.address}
 									onChange={(event) =>
 										this.handleOnchangeModalInput(
@@ -618,58 +642,119 @@ class ManageDoctor extends Component {
 										)
 									}
 								/>
-
-								<div className="modal-select">
+								<div className="price-field">
 									<input
-										className="phoneNumber"
-										type="tel"
-										placeholder="Phone"
-										value={this.state.phoneNumber}
+										className="price"
+										name="price"
+										type="text"
+										placeholder="Giá"
+										value={this.state.price}
 										onChange={(event) =>
 											this.handleOnchangeModalInput(
 												event,
-												"phoneNumber"
+												"price"
 											)
 										}
 									/>
+									<input
+										className="doctor-image"
+										name="image"
+										type="file"
+										accept="image/png, image/jpeg"
+										onChange={(event) =>
+											this.handleOnchangeImage(
+												event,
+												"image"
+											)
+										}
+									/>
+								</div>
+								<div className="modal-select">
 									<select
-										name="gender"
-										id="gender-select"
-										value={this.state.gender}
+										name="clinic"
+										id="clinic-select"
+										value={this.state.clinic}
 										onChange={(event) =>
 											this.handleOnchangeModalInput(
 												event,
-												"gender"
+												"clinic"
 											)
 										}
 									>
 										<option value="" disabled>
-											Gender
+											Phòng khám
 										</option>
-										<option value="Male">Male</option>
-										<option value="Female">Female</option>
-										<option value="Other">Other</option>
+										{arrClinics &&
+											arrClinics.length > 0 &&
+											arrClinics.map((item, index) => (
+												<option
+													key={index}
+													value={item.id}
+												>
+													{item.name}
+												</option>
+											))}
 									</select>
 
 									<select
-										name="role"
-										id="role-select"
-										value={this.state.role}
+										name="specialty"
+										id="specialty-select-doctor"
+										value={this.state.specialty}
 										onChange={(event) =>
 											this.handleOnchangeModalInput(
 												event,
-												"role"
+												"specialty"
 											)
 										}
 									>
 										<option value="" disabled>
-											Role
+											Chuyên khoa
 										</option>
-										<option value="Admin">Admin</option>
-										<option value="Doctor">Doctor</option>
-										<option value="User">User</option>
+										{arrSpecialty &&
+											arrSpecialty.length > 0 &&
+											arrSpecialty.map((item, index) => (
+												<option
+													key={index}
+													value={item.id}
+												>
+													{item.name}
+												</option>
+											))}
 									</select>
 								</div>
+								<div className="d-flex">
+									<select
+										name="specialty"
+										id="telem-select-doctor"
+										value={this.state.telemId}
+										onChange={(event) =>
+											this.handleOnchangeModalInput(
+												event,
+												"telemId"
+											)
+										}
+									>
+										<option value="" disabled>
+											Khám từ xa
+										</option>
+										{arrTelems &&
+											arrTelems.length > 0 &&
+											arrTelems.map((item, index) => (
+												<option
+													key={index}
+													value={item.id}
+												>
+													{item.name}
+												</option>
+											))}
+									</select>
+								</div>
+								<MdEditor
+									style={{ height: "250px" }}
+									renderHTML={(text) => mdParser.render(text)}
+									onChange={this.handleEditorChange}
+									value={this.state.description}
+								/>
 								<div
 									className="errMsgSignUp"
 									style={{ color: "red" }}
@@ -681,16 +766,16 @@ class ManageDoctor extends Component {
 									<button
 										className="btn-add-new"
 										type="button"
-										onClick={() => this.handleEditUser()}
+										onClick={() => this.handleEditDoctor()}
 									>
-										Save
+										Chỉnh sửa
 									</button>
 									<button
 										className="btn-cancel"
 										type="button"
 										onClick={() => this.handleCloseModal()}
 									>
-										Cancel
+										Hủy
 									</button>
 								</div>
 							</div>
@@ -700,7 +785,7 @@ class ManageDoctor extends Component {
 					{confirmDelete ? (
 						<div className="confirm-delete">
 							<div className="confirmation-text">
-								Are you sure ?
+								Bạn có chắc chắn muốn xóa?
 							</div>
 							<div className="button-container">
 								<button
@@ -709,13 +794,13 @@ class ManageDoctor extends Component {
 										this.handleCloseConfirmDelete()
 									}
 								>
-									Cancel
+									Hủy
 								</button>
 								<button
 									className="confirmation-button"
 									onClick={() => this.handleDeleteUser()}
 								>
-									Delete
+									Xóa
 								</button>
 							</div>
 						</div>

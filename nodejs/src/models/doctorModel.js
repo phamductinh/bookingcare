@@ -8,12 +8,23 @@ import {
 	findDoctorIsTelemedicine,
 	totalRowDoctor,
 	findDoctorBySpecialty,
-    findDoctorByServiceId
+	findDoctorByServiceId,
+	findOutDoctorsQuery,
 } from "../database/queries";
 import { errMsg } from "../utils/resMsg";
 
 let getAllDoctorsModel = (callback) => {
 	db.query(findAllDoctorsQuery, (error, results) => {
+		if (error) {
+			callback(error, null);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
+let getOutDoctorsModel = (callback) => {
+	db.query(findOutDoctorsQuery, (error, results) => {
 		if (error) {
 			callback(error, null);
 		} else {
@@ -71,7 +82,7 @@ let createDoctorModel = (doctorData, callback) => {
 		address,
 		price,
 		image,
-		isTelemedicine,
+		telemId,
 	} = doctorData;
 
 	db.query(
@@ -85,7 +96,7 @@ let createDoctorModel = (doctorData, callback) => {
 			address,
 			price,
 			image,
-			isTelemedicine,
+			telemId,
 		],
 		(err, results) => {
 			if (err) {
@@ -105,6 +116,8 @@ let updateADoctorModel = (doctorData, callback) => {
 		doctorData.description,
 		doctorData.address,
 		doctorData.price,
+		doctorData.image,
+		doctorData.telemId,
 		doctorData.id,
 	];
 	if (!doctorData.id) {
@@ -147,5 +160,6 @@ module.exports = {
 	getTotalRowDoctorModel,
 	getPaginationDoctorsModel,
 	getDoctorBySpecialtyIdModel,
-    getDoctorByServiceIdModel
+	getDoctorByServiceIdModel,
+	getOutDoctorsModel,
 };

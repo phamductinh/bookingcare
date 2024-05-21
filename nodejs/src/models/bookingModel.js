@@ -13,6 +13,9 @@ import {
 	getBookingByUserIdQuery,
 	confirmBookingByBookIdQuery,
 	deleteBookingByBookId,
+	getBookingByBookIdQuery,
+	findAllPendingBookingQuery,
+	findAllConfirmedTelemedicineBookingQuery,
 } from "../database/queries";
 import emailService from "../services/emailService";
 
@@ -26,8 +29,37 @@ let getAllConfirmedBookingModel = (callback) => {
 	});
 };
 
+let getAllConfirmedTelemedicineBookingModel = (callback) => {
+	db.query(findAllConfirmedTelemedicineBookingQuery, (error, results) => {
+		if (error) {
+			callback(error, null);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
+let getAllPendingBookingModel = (callback) => {
+	db.query(findAllPendingBookingQuery, (error, results) => {
+		if (error) {
+			callback(error, null);
+		} else {
+			callback(null, results);
+		}
+	});
+};
+
 let getBookingByUserIdModel = (userId, callback) => {
 	db.query(getBookingByUserIdQuery, userId, (error, results) => {
+		if (error) {
+			return callback(error);
+		}
+		return callback(null, results);
+	});
+};
+
+let getBookingByBookIdModel = (bookId, callback) => {
+	db.query(getBookingByBookIdQuery, bookId, (error, results) => {
 		if (error) {
 			return callback(error);
 		}
@@ -114,25 +146,25 @@ let bookingAnAppointmentModel = (data, callback) => {
 				error.statusCode = 409;
 				return callback(error);
 			}
-			if (isTelemedicine === 1) {
-				await emailService.sendTelemedicineEmail({
-					receiverEmail: data.receiverEmail,
-					fullName: data.fullName,
-					booking_date: data.booking_date_formated,
-					booking_time: data.booking_time,
-					exam_time: data.exam_time,
-					doctorName: data.doctorName,
-					idRoom: data.idRoom,
-				});
-			} else {
-				await emailService.sendSimpleEmail({
-					receiverEmail: data.receiverEmail,
-					fullName: data.fullName,
-					booking_date: data.booking_date_formated,
-					booking_time: data.booking_time,
-					doctorName: data.doctorName,
-				});
-			}
+			// if (isTelemedicine === 1) {
+			// 	await emailService.sendTelemedicineEmail({
+			// 		receiverEmail: data.receiverEmail,
+			// 		fullName: data.fullName,
+			// 		booking_date: data.booking_date_formated,
+			// 		booking_time: data.booking_time,
+			// 		exam_time: data.exam_time,
+			// 		doctorName: data.doctorName,
+			// 		idRoom: data.idRoom,
+			// 	});
+			// } else {
+			// 	await emailService.sendSimpleEmail({
+			// 		receiverEmail: data.receiverEmail,
+			// 		fullName: data.fullName,
+			// 		booking_date: data.booking_date_formated,
+			// 		booking_time: data.booking_time,
+			// 		doctorName: data.doctorName,
+			// 	});
+			// }
 
 			db.query(
 				bookingAnAppointmentQuery,
@@ -218,4 +250,7 @@ module.exports = {
 	getBookingByDateAndTimeModel,
 	confirmBookingByBookIdModel,
 	deleteBookingByBookIdModel,
+	getBookingByBookIdModel,
+	getAllPendingBookingModel,
+	getAllConfirmedTelemedicineBookingModel,
 };

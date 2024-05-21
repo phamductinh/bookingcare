@@ -26,6 +26,10 @@ class Telemedicine extends Component {
 		}
 	};
 
+	seeMoreTelems = () => {
+		this.props.history.push(`/telemedicines`);
+	};
+
 	handleShowTelemedicine = (telem) => {
 		this.props.history.push(`/telemedicine/${telem.id}`);
 	};
@@ -48,7 +52,12 @@ class Telemedicine extends Component {
 						<div className="telem-title">
 							Bác sĩ từ xa qua Video
 						</div>
-						<button className="telem-btn">Xem thêm</button>
+						<button
+							className="telem-btn"
+							onClick={() => this.seeMoreTelems()}
+						>
+							Xem thêm
+						</button>
 					</div>
 					<div className="telem-slide-container">
 						<div id="telem-slide">

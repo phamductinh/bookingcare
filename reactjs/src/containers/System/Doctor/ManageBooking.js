@@ -9,7 +9,9 @@ import {
 	confirmBooking,
 	deleteBooking,
 	getBookingByDate,
+	getAllPendingBooking,
 } from "../../../services/bookingService";
+import moment from "moment";
 
 class ManageBooking extends Component {
 	constructor(props) {
@@ -21,7 +23,9 @@ class ManageBooking extends Component {
 		};
 	}
 
-	async componentDidMount() {}
+	async componentDidMount() {
+		this.getAllPendingBookingReact();
+	}
 
 	handleDeleteUser = async () => {
 		try {
@@ -56,19 +60,32 @@ class ManageBooking extends Component {
 		}
 	};
 
-	handleOnchangeInput = async (event) => {
-		let date = event.target.value;
-		let formatedDate = new Date(date).getTime();
-		this.setState({
-			formatedDate: formatedDate,
-		});
-		let res = await getBookingByDate(formatedDate);
-		if (res && res.code === 200) {
-			this.setState({
-				arrBooking: res.data,
-			});
+	getAllPendingBookingReact = async () => {
+		try {
+			let res = await getAllPendingBooking();
+			if (res && res.code === 200) {
+				this.setState({
+					arrBooking: res.data,
+				});
+			}
+		} catch (error) {
+			console.log(error);
 		}
 	};
+
+	// handleOnchangeInput = async (event) => {
+	// 	let date = event.target.value;
+	// 	let formatedDate = new Date(date).getTime();
+	// 	this.setState({
+	// 		formatedDate: formatedDate,
+	// 	});
+	// 	let res = await getBookingByDate(formatedDate);
+	// 	if (res && res.code === 200) {
+	// 		this.setState({
+	// 			arrBooking: res.data,
+	// 		});
+	// 	}
+	// };
 
 	handleConfirmDelete = (item) => {
 		this.setState({
@@ -91,8 +108,10 @@ class ManageBooking extends Component {
 			<>
 				{this.props.isLoggedIn && <Header />}
 				<div className="user-container">
-					<div className="title text-center">Quản lý đặt lịch</div>
-					<div className="mx-3">
+					<div className="title text-center">
+						Quản lý lịch hẹn chưa xác nhận
+					</div>
+					{/* <div className="mx-3">
 						<input
 							className="date-choose"
 							type="date"
@@ -101,18 +120,21 @@ class ManageBooking extends Component {
 								this.handleOnchangeInput(event)
 							}
 						/>
-					</div>
+					</div> */}
 					<div className="users-table mt-3 mx-3">
 						<table id="customers">
 							<tbody>
 								<tr>
 									<th width="8%" className="text-center">
+										Ngày
+									</th>
+									<th width="8%" className="text-center">
 										Thời gian
 									</th>
-									<th width="15%" className="text-center">
+									<th width="12%" className="text-center">
 										Họ và tên
 									</th>
-									<th width="15%" className="text-center">
+									<th width="12%" className="text-center">
 										Địa chỉ
 									</th>
 									<th width="5%" className="text-center">
@@ -124,21 +146,28 @@ class ManageBooking extends Component {
 									<th width="10%" className="text-center">
 										Số điện thoại
 									</th>
-									<th width="15%" className="text-center">
+									<th width="13%" className="text-center">
 										Lý do
 									</th>
-									<th width="10%" className="text-center">
+									<th width="5%" className="text-center">
+										Hình thức
+									</th>
+									<th width="7%" className="text-center">
 										Trạng thái
 									</th>
-									<th width="15%" className="text-center">
+									<th width="20%" className="text-center">
 										Acts
 									</th>
 								</tr>
 
 								{arrBooking &&
 									arrBooking.map((item, index) => {
+										const date = moment(
+											item.booking_date / 1
+										).format("YYYY-MM-DD");
 										return (
 											<tr key={index}>
+												<td>{date}</td>
 												<td>{item.booking_time}</td>
 												<td>{item.fullName}</td>
 												<td>{item.address}</td>
@@ -147,6 +176,11 @@ class ManageBooking extends Component {
 												<td>{item.phoneNumber}</td>
 												<td>{item.reason}</td>
 												<td>{item.status}</td>
+												<td>
+													{item.isTelemedicine === 1
+														? "Trực tuyến"
+														: "Trực tiếp"}
+												</td>
 												<td className="text-center">
 													<button
 														className="btn-confirm"

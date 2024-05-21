@@ -1,0 +1,48 @@
+.detail-tele-list-doctors-container {
+	width: 100%;
+	height: auto;
+	padding-top: 5px;
+	background: #efefef;
+}
+.detail-tele-province-filter {
+	width: 1200px;
+	height: auto;
+	margin: 10px auto;
+	margin-bottom: 18px;
+}
+.detail-tele-province {
+	padding: 8px;
+	border: 1px solid #ced4da;
+	border-radius: 3px;
+	display: block;
+	font-size: 17px;
+}
+.detail-tele-list-doctors {
+	width: 1200px;
+	height: auto;
+	margin: 10px auto;
+	display: flex;
+	background-color: #fff;
+	box-shadow: 0 1px 6px rgb(32 33 36 / 28%);
+	border-radius: 8px;
+	border-bottom: none;
+}
+.telems-content {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	border-right: 1px solid #efefef;
+}
+.telems-name h1 {
+	font-size: 25px;
+	line-height: 100px;
+	font-weight: 600;
+	margin-bottom: 10px;
+	color: #45c3d2;
+	cursor: pointer;
+}
+
+.telems-content:hover {
+	background-color: #e0e3e6;
+	cursor: pointer;
+}

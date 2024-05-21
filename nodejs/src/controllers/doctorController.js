@@ -18,6 +18,22 @@ const getAllDoctors = (req, res) => {
 	});
 };
 
+const getOutDoctors = (req, res) => {
+	doctorModel.getOutDoctorsModel((error, results) => {
+		if (error) {
+			return res.status(500).send({
+				code: 500,
+				msg: errMsg.failed,
+			});
+		} else {
+			return res.status(200).send({
+				code: 200,
+				data: results,
+			});
+		}
+	});
+};
+
 const getTotalRowDoctor = (req, res) => {
 	doctorModel.getTotalRowDoctorModel((error, results) => {
 		if (error) {
@@ -112,6 +128,7 @@ let createADoctor = (req, res) => {
 	let doctorData = req.body;
 	doctorModel.createDoctorModel(doctorData, (err, results) => {
 		if (err) {
+			console.log(err);
 			return res.status(400).send({
 				code: 400,
 				msg: "Something wrong!",
@@ -198,4 +215,5 @@ module.exports = {
 	getPaginationDoctors,
 	getDoctorBySpecialtyId,
 	getDoctorByServiceId,
+	getOutDoctors,
 };

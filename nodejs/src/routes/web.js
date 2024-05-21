@@ -29,7 +29,7 @@ let initWebRoutes = (app) => {
 		authController.sendResetPasswordEmail
 	);
 
-	router.get("/api/users", verifyJWT, userController.getAllUsers);
+	router.get("/api/users", userController.getAllUsers);
 	router.get("/api/get-user", userController.getUser);
 	router.get("/api/get-pagination-users", userController.getPaginationUsers);
 	router.get(
@@ -38,18 +38,18 @@ let initWebRoutes = (app) => {
 		userController.getTotalRowUser
 	);
 	router.post("/api/create-user", userController.createUser);
-	router.put("/api/edit-user", verifyJWT, userController.updateUser);
+	router.put("/api/edit-user", userController.updateUser);
 	router.put("/api/update-infor-user", userController.updateInforUser);
-	router.delete("/api/delete-user", verifyJWT, userController.deleteUser);
+	router.delete("/api/delete-user", userController.deleteUser);
 
 	router.get("/api/get-all-doctors", doctorController.getAllDoctors);
+	router.get("/api/get-outstanding-doctors", doctorController.getOutDoctors);
 	router.get(
 		"/api/get-pagination-doctors",
 		doctorController.getPaginationDoctors
 	);
 	router.get(
 		"/api/get-total-row-doctor",
-
 		doctorController.getTotalRowDoctor
 	);
 	router.get("/api/get-a-doctor", doctorController.getADoctor);
@@ -69,13 +69,9 @@ let initWebRoutes = (app) => {
 		"/api/get-doctor-by-serviceId",
 		doctorController.getDoctorByServiceId
 	);
-	router.post("/api/create-doctor", authApi, doctorController.createADoctor);
-	router.put("/api/update-doctor", authApi, doctorController.updateADoctor);
-	router.delete(
-		"/api/delete-doctor",
-		verifyJWT,
-		doctorController.deleteDoctor
-	);
+	router.post("/api/create-doctor", doctorController.createADoctor);
+	router.put("/api/update-doctor", doctorController.updateADoctor);
+	router.delete("/api/delete-doctor", doctorController.deleteDoctor);
 
 	router.get(
 		"/api/get-all-telemedicine",
@@ -87,17 +83,14 @@ let initWebRoutes = (app) => {
 	);
 	router.post(
 		"/api/create-telemedicine",
-		authApi,
 		telemedicineController.createTelemedicine
 	);
 	router.delete(
 		"/api/delete-telemedicine",
-		verifyJWT,
 		telemedicineController.deleteTelemedicine
 	);
 	router.put(
 		"/api/update-telemedicine",
-		authApi,
 		telemedicineController.updateTelemedicine
 	);
 	router.get(
@@ -116,21 +109,9 @@ let initWebRoutes = (app) => {
 		"/api/get-specialty-by-id",
 		specialtyController.getSpecialtyById
 	);
-	router.post(
-		"/api/create-specialty",
-		authApi,
-		specialtyController.createSpecialty
-	);
-	router.delete(
-		"/api/delete-specialty",
-		verifyJWT,
-		specialtyController.deleteSpecialty
-	);
-	router.put(
-		"/api/update-specialty",
-		authApi,
-		specialtyController.updateSpecialty
-	);
+	router.post("/api/create-specialty", specialtyController.createSpecialty);
+	router.delete("/api/delete-specialty", specialtyController.deleteSpecialty);
+	router.put("/api/update-specialty", specialtyController.updateSpecialty);
 	router.get(
 		"/api/get-pagination-specialty",
 
@@ -164,6 +145,10 @@ let initWebRoutes = (app) => {
 	);
 	router.get("/api/get-booking-by-date", bookingController.getBookingByDate);
 	router.get(
+		"/api/get-booking-by-bookId",
+		bookingController.getBookingByBookId
+	);
+	router.get(
 		"/api/get-booking-by-date-and-time",
 		bookingController.getBookingByDateAndTime
 	);
@@ -180,44 +165,44 @@ let initWebRoutes = (app) => {
 		bookingController.getAllConfirmedBooking
 	);
 	router.get(
+		"/api/get-all-confirmed-telemedicine-booking",
+		bookingController.getAllConfirmedTelemedicineBooking
+	);
+	router.get(
+		"/api/get-all-pending-booking",
+		bookingController.getAllPendingBooking
+	);
+	router.get(
 		"/api/get-all-finished-booking",
 		bookingController.getAllFinishedBooking
 	);
-	router.put(
-		"/api/confirm-booking",
-		authApiDoctor,
-		bookingController.confirmBooking
-	);
+	router.put("/api/confirm-booking", bookingController.confirmBooking);
 	router.put(
 		"/api/confirm-booking-by-bookId",
 		bookingController.confirmBookingByBookId
 	);
-	router.put(
-		"/api/finish-booking",
-		authApiDoctor,
-		bookingController.finishBooking
-	);
-	router.delete(
-		"/api/delete-booking",
-		verifyJWT,
-		bookingController.deleteBooking
-	);
+	router.put("/api/finish-booking", bookingController.finishBooking);
+	router.delete("/api/delete-booking", bookingController.deleteBooking);
 	router.delete(
 		"/api/delete-booking-by-bookId",
 		bookingController.deleteBookingByBookId
 	);
 	router.delete("/api/cancel-booking", bookingController.deleteBooking);
+	router.post(
+		"/api/send-success-booking-email",
+		bookingController.sendSuccessBookingEmail
+	);
+	router.post(
+		"/api/send-fail-booking-email",
+		bookingController.sendFailBookingEmail
+	);
 
 	router.get(
 		"/api/get-pagination-review",
 		reviewController.getPaginationReviews
 	);
 	router.get("/api/get-total-row-review", reviewController.getTotalRowReview);
-	router.delete(
-		"/api/delete-review",
-		verifyJWT,
-		reviewController.deleteReview
-	);
+	router.delete("/api/delete-review", reviewController.deleteReview);
 	router.delete("/api/delete-feedback", reviewController.deleteReview);
 	router.get(
 		"/api/get-feedback-by-doctorId",

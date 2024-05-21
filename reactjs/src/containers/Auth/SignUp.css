@@ -61,7 +61,7 @@ body {
 	outline: 0;
 	background-color: transparent !important;
 	padding: 0.75rem 1rem;
-	padding-left: 35px;
+	padding-left: 15px;
 	color: rgba(243, 244, 246, 1) !important;
 }
 
@@ -75,11 +75,12 @@ body {
 
 .input-group i {
 	position: absolute;
-	top: 0;
-	left: 0;
-	padding: 38px 10px;
+	top: 37px;
+	right: 10px;
 	font-size: 16px;
 	color: rgb(173, 172, 172);
+	cursor: pointer;
+	z-index: 5;
 }
 
 .errMsgSignUp {

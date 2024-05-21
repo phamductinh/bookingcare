@@ -234,12 +234,10 @@ class BookingHistory extends Component {
 					<div className="booking-table mt-6 mx-3 ">
 						<table id="customers">
 							<tr>
-								<th className="text-center">STT</th>
 								<th className="text-center">Thời gian</th>
 								<th className="text-center">Ngày</th>
 								<th className="text-center">Lý do</th>
 								<th className="text-center">Tình trạng</th>
-								<th className="text-center">Act</th>
 							</tr>
 
 							{arrBookings &&
@@ -249,23 +247,10 @@ class BookingHistory extends Component {
 									).format("YYYY-MM-DD");
 									return (
 										<tr key={index}>
-											<td>{item.id}</td>
 											<td>{item.booking_time}</td>
 											<td>{date}</td>
 											<td>{item.reason}</td>
 											<td>{item.status}</td>
-											<td className="text-center">
-												<button
-													className="btn-refuse"
-													onClick={() =>
-														this.handleConfirmDelete(
-															item
-														)
-													}
-												>
-													Hủy lịch
-												</button>
-											</td>
 										</tr>
 									);
 								})}

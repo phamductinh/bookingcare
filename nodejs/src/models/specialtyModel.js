@@ -5,6 +5,7 @@ import {
 	deleteSpecialtyById,
 	totalRowSpecialty,
 	findSpecialtyById,
+	updateSpecialtyQuery,
 } from "../database/queries";
 
 let getAllSpecialtyModel = (callback) => {

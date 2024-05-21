@@ -139,6 +139,18 @@
 	border-radius: 4px;
 }
 
+#telem-select-doctor {
+	height: 35px;
+	width: 100%;
+	padding-left: 8px;
+	margin: 10px 0 10px 8px;
+	outline: none;
+	color: rgb(17, 17, 17);
+	background: #fff;
+	border: 1px solid rgb(141, 141, 141);
+	border-radius: 4px;
+}
+
 .phoneNumber {
 	width: 36%;
 }
@@ -246,7 +258,7 @@
 	background-size: cover;
 }
 
-.is-telem{
-    padding-top: 17px;
-    padding-right: 10px;
+.is-telem {
+	padding-top: 17px;
+	padding-right: 10px;
 }

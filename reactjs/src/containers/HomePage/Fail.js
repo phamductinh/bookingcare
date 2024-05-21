@@ -4,7 +4,10 @@ import { push } from "connected-react-router";
 import * as actions from "../../store/actions/";
 import "react-toastify/dist/ReactToastify.css";
 import "./Fail.css";
-import { deleteBookingByBookId } from "../../services/bookingService";
+import {
+	deleteBookingByBookId,
+	sendFailBookingEmail,
+} from "../../services/bookingService";
 
 class Fail extends Component {
 	constructor(props) {
@@ -19,8 +22,10 @@ class Fail extends Component {
 			this.props.match.params.bookId
 		) {
 			let bookId = this.props.match.params.bookId;
-			let res = await deleteBookingByBookId(bookId);
-			console.log(res);
+			let res = await sendFailBookingEmail(bookId);
+			if (res && res.code === 200) {
+				await deleteBookingByBookId(bookId);
+			}
 		}
 	}
 

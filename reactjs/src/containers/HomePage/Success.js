@@ -4,7 +4,11 @@ import { push } from "connected-react-router";
 import * as actions from "../../store/actions/";
 import "react-toastify/dist/ReactToastify.css";
 import "./Success.css";
-import { confirmBookingByBookId } from "../../services/bookingService";
+import {
+	confirmBookingByBookId,
+	sendSuccessBookingEmail,
+} from "../../services/bookingService";
+import { toast } from "react-toastify";
 
 class Success extends Component {
 	constructor(props) {
@@ -22,7 +26,25 @@ class Success extends Component {
 			let res = await confirmBookingByBookId(bookId);
 			console.log(res);
 		}
+		this.handleSendEmailSuccess();
 	}
+
+	handleSendEmailSuccess = async () => {
+		if (
+			this.props.match &&
+			this.props.match.params &&
+			this.props.match.params.bookId
+		) {
+			try {
+				let res = await sendSuccessBookingEmail(
+					this.props.match.params.bookId
+				);
+				toast.success("Gửi email xác nhận thành công!");
+			} catch (error) {
+				console.log(error);
+			}
+		}
+	};
 
 	render() {
 		return (

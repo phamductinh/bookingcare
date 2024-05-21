@@ -4,6 +4,7 @@ import { getALLSpecialty } from "../../services/specialtyService";
 import "./HomePage.css";
 import {
 	getAllDoctors,
+	getOutstandingDoctors,
 	getDoctorByKeyword,
 } from "../../services/doctorService";
 import { withRouter } from "react-router";
@@ -13,6 +14,7 @@ import ChatApp from "../ChatApp/ChatApp";
 import Telemedicine from "./Telemedicine";
 import Specialty from "./Specialty";
 import Facility from "./Facility";
+import Footer from "./Footer";
 
 class HomePage extends Component {
 	constructor(props) {
@@ -33,7 +35,8 @@ class HomePage extends Component {
 	}
 
 	getALLDoctorReact = async () => {
-		let res = await getAllDoctors();
+		let res = await getOutstandingDoctors();
+		console.log(res);
 		if (res && res.code === 200) {
 			this.setState({
 				arrDoctors: res.data,
@@ -116,6 +119,22 @@ class HomePage extends Component {
 		this.props.history.push(`/detail-service/${id}`);
 	};
 
+	handleViewSpecialties = () => {
+		this.props.history.push(`/specialties`);
+	};
+
+	handleViewTelemedicines = () => {
+		this.props.history.push(`/telemedicines`);
+	};
+
+	handleViewDoctors = () => {
+		this.props.history.push(`/doctors`);
+	};
+
+	handleViewServices = () => {
+		this.props.history.push(`/services`);
+	};
+
 	handleViewUpdateInfor = () => {
 		if (this.props.userInfor) {
 			this.props.history.push(`/update-infor/${this.props.userInfor.id}`);
@@ -169,7 +188,10 @@ class HomePage extends Component {
 								<div className="header-logo"></div>
 							</div>
 							<div className="center-content">
-								<div className="child-content">
+								<div
+									className="child-content"
+									onClick={() => this.handleViewSpecialties()}
+								>
 									<div>
 										<p>Chuyên khoa</p>
 									</div>
@@ -177,15 +199,23 @@ class HomePage extends Component {
 										Tìm bác sĩ theo chuyên khoa
 									</div>
 								</div>
-								<div className="child-content">
+								<div
+									className="child-content"
+									onClick={() =>
+										this.handleViewTelemedicines()
+									}
+								>
 									<div>
-										<p>Cơ sở y tế</p>
+										<p>Khám từ xa</p>
 									</div>
 									<div className="text-under">
-										Chọn bệnh viện phòng khám
+										Khám bệnh trực tuyến
 									</div>
 								</div>
-								<div className="child-content">
+								<div
+									className="child-content"
+									onClick={() => this.handleViewDoctors()}
+								>
 									<div>
 										<p>Bác sĩ</p>
 									</div>
@@ -193,9 +223,12 @@ class HomePage extends Component {
 										Chọn bác sĩ giỏi
 									</div>
 								</div>
-								<div className="child-content">
+								<div
+									className="child-content"
+									onClick={() => this.handleViewServices()}
+								>
 									<div>
-										<p>Gói khám</p>
+										<p>Dịch vụ</p>
 									</div>
 									<div className="text-under">
 										Khám sức khỏe tổng quát
@@ -208,8 +241,8 @@ class HomePage extends Component {
 									Hỗ trợ
 								</div>
 								<div className="flags">
-									<div className="flag-vn"></div>
-									<div className="flag-en"></div>
+									{/* <div className="flag-vn"></div>
+									<div className="flag-en"></div> */}
 								</div>
 								{!isLoggedIn ? (
 									<button className="btn-login-header">
@@ -341,8 +374,8 @@ class HomePage extends Component {
 										</ul>
 									</div>
 									<div className="download">
-										<div className="android"></div>
-										<div className="ios"></div>
+										{/* <div className="android"></div>
+										<div className="ios"></div> */}
 									</div>
 								</div>
 							</div>
@@ -773,10 +806,13 @@ class HomePage extends Component {
 
 					<div className="outstanding-doctor-container">
 						<div className="doctor-content-up">
-							<div className="doctor-title">
-								Bác sĩ nổi bật tuần qua
-							</div>
-							<button className="doctor-btn">Xem thêm</button>
+							<div className="doctor-title">Bác sĩ nổi bật</div>
+							<button
+								className="doctor-btn"
+								onClick={() => this.handleViewDoctors()}
+							>
+								Xem thêm
+							</button>
 						</div>
 						<div className="doctor-slide-container">
 							<div id="doctor-slide">
@@ -1060,71 +1096,11 @@ class HomePage extends Component {
 						</div>
 					</div> */}
 
-					<div className="footer1">
-						<div className="company-infor">
-							<div className="company-logo"></div>
-							<div className="company-address">
-								<h2>Công ty Cổ phần Công nghệ DANA Hospital</h2>
-								<p>
-									<i className="fas fa-map-marker-alt"></i>28
-									Thành Thái, Dịch Vọng, Cầu Giấy, Hà Nội
-								</p>
-								<p>
-									<i className="fas fa-check"></i>ĐKKD số:
-									0106790291. Sở KHĐT Hà Nội cấp ngày
-									16/03/2015
-								</p>
-							</div>
-							<div className="registered">
-								<div className="registered-1"></div>
-								<div className="registered-2"></div>
-							</div>
-						</div>
-						<div className="list-features">
-							<ul>
-								<li>
-									<a href="#/">Liên hệ hợp tác</a>
-								</li>
-								<li>
-									<a href="#/">
-										Gói chuyển đổi số doanh nghiệp
-									</a>
-								</li>
-								<li>
-									<a href="#/">Tuyển dụng</a>
-								</li>
-								<li>
-									<a href="#/">Câu hỏi thường gặp</a>
-								</li>
-								<li>
-									<a href="#/">Điều khoản sử dụng</a>
-								</li>
-								<li>
-									<a href="#/">Chính sách Bảo mật</a>
-								</li>
-							</ul>
-						</div>
-						<div className="more-infor">
-							<div className="headquarter">
-								<h2>Trụ sở tại Hà Nội</h2>
-								<p>
-									28 Thành Thái, Dịch Vọng, Cầu Giấy, Hà Nội
-								</p>
-							</div>
-							<div className="office">
-								<h2>Văn phòng tại TP Hồ Chí Minh</h2>
-								<p>Số 01, Hồ Bá Kiện, Phường 15, Quận 10</p>
-							</div>
-							<div className="footer-support">
-								<h2>Hỗ trợ khách hàng</h2>
-								<p>support@bookingcare.vn (7h - 18h)</p>
-							</div>
-						</div>
-					</div>
+					<Footer />
 
 					<div className="footer2">
 						<div className="footer-left">
-							<p>&copy; 2022 Pham Duc Tinh</p>
+							<p>&copy; 2024 Nhóm 42</p>
 						</div>
 						<div className="footer-right">
 							<i className="fab fa-facebook-square"></i>

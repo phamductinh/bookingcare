@@ -29,7 +29,7 @@ export const adminMenu = [
 			},
 		],
 	},
-    {
+	{
 		//quản lý người dùng
 		name: "menu.admin.manage-service",
 		menus: [
@@ -48,7 +48,7 @@ export const adminMenu = [
 				link: "/system/manage-doctor",
 			},
 			{
-				name: "menu.admin.manage-booking",
+				name: "menu.admin.manage-booking-pending",
 				link: "/system/manage-booking",
 			},
 			{
@@ -93,10 +93,6 @@ export const doctorMenu = [
 		//quản lý bac si
 		name: "menu.doctor.doctor",
 		menus: [
-			{
-				name: "menu.admin.manage-booking",
-				link: "/system/manage-booking",
-			},
 			{
 				name: "menu.admin.manage-telemedicine-booking",
 				link: "/system/manage-telemedicine-booking",

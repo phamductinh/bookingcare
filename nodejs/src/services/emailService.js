@@ -115,8 +115,8 @@ let getBodyTelemedicineEmail = (dataSend) => {
 
 let getBodyHTMLEmailRemedy = (dataSend) => {
 	let result = `
-            <h3>Xin chào!</h3>
-            <p>Chúng tôi rất tiếc phải thông báo rằng vì một số lý do nên lịch hẹn của bạn đã bị hủy. Bạn vui lòng đặt lại vào khoảng thời gian khác.</p>
+            <h3>Xin chào ${dataSend.fullName}!</h3>
+            <p>Chúng tôi rất tiếc phải thông báo rằng vì bạn không thanh toán thành công nên lịch hẹn của bạn đã bị hủy. Bạn vui lòng đặt lại và và thực hiện thanh toán.</p>
             <div>Xin chân thành cảm ơn !</div>
         `;
 	return result;
@@ -624,7 +624,7 @@ let getBodyHTMLEmailResetPassword = (dataSend) => {
                             <tr>
                                 <td class="content-cell">
                                 <div class="f-fallback">
-                                    <h1>Hi ${dataSend.fullName},</h1>
+                                    <h1>Xin chào ${dataSend.fullName},</h1>
                                     <p>Bạn đã yêu cầu đặt lại mật khẩu cho tài khoản DANA Hospital của mình. Bấm vào nút bên dưới để đi tới trang thay đổi mật khẩu.</p>
                                     <!-- Action -->
                                     <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation">
@@ -642,14 +642,11 @@ let getBodyHTMLEmailResetPassword = (dataSend) => {
                                     </table>
                                     <p>Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>
                                     <p>Cảm ơn,
-                                    <br>The DANA Hospital team</p>
+                                    <br>DANA Hospital</p>
                                     <!-- Sub copy -->
                                     <table class="body-sub" role="presentation">
                                     <tr>
-                                        <td>
-                                        <p class="f-fallback sub">Nếu có vấn đề với nút bấm trên, sao chép link bên dưới và dán vào Google.</p>
-                                        <p class="f-fallback sub">"example.com"</p>
-                                        </td>
+                                        
                                     </tr>
                                     </table>
                                 </div>
@@ -662,13 +659,7 @@ let getBodyHTMLEmailResetPassword = (dataSend) => {
                         <td>
                             <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
                             <tr>
-                                <td class="content-cell" align="center">
-                                <p class="f-fallback sub align-center">
-                                    [Company Name, LLC]
-                                    <br>1234 Street Rd.
-                                    <br>Suite 1234
-                                </p>
-                                </td>
+                               
                             </tr>
                             </table>
                         </td>

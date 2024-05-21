@@ -8,12 +8,23 @@ const getAllConfirmedBooking = () => {
 	return axios.get(`/api/get-all-confirmed-booking`);
 };
 
+const getAllConfirmedTelemedicineBooking = () => {
+	return axios.get(`/api/get-all-confirmed-telemedicine-booking`);
+};
+
+const getAllPendingBooking = () => {
+	return axios.get(`/api/get-all-pending-booking`);
+};
+
 const getAllFinishedBooking = () => {
 	return axios.get(`/api/get-all-finished-booking`);
 };
 
 const getBookingByDate = (date) => {
 	return axios.get(`/api/get-booking-by-date?booking_date=${date}`);
+};
+const getBookingByBookId = (bookId) => {
+	return axios.get(`/api/get-booking-by-bookId?bookId=${bookId}`);
 };
 const getBookingByDateAndTime = (date, time) => {
 	return axios.get(
@@ -27,32 +38,20 @@ const getTelemedicineBookingByDate = (date) => {
 	);
 };
 
-const confirmBooking = (token, bookingId) => {
-	return axios.put(`/api/confirm-booking?id=${bookingId}`, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+const confirmBooking = (bookingId) => {
+	return axios.put(`/api/confirm-booking?id=${bookingId}`);
 };
 
 const confirmBookingByBookId = (bookId) => {
 	return axios.put(`/api/confirm-booking-by-bookId?bookId=${bookId}`);
 };
 
-const finishBooking = (token, bookingId) => {
-	return axios.put(`/api/finish-booking?id=${bookingId}`, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+const finishBooking = (bookingId) => {
+	return axios.put(`/api/finish-booking?id=${bookingId}`);
 };
 
-const deleteBooking = (token, bookingId) => {
-	return axios.delete(`/api/delete-booking?id=${bookingId}`, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+const deleteBooking = (bookingId) => {
+	return axios.delete(`/api/delete-booking?id=${bookingId}`);
 };
 
 const cancelBooking = (bookingId) => {
@@ -65,6 +64,14 @@ const deleteBookingByBookId = (bookId) => {
 
 const getBookingByUserId = (userId) => {
 	return axios.get(`/api/get-booking-by-userId?userId=${userId}`);
+};
+
+const sendSuccessBookingEmail = (bookId) => {
+	return axios.post(`/api/send-success-booking-email?bookId=${bookId}`);
+};
+
+const sendFailBookingEmail = (bookId) => {
+	return axios.post(`/api/send-fail-booking-email?bookId=${bookId}`);
 };
 
 const checkoutBooking = (body) => {
@@ -86,4 +93,9 @@ export {
 	getBookingByDateAndTime,
 	confirmBookingByBookId,
 	deleteBookingByBookId,
+	getBookingByBookId,
+	sendSuccessBookingEmail,
+	sendFailBookingEmail,
+	getAllPendingBooking,
+    getAllConfirmedTelemedicineBooking
 };
