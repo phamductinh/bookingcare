@@ -1,0 +1,61 @@
+.fail-container {
+	height: 100vh;
+	width: 100vw;
+	text-align: center;
+	background: #ebf0f5;
+}
+.card-fail h1 {
+	color: #ad3939;
+	font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+	font-weight: 900;
+	font-size: 50px;
+	line-height: 100px;
+	margin-bottom: 10px;
+}
+.card-fail p {
+	color: #404f5e;
+	font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+	font-size: 25px;
+	margin: 0;
+}
+.card-fail i {
+	color: #ad3939;
+	font-size: 130px;
+	line-height: 250px;
+	margin-left: -10px;
+}
+.card-fail {
+	background: white;
+	padding: 50px 100px;
+	border-radius: 4px;
+	box-shadow: 0 2px 3px #c8d0d8;
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.card-checkmark-fail {
+	border-radius: 200px;
+	height: 250px;
+	width: 250px;
+	background: #f8faf5;
+	margin: 0 auto;
+}
+
+.btn-gohome {
+	padding: 10px 20px;
+	margin-top: 20px;
+	border-radius: 25px;
+	border: none;
+	outline: none;
+	background-color: #9abc66;
+	color: white;
+	font-size: 17px;
+	font-weight: bold;
+}
+
+.btn-gohome:hover {
+	background-color: #637e3c;
+}

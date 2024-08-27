@@ -175,6 +175,7 @@ class ManageTelemedicine extends Component {
 			name: item.name,
 			description: item.description,
 			descriptionHTML: item.descriptionHTML,
+			image: item.image,
 			showBtnEdit: true,
 		});
 	};

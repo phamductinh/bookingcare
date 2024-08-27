@@ -216,7 +216,7 @@
 .btn-login-header {
 	--primary-color: #645bff;
 	--secondary-color: #fff;
-	--hover-color: #111;
+	--hover-color: #2f2bfc;
 	--arrow-width: 10px;
 	--arrow-stroke: 2px;
 	box-sizing: border-box;
@@ -829,9 +829,9 @@
 	background: gold;
 	color: #fff;
 }
-.doctor-img {
-	width: 150px;
-	height: 150px;
+.doctor-home-img {
+	width: 100px !important;
+	height: 100px !important;
 	border-radius: 50%;
 	margin: 20px auto;
 	background-position: center;
@@ -841,7 +841,7 @@
 	cursor: pointer;
 	z-index: 1;
 }
-.doctor-img:hover {
+.doctor-home-img:hover {
 	transform: scale(1.1);
 }
 .doctor-slide-item {
@@ -942,7 +942,7 @@
 		width: 250px;
 		height: 240px;
 	}
-	.doctor-img {
+	.doctor-home-img {
 		width: 100px;
 		height: 100px;
 	}
@@ -971,7 +971,7 @@
 	.doctor-name {
 		font-size: 12px;
 	}
-	.doctor-img {
+	.doctor-home-img {
 		width: 100px;
 		height: 100px;
 	}

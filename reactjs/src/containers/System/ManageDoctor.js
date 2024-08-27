@@ -119,7 +119,6 @@ class ManageDoctor extends Component {
 	}
 
 	handleOpenModalEdit(user) {
-		console.log(user);
 		this.setState({
 			setModalEditIsOpen: true,
 			name: user.name,
@@ -601,7 +600,7 @@ class ManageDoctor extends Component {
 					{setModalEditIsOpen ? (
 						<div id="add-new-modal" className="modal">
 							<div className="modal-content">
-								<p>Thêm mới bác sĩ</p>
+								<p>Chỉnh sửa bác sĩ</p>
 								<input
 									className="name"
 									type="text"

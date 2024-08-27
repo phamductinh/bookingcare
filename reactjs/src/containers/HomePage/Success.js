@@ -46,10 +46,31 @@ class Success extends Component {
 		}
 	};
 
+	goBack = () => {
+		this.props.history.push(`/home`);
+	};
+
 	render() {
 		return (
 			<>
-				<div className="alb">Thanh toán thành công!</div>
+				<div className="success-container">
+					<div class="card-success">
+						<div className="card-checkmark">
+							<i class="checkmark">✓</i>
+						</div>
+						<h1>Success</h1>
+						<p>
+							Thanh toán dịch vụ thành công!
+							<br /> Vui lòng kiểm tra email của bạn.
+						</p>
+						<button
+							className="btn-gohome"
+							onClick={() => this.goBack()}
+						>
+							Go to Home
+						</button>
+					</div>
+				</div>
 			</>
 		);
 	}

@@ -80,6 +80,7 @@ class confirmEmail extends Component {
 									name="email"
 									placeholder="Nhập email của bạn"
 									required=""
+									value={this.state.email}
 									onChange={(event) =>
 										this.handleOnchangeEmail(event)
 									}

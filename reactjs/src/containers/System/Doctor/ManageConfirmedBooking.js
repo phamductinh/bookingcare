@@ -32,7 +32,7 @@ class ManageConfirmedBooking extends Component {
 
 	handleConfirmBooking = async () => {
 		try {
-			let res = await finishBooking( this.state.bookingId);
+			let res = await finishBooking(this.state.bookingId);
 			if (res && res.code === 200) {
 				toast.success("Kết thúc lịch khám thành công!");
 				this.setState({
@@ -74,31 +74,34 @@ class ManageConfirmedBooking extends Component {
 						<table id="customers">
 							<tbody>
 								<tr>
-									<th width="8%" className="text-center">
+									<th width="7%" className="text-center">
 										Ngày
 									</th>
-									<th width="8%" className="text-center">
+									<th width="7%" className="text-center">
 										Thời gian
 									</th>
-									<th width="15%" className="text-center">
+									<th width="12%" className="text-center">
 										Họ và tên
 									</th>
-									<th width="15%" className="text-center">
+									<th width="12%" className="text-center">
 										Địa chỉ
 									</th>
 									<th width="7%" className="text-center">
 										Giới tính
 									</th>
-									<th width="10%" className="text-center">
+									<th width="6%" className="text-center">
 										Ngày sinh
 									</th>
-									<th width="10%" className="text-center">
+									<th width="8%" className="text-center">
 										Số điện thoại
+									</th>
+									<th width="12%" className="text-center">
+										Người khám
 									</th>
 									<th width="15%" className="text-center">
 										Lý do
 									</th>
-									<th width="10%" className="text-center">
+									<th width="8%" className="text-center">
 										Tình trạng
 									</th>
 									<th width="10%" className="text-center">
@@ -120,8 +123,9 @@ class ManageConfirmedBooking extends Component {
 												<td>{item.gender}</td>
 												<td>{item.birthday}</td>
 												<td>{item.phoneNumber}</td>
+												<td>{item.doctorName}</td>
 												<td>{item.reason}</td>
-												<td>{item.status}</td>
+												<td>Đã thanh toán</td>
 												<td className="text-center">
 													{/* <button
 													className="btn-confirm"
@@ -154,7 +158,7 @@ class ManageConfirmedBooking extends Component {
 					{confirmDelete ? (
 						<div className="confirm-delete">
 							<div className="confirmation-text">
-								Finish this appointment?
+								Bạn đã hoàn thành lịch khám này. Kết thúc ngay?
 							</div>
 							<div className="button-container">
 								<button
@@ -163,13 +167,13 @@ class ManageConfirmedBooking extends Component {
 										this.handleCloseConfirmDelete()
 									}
 								>
-									Cancel
+									Hủy
 								</button>
 								<button
 									className="confirmation-button"
 									onClick={() => this.handleConfirmBooking()}
 								>
-									Yes
+									Kết thúc
 								</button>
 							</div>
 						</div>

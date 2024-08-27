@@ -137,7 +137,10 @@ JOIN user ON user.id = booking.userId
 JOIN doctor ON doctor.id = booking.doctorId
 WHERE isTelemedicine = 1 AND status = 'Confirmed' AND booking_date = ?`;
 
-let findAllConfirmedBookingQuery = `SELECT * FROM booking WHERE isTelemedicine <> 1 AND status = 'Confirmed'`;
+let findAllConfirmedBookingQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
+FROM booking 
+JOIN user ON user.id = booking.userId
+JOIN doctor ON doctor.id = booking.doctorId WHERE isTelemedicine <> 1 AND status = 'Confirmed'`;
 
 let findAllConfirmedTelemedicineBookingQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
 FROM booking 
@@ -145,9 +148,15 @@ JOIN user ON user.id = booking.userId
 JOIN doctor ON doctor.id = booking.doctorId
 WHERE isTelemedicine = 1 AND status = 'Confirmed'`;
 
-let findAllPendingBookingQuery = `SELECT * FROM booking WHERE isTelemedicine <> 1 AND status = 'Pending'`;
+let findAllPendingBookingQuery = `SELECT booking.*, user.email as patientEmail, doctor.name as doctorName 
+FROM booking 
+JOIN user ON user.id = booking.userId
+JOIN doctor ON doctor.id = booking.doctorId WHERE status = 'Pending'`;
 
-let findAllFinishedBookingQuery = `SELECT * FROM booking WHERE status = 'Done'`;
+let findAllFinishedBookingQuery = `SELECT booking.*, doctor.name as doctorName 
+FROM booking 
+JOIN user ON user.id = booking.userId
+JOIN doctor ON doctor.id = booking.doctorId WHERE status = 'Done'`;
 
 let confirmBookingQuery = `UPDATE booking SET status = 'Confirmed' WHERE id = ?`;
 

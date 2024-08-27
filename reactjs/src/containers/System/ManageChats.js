@@ -195,7 +195,9 @@ class ManageChats extends Component {
 				{this.props.isLoggedIn && <Header />}
 				{!user ? (
 					<>
-						<div className="title text-center">Manage Chats</div>
+						<div className="title text-center">
+							Quản lý tin nhắn
+						</div>
 						<button
 							className="btn-login-gg"
 							onClick={() => this.handleLoginWithFB()}

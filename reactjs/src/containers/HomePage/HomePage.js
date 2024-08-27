@@ -157,6 +157,10 @@ class HomePage extends Component {
 		}
 	};
 
+	goToLogin = () => {
+		this.props.history.push("/login");
+	};
+
 	handleNextDoctor() {
 		let lists = document.querySelectorAll(".doctor-slide-item");
 		document.getElementById("doctor-slide").appendChild(lists[0]);
@@ -184,7 +188,7 @@ class HomePage extends Component {
 					<div id="header" className="header-homepage">
 						<div className="home-header">
 							<div className="left-content">
-								<i className="fas fa-bars"></i>
+								{/* <i className="fas fa-bars"></i> */}
 								<div className="header-logo"></div>
 							</div>
 							<div className="center-content">
@@ -245,8 +249,11 @@ class HomePage extends Component {
 									<div className="flag-en"></div> */}
 								</div>
 								{!isLoggedIn ? (
-									<button className="btn-login-header">
-										<Link to="/login">Login</Link>
+									<button
+										className="btn-login-header"
+										onClick={() => this.goToLogin()}
+									>
+										<a href="#/">Login</a>
 										<div className="arrow-wrapper">
 											<div className="arrow"></div>
 										</div>
@@ -811,7 +818,7 @@ class HomePage extends Component {
 								className="doctor-btn"
 								onClick={() => this.handleViewDoctors()}
 							>
-								Xem thêm
+								Tất cả bác sĩ
 							</button>
 						</div>
 						<div className="doctor-slide-container">
@@ -832,7 +839,7 @@ class HomePage extends Component {
 												}
 											>
 												<div
-													className="doctor-img"
+													className="doctor-home-img"
 													style={{
 														backgroundImage: `url(${doctorImage})`,
 													}}
@@ -1100,7 +1107,7 @@ class HomePage extends Component {
 
 					<div className="footer2">
 						<div className="footer-left">
-							<p>&copy; 2024 Nhóm 42</p>
+							<p>&copy; 2022 Pham Duc Tinh</p>
 						</div>
 						<div className="footer-right">
 							<i className="fab fa-facebook-square"></i>

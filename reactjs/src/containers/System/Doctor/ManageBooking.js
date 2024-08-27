@@ -73,21 +73,8 @@ class ManageBooking extends Component {
 		}
 	};
 
-	// handleOnchangeInput = async (event) => {
-	// 	let date = event.target.value;
-	// 	let formatedDate = new Date(date).getTime();
-	// 	this.setState({
-	// 		formatedDate: formatedDate,
-	// 	});
-	// 	let res = await getBookingByDate(formatedDate);
-	// 	if (res && res.code === 200) {
-	// 		this.setState({
-	// 			arrBooking: res.data,
-	// 		});
-	// 	}
-	// };
-
 	handleConfirmDelete = (item) => {
+		console.log(item);
 		this.setState({
 			confirmDelete: true,
 			bookingId: item.id,
@@ -102,8 +89,7 @@ class ManageBooking extends Component {
 
 	render() {
 		let { isLoading, confirmDelete, arrBooking } = this.state;
-		let currentDate = new Date().toISOString().split("T")[0];
-
+		console.log(arrBooking);
 		return (
 			<>
 				{this.props.isLoggedIn && <Header />}
@@ -125,31 +111,34 @@ class ManageBooking extends Component {
 						<table id="customers">
 							<tbody>
 								<tr>
-									<th width="8%" className="text-center">
+									<th width="7%" className="text-center">
 										Ngày
 									</th>
-									<th width="8%" className="text-center">
+									<th width="5%" className="text-center">
 										Thời gian
 									</th>
 									<th width="12%" className="text-center">
 										Họ và tên
 									</th>
-									<th width="12%" className="text-center">
+									<th width="8%" className="text-center">
 										Địa chỉ
 									</th>
 									<th width="5%" className="text-center">
 										Giới tính
 									</th>
-									<th width="7%" className="text-center">
+									<th width="6%" className="text-center">
 										Ngày sinh
 									</th>
-									<th width="10%" className="text-center">
+									<th width="8%" className="text-center">
 										Số điện thoại
 									</th>
-									<th width="13%" className="text-center">
+									<th width="11%" className="text-center">
+										Người khám
+									</th>
+									<th width="11%" className="text-center">
 										Lý do
 									</th>
-									<th width="5%" className="text-center">
+									<th width="7%" className="text-center">
 										Hình thức
 									</th>
 									<th width="7%" className="text-center">
@@ -174,13 +163,14 @@ class ManageBooking extends Component {
 												<td>{item.gender}</td>
 												<td>{item.birthday}</td>
 												<td>{item.phoneNumber}</td>
+												<td>{item.doctorName}</td>
 												<td>{item.reason}</td>
-												<td>{item.status}</td>
 												<td>
 													{item.isTelemedicine === 1
 														? "Trực tuyến"
 														: "Trực tiếp"}
 												</td>
+												<td>Chưa xác nhận</td>
 												<td className="text-center">
 													<button
 														className="btn-confirm"

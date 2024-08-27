@@ -52,6 +52,7 @@ app.use((err, req, res, next) => {
 io.on("connection", (socket) => {
 	console.log("user connect", socket.id);
 	socket.on("join room", (roomID) => {
+		console.log(roomID);
 		if (users[roomID]) {
 			const length = users[roomID].length;
 			if (length === 2) {
@@ -68,10 +69,15 @@ io.on("connection", (socket) => {
 
 		socket.emit("all users", usersInThisRoom);
 
-		socket.on("sendMessage", (data) => {
-			socket.to(roomID).emit("receiveMessage", data);
-			console.log(data);
-		});
+		// socket.on("sendMessage", (data) => {
+		// 	socket.to(roomID).emit("receiveMessage", data);
+		// 	console.log(data);
+		// });
+	});
+
+	socket.on("sendMessage", (data) => {
+		io.emit("receiveMessage", data);
+		console.log(data);
 	});
 
 	socket.on("sending signal", (payload) => {

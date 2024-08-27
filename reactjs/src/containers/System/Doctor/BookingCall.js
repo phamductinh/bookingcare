@@ -256,7 +256,7 @@ class BookingCall extends Component {
 								<h2>Đặt lịch khám</h2>
 								<h1>Bác sĩ {detailDoctor.name}</h1>
 								<p>{detailDoctor.introduction}</p>
-								<div>
+								{/* <div>
 									Giá khám:
 									<NumericFormat
 										className="price-booking-header"
@@ -265,7 +265,7 @@ class BookingCall extends Component {
 										thousandSeparator={true}
 										suffix={"VNĐ"}
 									/>
-								</div>
+								</div> */}
 							</div>
 						</div>
 						<div className="booking-container">
@@ -298,7 +298,7 @@ class BookingCall extends Component {
 											/>
 										</div>
 									</label>
-									<label
+									{/* <label
 										htmlFor=""
 										className="examination-time"
 									>
@@ -324,7 +324,7 @@ class BookingCall extends Component {
 												suffix={"VNĐ"}
 											/>
 										</div>
-									</label>
+									</label> */}
 								</div>
 								<label htmlFor="">Chọn ngày khám:</label>
 								<div className="booking-input">
@@ -484,7 +484,7 @@ class BookingCall extends Component {
 									{this.state.errMsgSignUp}
 								</div>
 								<div className="booking-total-price">
-									<div>
+									{/* <div>
 										<div>Giá khám</div>
 										<NumericFormat
 											className="total-price"
@@ -493,7 +493,7 @@ class BookingCall extends Component {
 											thousandSeparator={true}
 											suffix={"VNĐ"}
 										/>
-									</div>
+									</div> */}
 									<div>
 										<div>Phí đặt lịch</div>
 										<div className="total-price">
@@ -501,7 +501,7 @@ class BookingCall extends Component {
 										</div>
 									</div>
 									<hr />
-									<div>
+									{/* <div>
 										<div>Tổng cộng</div>
 										<NumericFormat
 											className="price-booking-header"
@@ -510,7 +510,7 @@ class BookingCall extends Component {
 											thousandSeparator={true}
 											suffix={"VNĐ"}
 										/>
-									</div>
+									</div> */}
 								</div>
 								<p>
 									Quý khách vui lòng điền đầy đủ thông tin để

@@ -14,7 +14,7 @@ class Home extends Component {
 				return <Redirect to={"/home"} />;
 			}
 			if (userInfo && userInfo.role === "Doctor") {
-				return <Redirect to={"/system/manage-telemedicine-booking"} />;
+				return <Redirect to={"/system/manage-confirmed-booking"} />;
 			}
 			if (userInfo && userInfo.role === "") {
 				return <Redirect to={"/home"} />;

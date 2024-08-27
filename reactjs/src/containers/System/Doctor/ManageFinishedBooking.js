@@ -38,16 +38,16 @@ class ManageFinishedBooking extends Component {
 						<table id="customers">
 							<tbody>
 								<tr>
-									<th width="8%" className="text-center">
+									<th width="7%" className="text-center">
 										Ngày
 									</th>
-									<th width="8%" className="text-center">
+									<th width="7%" className="text-center">
 										Thời gian
 									</th>
-									<th width="15%" className="text-center">
+									<th width="12%" className="text-center">
 										Họ tên
 									</th>
-									<th width="15%" className="text-center">
+									<th width="12%" className="text-center">
 										Địa chỉ
 									</th>
 									<th width="7%" className="text-center">
@@ -58,6 +58,9 @@ class ManageFinishedBooking extends Component {
 									</th>
 									<th width="10%" className="text-center">
 										Số điện thoại
+									</th>
+									<th width="10%" className="text-center">
+										Người khám
 									</th>
 									<th width="15%" className="text-center">
 										Lý do
@@ -81,8 +84,9 @@ class ManageFinishedBooking extends Component {
 												<td>{item.gender}</td>
 												<td>{item.birthday}</td>
 												<td>{item.phoneNumber}</td>
+												<td>{item.doctorName}</td>
 												<td>{item.reason}</td>
-												<td>{item.status}</td>
+												<td>Đã khám</td>
 											</tr>
 										);
 									})}

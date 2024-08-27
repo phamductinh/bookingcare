@@ -74,7 +74,7 @@ class ManageTelemedicineBooking extends Component {
 				this.setState({
 					confirmDelete: false,
 				});
-				await this.componentDidMount();
+				await this.getAllConfirmedBookingReact();
 			}
 		} catch (error) {
 			console.log(error);
@@ -126,23 +126,26 @@ class ManageTelemedicineBooking extends Component {
 						<table id="customers">
 							<tbody>
 								<tr>
-									<th width="8%" className="text-center">
+									<th width="7%" className="text-center">
 										Ngày
 									</th>
-									<th width="8%" className="text-center">
+									<th width="7%" className="text-center">
 										Thời gian
 									</th>
-									<th width="15%" className="text-center">
+									<th width="12%" className="text-center">
 										Họ và tên
 									</th>
 									<th width="5%" className="text-center">
 										Giới tính
 									</th>
-									<th width="7%" className="text-center">
+									<th width="6%" className="text-center">
 										Ngày sinh
 									</th>
-									<th width="10%" className="text-center">
+									<th width="9%" className="text-center">
 										Số điện thoại
+									</th>
+									<th width="12%" className="text-center">
+										Người khám
 									</th>
 									<th width="15%" className="text-center">
 										Lý do
@@ -150,7 +153,7 @@ class ManageTelemedicineBooking extends Component {
 									<th width="5%" className="text-center">
 										Thời lượng
 									</th>
-									<th width="10%" className="text-center">
+									<th width="8%" className="text-center">
 										Trạng thái
 									</th>
 									<th width="10%" className="text-center">
@@ -174,9 +177,10 @@ class ManageTelemedicineBooking extends Component {
 												<td>{item.gender}</td>
 												<td>{item.birthday}</td>
 												<td>{item.phoneNumber}</td>
+												<td>{item.doctorName}</td>
 												<td>{item.reason}</td>
 												<td>{item.exam_time}</td>
-												<td>{item.status}</td>
+												<td>Đã thanh toán</td>
 												<td>
 													<button className="btn-join-calling-room">
 														<Link
@@ -190,7 +194,7 @@ class ManageTelemedicineBooking extends Component {
 													<button
 														className="btn-refuse"
 														onClick={() =>
-															this.handleFinishBooking(
+															this.handleConfirmDelete(
 																item
 															)
 														}
@@ -208,7 +212,7 @@ class ManageTelemedicineBooking extends Component {
 					{confirmDelete ? (
 						<div className="confirm-delete">
 							<div className="confirmation-text">
-								You want to decline this appointment?
+								Bạn đã thực hiện khám xong. Kết thúc ngay?
 							</div>
 							<div className="button-container">
 								<button
@@ -217,13 +221,13 @@ class ManageTelemedicineBooking extends Component {
 										this.handleCloseConfirmDelete()
 									}
 								>
-									Cancel
+									Hủy
 								</button>
 								<button
 									className="confirmation-button"
-									onClick={() => this.handleDeleteUser()}
+									onClick={() => this.handleConfirmDelete()}
 								>
-									Decline
+									Kết thúc
 								</button>
 							</div>
 						</div>

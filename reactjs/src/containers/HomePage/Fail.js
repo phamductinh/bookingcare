@@ -29,10 +29,28 @@ class Fail extends Component {
 		}
 	}
 
+	goBack = () => {
+		this.props.history.push(`/home`);
+	};
+
 	render() {
 		return (
 			<>
-				<div className="alb">Thanh toán thất bại!</div>
+				<div className="fail-container">
+					<div class="card-fail">
+						<div className="card-checkmark-fail">
+							<i class="checkmark">X</i>
+						</div>
+						<h1>Fail</h1>
+						<p>Thanh toán dịch vụ thất bại!</p>
+						<button
+							className="btn-gohome"
+							onClick={() => this.goBack()}
+						>
+							Go to Home
+						</button>
+					</div>
+				</div>
 			</>
 		);
 	}

@@ -6,9 +6,8 @@ import styled from "styled-components";
 import "./Room.css";
 
 const StyledVideo = styled.video`
-	width: 39%;
 	width: 50%;
-	height: 454px;
+	height: 575px;
 	transform: scaleX(-1);
 `;
 
@@ -42,10 +41,10 @@ const Room = (props) => {
 			transports: ["websocket"],
 		});
 
-		console.log(socketRef.current);
+		console.log("check", socketRef.current);
+
 		socketRef.current.on("receiveMessage", (data) => {
 			setMessages((prevMessages) => [...prevMessages, data]);
-			console.log(data);
 		});
 
 		navigator.mediaDevices
@@ -157,7 +156,7 @@ const Room = (props) => {
 
 	const sendMessage = async () => {
 		const messageData = {
-			name: isLoggedIn ? userInfo.fullName : "User",
+			name: isLoggedIn ? userInfo.fullName : "Khách",
 			room: roomID,
 			message: message,
 			time:
@@ -168,7 +167,6 @@ const Room = (props) => {
 
 		if (message.trim() !== "") {
 			await socketRef.current.emit("sendMessage", messageData);
-			setMessages((prevMessages) => [...prevMessages, messageData]);
 			setMessage("");
 		}
 	};
@@ -186,7 +184,7 @@ const Room = (props) => {
 							className="fas fa-long-arrow-left"
 							onClick={goBack}
 						></i>
-						<p style={{ color: "white" }}>{roomID}</p>
+						<p style={{ color: "white" }}></p>
 					</div>
 					<div className="detail-doctor-header-right">
 						<div className="detail-doctor-header-support">
@@ -248,15 +246,28 @@ const Room = (props) => {
 					<div className="chat-box">
 						<div id="chatBox">
 							{messages.map((msg, index) => (
-								<div key={index}>
-									<div className="msg-content">
-										<h3 className="msg-message">
-											{msg.message}
-										</h3>
-										<p className="msg-name">
-											{msg.name} ({msg.time})
-										</p>
-									</div>
+								<div
+									key={index}
+									className={`message-content ${
+										isLoggedIn &&
+										msg.name == userInfo.fullName
+											? "messages-from-me"
+											: "messages-from-you"
+									}`}
+								>
+									<h3
+										className={`${
+											isLoggedIn &&
+											msg.name == userInfo.fullName
+												? "msg-from-me"
+												: "msg-from-you"
+										}`}
+									>
+										{msg.message}
+									</h3>
+									<p className="msg-name">
+										{msg.name} ({msg.time})
+									</p>
 								</div>
 							))}
 						</div>
@@ -264,7 +275,7 @@ const Room = (props) => {
 							<input
 								type="text"
 								id="messageInput"
-								placeholder="Type a message"
+								placeholder="Gửi tin nhắn"
 								onChange={handleOnChangeMessage}
 								value={message}
 								onKeyPress={(event) => {
@@ -275,7 +286,7 @@ const Room = (props) => {
 								id="sendMessageButton"
 								onClick={sendMessage}
 							>
-								Send
+								Gửi
 							</button>
 						</div>
 					</div>

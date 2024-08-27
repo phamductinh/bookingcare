@@ -52,12 +52,12 @@ export const adminMenu = [
 				link: "/system/manage-booking",
 			},
 			{
-				name: "menu.admin.manage-telemedicine-booking",
-				link: "/system/manage-telemedicine-booking",
-			},
-			{
 				name: "menu.admin.manage-confirmed-booking",
 				link: "/system/manage-confirmed-booking",
+			},
+			{
+				name: "menu.admin.manage-telemedicine-booking",
+				link: "/system/manage-telemedicine-booking",
 			},
 			{
 				name: "menu.admin.manage-finished-booking",
@@ -94,12 +94,12 @@ export const doctorMenu = [
 		name: "menu.doctor.doctor",
 		menus: [
 			{
-				name: "menu.admin.manage-telemedicine-booking",
-				link: "/system/manage-telemedicine-booking",
-			},
-			{
 				name: "menu.admin.manage-confirmed-booking",
 				link: "/system/manage-confirmed-booking",
+			},
+			{
+				name: "menu.admin.manage-telemedicine-booking",
+				link: "/system/manage-telemedicine-booking",
 			},
 			{
 				name: "menu.admin.manage-finished-booking",
